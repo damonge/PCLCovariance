@@ -25,6 +25,7 @@ parser.add_option('--no-debias',dest='no_debias',default=False,action='store_tru
                   help='Set if you will include contaminants, clean them but won\'t correct for the bias (ignore for now)')
 (o, args) = parser.parse_args()
         
+nsims=o.isim_end-o.isim_ini+1
 
 #Read input power spectra
 l,cltt,clee,clbb,clte,nltt,nlee,nlbb,nlte=np.loadtxt("data/cls_lss.txt",unpack=True)
@@ -133,5 +134,33 @@ else :
     dum,cl00_th[0],cl02_th[0],cl02_th[1],cl22_th[0],cl22_th[1],cl22_th[2],cl22_th[3]=np.loadtxt(o.prefix_out+"_cl_th.txt",unpack=True)
     
 
+#Compute mean and variance over nsims simulations
+cl00_all=[]
+cl02_all=[]
+cl22_all=[]
+for i in np.arange(nsims) :
+    #if i%100==0 :
+    print("%d-th sim"%(i+o.isim_ini))
+
+    if not os.path.isfile(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i)) :
+        f0,f2=get_fields(fmi,mask_hsc)
+        cl00=w00.decouple_cell(nmt.compute_coupled_cell_flat(f0,f0,b))#,cl_bias=clb00)
+        cl02=w02.decouple_cell(nmt.compute_coupled_cell_flat(f0,f2,b))#,cl_bias=clb02)
+        cl22=w22.decouple_cell(nmt.compute_coupled_cell_flat(f2,f2,b))#,cl_bias=clb22)
+        np.savez(o.prefix_out+"_cl_%04d"%(o.isim_ini+i),
+                 l=b.get_effective_ells(),cltt=cl00[0],clte=cl02[0],cltb=cl02[1],
+                 clee=cl22[0],cleb=cl22[1],clbe=cl22[2],clbb=cl22[3])
+    cld=np.load(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i))
+    cl00_all.append([cld['cltt']])
+    cl02_all.append([cld['clte'],cld['cltb']])
+    cl22_all.append([cld['clee'],cld['cleb'],cld['clbe'],cld['clbb']])
+cl00_all=np.array(cl00_all)
+cl02_all=np.array(cl02_all)
+cl22_all=np.array(cl22_all)
+
+#Save output
+np.savez(o.prefix_out+'_clsims_%04d-%04d'%(o.isim_ini,o.isim_end),
+         l=b.get_effective_ells(),cl00=cl00_all,cl02=cl02_all,cl22=cl22_all)
+    
 if o.plot_stuff :
     plt.show()
