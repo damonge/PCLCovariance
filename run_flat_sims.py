@@ -91,7 +91,7 @@ if os.path.isfile(temp_ss_filename):
     templates_ss = np.load(temp_ss_filename)['arr_0'][:o.nss_cont]
 
 if len(templates_ss) < o.nss_cont:
-    new_templates_ss = tp.create_templates_flat(fmi.nx, fmi.ny, fmi.lx_rad, fmi.ly_rad, l, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nss_cont - len(templates_ss))
+    new_templates_ss = tp.create_templates_flat(fmi.nx, fmi.ny, fmi.lx_rad, fmi.ly_rad, l, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nss_cont - len(templates_ss), exp_range=(0,0))
     if templates_ss == []:
         templates_ss = new_templates_ss
     else:
@@ -145,8 +145,6 @@ def get_fields(fsk,mask,w_cont=False) :
 
 np.random.seed(1000)
 f0,f2=get_fields(fmi,mask_hsc, o.nss_cont or o.nls_cont)
-print(f0, f2)
-sys.exit()
 
 #Compute mode-coupling matrix
 #Use initial fields to generate coupling matrix
