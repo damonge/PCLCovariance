@@ -23,14 +23,20 @@ parser.add_option('--no-deproject',dest='no_deproject',default=False,action='sto
                   help='Set if you will include contaminants but won\'t clean them (ignore for now)')
 parser.add_option('--no-debias',dest='no_debias',default=False,action='store_true',
                   help='Set if you will include contaminants, clean them but won\'t correct for the bias (ignore for now)')
+parser.add_option('--low-noise-ee-bb',dest='low_noise_ee_bb',default=False,action='store_true',
+                  help='Set if you want the noise for ee and bb modes be multiplied by 1e-2')
 (o, args) = parser.parse_args()
-        
+
 nsims=o.isim_end-o.isim_ini+1
 
 #Read input power spectra
 l,cltt,clee,clbb,clte,nltt,nlee,nlbb,nlte=np.loadtxt("data/cls_lss.txt",unpack=True)
 cltt[0]=0; clee[0]=0; clbb[0]=0; clte[0]=0;
 nltt[0]=0; nlee[0]=0; nlbb[0]=0; nlte[0]=0;
+
+if o.low_noise_ee_bb:
+    nlee *= 1e-2
+    nlbb *= 1e-2
 
 if o.plot_stuff :
     plt.figure()
@@ -55,13 +61,13 @@ l_bpw=np.zeros([2,n_ell])
 l_bpw[0,:]=ell_min+np.arange(n_ell)*d_ell
 l_bpw[1,:]=l_bpw[0,:]+d_ell
 b=nmt.NmtBinFlat(l_bpw[0,:],l_bpw[1,:])
-    
+
 #Generate an initial simulation
 def get_fields(fsk,mask,w_cont=False) :
     """
     Generate a simulated field.
     It returns two NmtField objects for a spin-0 and a spin-2 field.
-    
+
     :param fsk: a fm.FlatMapInfo object.
     :param mask: a sky mask.
     :param w_cont: deproject any contaminants? (not implemented yet)
@@ -132,7 +138,7 @@ else :
     cl02_th=np.zeros([2,b.get_n_bands()])
     cl22_th=np.zeros([4,b.get_n_bands()])
     dum,cl00_th[0],cl02_th[0],cl02_th[1],cl22_th[0],cl22_th[1],cl22_th[2],cl22_th[3]=np.loadtxt(o.prefix_out+"_cl_th.txt",unpack=True)
-    
+
 
 #Compute mean and variance over nsims simulations
 cl00_all=[]
@@ -161,6 +167,6 @@ cl22_all=np.array(cl22_all)
 #Save output
 np.savez(o.prefix_out+'_clsims_%04d-%04d'%(o.isim_ini,o.isim_end),
          l=b.get_effective_ells(),cl00=cl00_all,cl02=cl02_all,cl22=cl22_all)
-    
+
 if o.plot_stuff :
     plt.show()
