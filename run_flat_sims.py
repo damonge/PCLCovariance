@@ -4,7 +4,9 @@ import pymaster as nmt
 import numpy as np
 import matplotlib.pyplot as plt
 import flatmaps as fm
+import templates as tp
 import os
+import sys
 
 def opt_callback(option, opt, value, parser):
         setattr(parser.values, option.dest, value.split(','))
@@ -15,6 +17,10 @@ parser.add_option('--isim-ini', dest='isim_ini', default=1, type=int,
                   help='Index of first simulation')
 parser.add_option('--isim-end', dest='isim_end', default=100, type=int,
                   help='Index of last simulation')
+parser.add_option('--nls-contaminants', dest='nls_cont', default=0, type=int,
+                  help='Number of Large Scales contaminants')
+parser.add_option('--nss-contaminants', dest='nss_cont', default=0, type=int,
+                  help='Number of Small Scales contaminants')
 parser.add_option('--wo-contaminants', dest='wo_cont', default=False, action='store_true',
                   help='Set if you don\'t want to use contaminants (ignore for now)')
 parser.add_option('--plot', dest='plot_stuff', default=False, action='store_true',
@@ -61,6 +67,36 @@ l_bpw=np.zeros([2,n_ell])
 l_bpw[0,:]=ell_min+np.arange(n_ell)*d_ell
 l_bpw[1,:]=l_bpw[0,:]+d_ell
 b=nmt.NmtBinFlat(l_bpw[0,:],l_bpw[1,:])
+
+#Read/Generate Large Scale contaminant fields
+templates_ls = []
+temp_ls_filename = o.prefix_out+"_cont_ls.npz"
+print("%d Large Scale contaminant"%(o.nls_cont))
+if os.path.isfile(temp_ls_filename):
+    templates_ls = np.load(temp_ls_filename)['arr_0'][:o.nls_cont]
+
+if len(templates_ls) < o.nls_cont:
+    new_templates_ls = tp.create_templates_flat(int(fmi.nx), int(fmi.ny), fmi.lx_rad, fmi.ly_rad, l, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nls_cont - len(templates_ls))
+    if templates_ls == []:
+        templates_ls = new_templates_ls
+    else:
+        templates_ls = np.concatenate((templates_ls, new_templates_ls))
+    np.savez_compressed(temp_ls_filename, templates_ls)
+
+#Read/Generate Small Scale contaminant fields
+templates_ss = []
+temp_ss_filename = o.prefix_out+"_cont_ss.npz"
+print("%d Small Scale contaminant"%(o.nss_cont))
+if os.path.isfile(temp_ss_filename):
+    templates_ss = np.load(temp_ss_filename)['arr_0'][:o.nss_cont]
+
+if len(templates_ss) < o.nss_cont:
+    new_templates_ss = tp.create_templates_flat(fmi.nx, fmi.ny, fmi.lx_rad, fmi.ly_rad, l, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nss_cont - len(templates_ss))
+    if templates_ss == []:
+        templates_ss = new_templates_ss
+    else:
+        templates_ls = np.concatenate((templates_ss, new_templates_ss))
+    np.savez_compressed(temp_ss_filename, templates_ss)
 
 #Generate an initial simulation
 def get_fields(fsk,mask,w_cont=False) :
