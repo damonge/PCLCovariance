@@ -98,6 +98,16 @@ if len(templates_ss) < o.nss_cont:
         templates_ls = np.concatenate((templates_ss, new_templates_ss))
     np.savez_compressed(temp_ss_filename, templates_ss)
 
+# Sum LS + SS templates
+if (templates_ls != []) and (templates_ss != []):
+    templates_all = np.concatenate((templates_ls, templates_ss))
+elif templates_ls != []:
+    templates_all = templates_ls
+elif templates_ss != []:
+    templates_all = templates_ss
+else:
+    templates_all = np.array([])
+
 #Generate an initial simulation
 def get_fields(fsk,mask,w_cont=False) :
     """
@@ -110,31 +120,33 @@ def get_fields(fsk,mask,w_cont=False) :
     """
     st,sq,su=nmt.synfast_flat(int(fsk.nx),int(fsk.ny),fsk.lx_rad,fsk.ly_rad,
                               [cltt+nltt,clte+nlte,0*cltt,clee+nlee,0*clee,clbb+nlbb],[0,2])
-    st=st.flatten(); sq=sq.flatten(); su=su.flatten()
     if w_cont :
-        raise NotImplemented("Not yet")
-        st+=np.sum(fgt,axis=0)[0,:]; sq+=np.sum(fgp,axis=0)[0,:]; su+=np.sum(fgp,axis=0)[1,:];
+        if np.any(templates_all):
+            tst, tsq, tsu = templates_all.sum(axis=0)
+            st+=tst; sq+=tsq; su+=tsu;
         if o.no_deproject :
             ff0=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                                 [st.reshape([fsk.ny,fsk.nx])])
+                                 [st])
             ff2=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                                 [sq.reshape([fsk.ny,fsk.nx]),su.reshape([fsk.ny,fsk.nx])])
+                                 [sq, su])
         else :
             ff0=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                                 [st.reshape([fsk.ny,fsk.nx])],
-                                 templates=fgt.reshape([2,1,fsk.ny,fsk.nx]))
+                                 [st],
+                                 templates=templates_all[:,0,None,:])
             ff2=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                                 [sq.reshape([fsk.ny,fsk.nx]),su.reshape([fsk.ny,fsk.nx])],
-                                 templates=fgp.reshape([2,2,fsk.ny,fsk.nx]))
+                                 [sq,su],
+                                 templates=templates_all[:,1:, :])
     else :
         ff0=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                             [st.reshape([fsk.ny,fsk.nx])])
+                             [st])
         ff2=nmt.NmtFieldFlat(fsk.lx_rad,fsk.ly_rad,mask.reshape([fsk.ny,fsk.nx]),
-                             [sq.reshape([fsk.ny,fsk.nx]),su.reshape([fsk.ny,fsk.nx])])
+                             [sq,su])
     return ff0,ff2
 
 np.random.seed(1000)
-f0,f2=get_fields(fmi,mask_hsc)
+f0,f2=get_fields(fmi,mask_hsc, o.nss_cont or o.nls_cont)
+print(f0, f2)
+sys.exit()
 
 #Compute mode-coupling matrix
 #Use initial fields to generate coupling matrix
