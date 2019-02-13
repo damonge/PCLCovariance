@@ -4,6 +4,7 @@ import pymaster as nmt
 import numpy as np
 import matplotlib.pyplot as plt
 import healpy as hp
+import templates as tp
 import os
 
 def opt_callback(option, opt, value, parser):
@@ -19,6 +20,10 @@ parser.add_option('--isim-end', dest='isim_end', default=100, type=int,
                   help='Index of last simulation')
 parser.add_option('--wo-contaminants', dest='wo_cont', default=False, action='store_true',
                   help='Set if you don\'t want to use contaminants (ignore for now)')
+parser.add_option('--nls-contaminants', dest='nls_cont', default=0, type=int,
+                  help='Number of Large Scales contaminants')
+parser.add_option('--nss-contaminants', dest='nss_cont', default=0, type=int,
+                  help='Number of Small Scales contaminants')
 parser.add_option('--plot', dest='plot_stuff', default=False, action='store_true',
                   help='Set if you want to produce plots')
 parser.add_option('--no-deproject',dest='no_deproject',default=False,action='store_true',
@@ -64,6 +69,46 @@ fsky=np.mean(mask_lss)
 d_ell=int(1./fsky)
 b=nmt.NmtBin(o.nside,nlb=d_ell)
 
+#Read/Generate Large Scale contaminant fields
+templates_ls = []
+temp_ls_filename = o.prefix_out+"_cont_ls.npz"
+print("%d Large Scale contaminant"%(o.nls_cont))
+if os.path.isfile(temp_ls_filename):
+    templates_ls = np.load(temp_ls_filename)['arr_0'][:o.nls_cont]
+
+if len(templates_ls) < o.nls_cont:
+    new_templates_ls = tp.create_templates(l, o.nside, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nls_cont - len(templates_ls))
+    if templates_ls == []:
+        templates_ls = new_templates_ls
+    else:
+        templates_ls = np.concatenate((templates_ls, new_templates_ls))
+    np.savez_compressed(temp_ls_filename, templates_ls)
+
+#Read/Generate Small Scale contaminant fields
+templates_ss = []
+temp_ss_filename = o.prefix_out+"_cont_ss.npz"
+print("%d Small Scale contaminant"%(o.nss_cont))
+if os.path.isfile(temp_ss_filename):
+    templates_ss = np.load(temp_ss_filename)['arr_0'][:o.nss_cont]
+
+if len(templates_ss) < o.nss_cont:
+    new_templates_ss = tp.create_templates(l, o.nside, cltt+nltt, clee+nlee, clbb+nlbb, N=o.nss_cont - len(templates_ss), exp_range=(0,0))
+    if templates_ss == []:
+        templates_ss = new_templates_ss
+    else:
+        templates_ls = np.concatenate((templates_ss, new_templates_ss))
+    np.savez_compressed(temp_ss_filename, templates_ss)
+
+# Sum LS + SS templates
+if (templates_ls != []) and (templates_ss != []):
+    templates_all = np.concatenate((templates_ls, templates_ss))
+elif templates_ls != []:
+    templates_all = templates_ls
+elif templates_ss != []:
+    templates_all = templates_ss
+else:
+    templates_all = np.array([])
+
 #Generate an initial simulation
 def get_fields(w_cont=False) :
     """
@@ -75,8 +120,17 @@ def get_fields(w_cont=False) :
     :param w_cont: deproject any contaminants? (not implemented yet)
     """
     st,sq,su=hp.synfast([cltt+nltt,clee+nlee,clbb+nlbb,clte+nlte],o.nside,new=True,verbose=False,pol=True)
-    if w_cont :
-        raise NotImplemented("Not yet")
+    if w_cont:
+        if np.any(templates_all):
+            tst, tsq, tsu = templates_all.sum(axis=0)
+            st+=tst; sq+=tsq; su+=tsu;
+
+        if o.no_deproject:
+            ff0 = nmt.NmtField(mask_lss, [st])
+            ff2 = nmt.NmtField(mask_lss, [sq, su])
+        else:
+            ff0 = nmt.NmtField(mask_lss, [st], templates_all[:, 0, None, :])
+            ff2 = nmt.NmtField(mask_lss, [sq, su], templates_all[:, 1:, :])
     else :
         ff0=nmt.NmtField(mask_lss,[st])
         ff2=nmt.NmtField(mask_lss,[sq,su])
