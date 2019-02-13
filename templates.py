@@ -29,7 +29,7 @@ def create_templates(l, nside, clTT, clEE, clBB, **kwards):
 
     templates = []
     for tt, ee, bb in zip(TT_cl, EE_cl, BB_cl):
-        templates.append(hp.synfast([tt, 0*tt, 0*tt, ee, 0*tt, bb], nside,
+        templates.append(hp.synfast([tt, ee, bb, 0*tt], nside,
                                     new=True, verbose=False, pol=True))
 
     return np.array(templates)
