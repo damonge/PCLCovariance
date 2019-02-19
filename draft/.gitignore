@@ -1,1 +1,5 @@
 /paper.pdf
+*.aux
+*.log
+*.synctex.gz
+*.out
