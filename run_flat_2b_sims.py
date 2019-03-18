@@ -206,25 +206,49 @@ def get_cls_sim(ws, fields):
     :param ws: workspaces for fields in fields.
     :param fields: tuple of tuple of fields to compute the mode-coupling matrix for. Shape is nbis x (f0, f2)
     """
+    dof = [1, 2] * len(fields)
+
     nfs = 3 * len(fields)
-    ncls = np.math.factorial(nfs)/ np.math.factorial(nfs) + nfs
 
     fields = sum(fields, ())  # Flatten the tuple of tuples
 
-    cl_ar = np.empty((ncls, b.get_n_bands()))
-    for c1, f1 in enumerate(fields):
-        for c2, f2, in enumerate(fields[c1:]):
-            cls = ws[c1].decouple_cell(nmt.compute_coupled_cell_flat(f1, f2, b))
+    cl_ar = np.empty((nfs, nfs, b.get_n_bands()))
 
-            if (c1 == c2) and (cls.shape[0] == 4):
-                cl_ar[0] = cls[0]
-                cl_ar[1] = cls[1]
-                cl_ar[2] = cls[3]  # Remove the lower triangular matrix term
-            else:
-                for cl in cls:
-                    cl_ar[c1] = cl
+    index1 = 0
+    c = 0
+    for c1, dof1 in enumerate(dof):
+        f1 = fields[c1]
+        index2 = index1
+        for c2, dof2 in enumerate(dof[c1:], c1):
+            f2 = fields[c2]
+            cls = ws[c].decouple_cell(nmt.compute_coupled_cell_flat(f1, f2, b)).reshape((dof1, dof2, -1))
 
-    return cl_ar
+            # from matplotlib import pyplot as plt
+            # cls_true = (f['cls'] + f['nls'])[index1 : index1 + dof1, index2 : index2 + dof2].reshape(dof1 * dof2, -1)
+            # print(cls_true.shape)
+            # print(cls.reshape(dof1 * dof2, -1).shape)
+            # for cli_true, cli in zip(cls_true, cls.reshape(dof1 * dof2, -1)):
+            #     print(cli)
+            #     plt.suptitle("{}, {}".format(dof1, dof2))
+            #     plt.loglog(l, cli_true, b.get_effective_ells(), cli, 'o')
+            #     plt.show()
+            #     plt.close()
+
+            cl_ar[index1 : index1 + dof1, index2 : index2 + dof2] = cls
+
+             # from matplotlib import pyplot as plt
+             # for cli_true, cli in zip(cls_true,
+             #                          cl_ar[index1 : index1 + dof1, index2 : index2 + dof2].reshape(dof1 * dof2, -1)):
+             #     plt.suptitle("{}, {}".format(dof1, dof2))
+             #     plt.loglog(l, cli_true, b.get_effective_ells(), cli, 'o')
+             #     plt.show()
+             #     plt.close()
+
+            index2 += dof2
+            c += 1
+        index1 += dof1
+
+    return cl_ar[np.triu_indices(cl_ar.shape[0])]
 
 ############## Generate fields #####################
 np.random.seed(1000)
@@ -239,9 +263,6 @@ if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
     np.savez_compressed(o.prefix_out+"_cl_th.npz",
                         ls=b.get_effective_ells(), cls=cl_ar)
 
-import sys
-sys.exit()
-
 ############## Generate simulations #####################
 #Compute mean and variance over nsims simulations
 for i in np.arange(nsims):
@@ -250,6 +271,7 @@ for i in np.arange(nsims):
         cl_ar = get_cls_sim(workspaces, fields)
         np.savez(o.prefix_out+"_cl_%04d"%(o.isim_ini + i),
                  l=b.get_effective_ells(), cls=cl_ar)
+
 
 #    cld=np.load(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i))
 #     cl00_all.append([cld['cltt']])
