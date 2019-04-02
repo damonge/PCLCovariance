@@ -259,7 +259,7 @@ workspaces = get_workspaces(fields)
 ############## Generate theory prediction #####################
 if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
     print("Computing theory prediction")
-    cl_ar = get_cls_th(workspaces, l, f['cls'])
+    cl_ar = get_cls_th(workspaces, l, f['cls'] + f['nls'])
     np.savez_compressed(o.prefix_out+"_cl_th.npz",
                         ls=b.get_effective_ells(), cls=cl_ar)
 
@@ -268,7 +268,8 @@ if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
 for i in np.arange(nsims):
     print("%d-th sim"%(i+o.isim_ini))
     if not os.path.isfile(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i)):
-        cl_ar = get_cls_sim(workspaces, fields)
+        fields_i = get_fields(fmi, mask_hsc)
+        cl_ar = get_cls_sim(workspaces, fields_i)
         np.savez(o.prefix_out+"_cl_%04d"%(o.isim_ini + i),
                  l=b.get_effective_ells(), cls=cl_ar)
 
