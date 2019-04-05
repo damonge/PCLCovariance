@@ -55,11 +55,20 @@ if o.plot_stuff :
     plt.legend()
 
 #Read mask
-fmi,mask_hsc=fm.read_flat_map("data/mask_lss_flat.fits")
-if o.plot_stuff :
-    fmi.view_map(mask_hsc)
+fmasks = ["data/mask_lss_flat.fits", "data/mask_lss_flat_2.fits"]
 
-#Set up binning scheme
+fmi_ar, mask_hsc_ar = [], []
+
+for fmask in fmasks:
+    fmi, mask_hsc=fm.read_flat_map(fmask)
+    fmi_ar.append(fmi)
+    mask_hsc_ar.append(mask_hsc)
+
+if o.plot_stuff :
+    fmi_ar[0].view_map(mask_hsc_ar[0])
+    fmi_ar[1].view_map(mask_hsc_ar[1])
+
+#Set up binning scheme. Both masks have same nx, ny, ...
 ell_min=max(2*np.pi/fmi.lx_rad,2*np.pi/fmi.ly_rad)
 ell_max=min(fmi.nx*np.pi/fmi.lx_rad,fmi.ny*np.pi/fmi.ly_rad)
 d_ell=2*ell_min
@@ -69,8 +78,12 @@ l_bpw[0,:]=ell_min+np.arange(n_ell)*d_ell
 l_bpw[1,:]=l_bpw[0,:]+d_ell
 b=nmt.NmtBinFlat(l_bpw[0,:],l_bpw[1,:])
 
+# To be sure we are not using these
+del fmi
+del mask_hsc
+
 #Generate an initial simulation
-def get_fields(fsk,mask,w_cont=False) :
+def get_fields(fsk_ar, mask_ar, w_cont=False) :
     """
     Generate a simulated field.
     It returns two NmtField objects for a spin-0 and a spin-2 field.
@@ -81,6 +94,9 @@ def get_fields(fsk,mask,w_cont=False) :
     """
     nbins = 2
     spins = [0,2] * nbins
+
+    fsk = fsk_ar[0]  # They share fsk.nx, ny, etc.
+
     # maps == [st1, sq1, su1, st2, sq2, su2, ...] (oredered as in spins)
     maps = nmt.synfast_flat(int(fsk.nx),int(fsk.ny),fsk.lx_rad,fsk.ly_rad,
                               cls_ar + nls_ar, spins)
@@ -104,13 +120,13 @@ def get_fields(fsk,mask,w_cont=False) :
         #                          [sq,su],
         #                          templates=templates_all[:,1:, :])
     else :
-        ff0_1=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask.reshape([fsk.ny, fsk.nx]),
+        ff0_1=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask_ar[0].reshape([fsk.ny, fsk.nx]),
                              [st1])
-        ff0_2=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask.reshape([fsk.ny, fsk.nx]),
+        ff0_2=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask_ar[1].reshape([fsk.ny, fsk.nx]),
                              [st2])
-        ff2_1=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask.reshape([fsk.ny, fsk.nx]),
+        ff2_1=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask_ar[0].reshape([fsk.ny, fsk.nx]),
                              [sq1, su1])
-        ff2_2=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask.reshape([fsk.ny, fsk.nx]),
+        ff2_2=nmt.NmtFieldFlat(fsk.lx_rad, fsk.ly_rad, mask_ar[1].reshape([fsk.ny, fsk.nx]),
                              [sq2, su2])
     return (ff0_1,ff2_1), (ff0_2, ff2_2)
 
@@ -252,7 +268,7 @@ def get_cls_sim(ws, fields):
 
 ############## Generate fields #####################
 np.random.seed(1000)
-fields = get_fields(fmi, mask_hsc) #, o.nss_cont or o.nls_cont)
+fields = get_fields(fmi_ar, mask_hsc_ar) #, o.nss_cont or o.nls_cont)
 fbin1,  fbin2 = fields
 workspaces = get_workspaces(fields)
 
@@ -268,7 +284,7 @@ if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
 for i in np.arange(nsims):
     print("%d-th sim"%(i+o.isim_ini))
     if not os.path.isfile(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i)):
-        fields_i = get_fields(fmi, mask_hsc)
+        fields_i = get_fields(fmi_ar, mask_hsc_ar)
         cl_ar = get_cls_sim(workspaces, fields_i)
         np.savez(o.prefix_out+"_cl_%04d"%(o.isim_ini + i),
                  l=b.get_effective_ells(), cls=cl_ar)
