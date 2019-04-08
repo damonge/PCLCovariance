@@ -59,17 +59,25 @@ if o.plot_stuff :
     # plt.legend()
 
 #Read mask
-mask_lss=hp.ud_grade(hp.read_map("data/mask_lss_sph.fits",verbose=False),nside_out=o.nside)
+fmasks = ["data/mask_lss_sph.fits", "data/mask_lss_sph.fits"]
+
+mask_lss_ar = []
+
+for fmask in fmasks:
+    mask_lss=hp.ud_grade(hp.read_map(fmask,verbose=False),nside_out=o.nside)
+    mask_lss_ar.append(mask_lss)
+
 if o.plot_stuff :
-    hp.mollview(mask_lss)
+    hp.mollview(mask_lss_ar[0])
+    hp.mollview(mask_lss_ar[1])
 
 #Set up binning scheme
-fsky=np.mean(mask_lss)
+fsky=np.mean(np.product(mask_lss_ar, axis=0))
 d_ell=int(1./fsky)
 b=nmt.NmtBin(o.nside,nlb=d_ell)
 
 #Generate an initial simulation
-def get_fields(w_cont=False) :
+def get_fields(mask_ar, w_cont=False) :
     """
     Generate a simulated field.
     It returns two NmtField objects for a spin-0 and a spin-2 field.
@@ -86,10 +94,10 @@ def get_fields(w_cont=False) :
     if w_cont :
         raise ValueError('Contaminants not implemented yet')
     else :
-        ff0_1=nmt.NmtField(mask_lss, [st1])
-        ff0_2=nmt.NmtField(mask_lss, [st2])
-        ff2_1=nmt.NmtField(mask_lss, [sq1, su1])
-        ff2_2=nmt.NmtField(mask_lss, [sq2, su2])
+        ff0_1=nmt.NmtField(mask_ar[0], [st1])
+        ff0_2=nmt.NmtField(mask_ar[1], [st2])
+        ff2_1=nmt.NmtField(mask_ar[0], [sq1, su1])
+        ff2_2=nmt.NmtField(mask_ar[1], [sq2, su2])
 
     return (ff0_1,ff2_1), (ff0_2, ff2_2)
 
@@ -233,7 +241,7 @@ def get_cls_sim(ws, fields):
 
 ############## Generate fields #####################
 np.random.seed(1000)
-fields = get_fields() #, o.nss_cont or o.nls_cont)
+fields = get_fields(mask_lss_ar) #, o.nss_cont or o.nls_cont)
 fbin1,  fbin2 = fields
 workspaces = get_workspaces(fields)
 
@@ -249,7 +257,7 @@ if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
 for i in np.arange(nsims):
     print("%d-th sim"%(i+o.isim_ini))
     if not os.path.isfile(o.prefix_out+"_cl_%04d.npz"%(o.isim_ini+i)):
-        fields_i = get_fields()
+        fields_i = get_fields(mask_lss_ar)
         cl_ar = get_cls_sim(workspaces, fields_i)
         np.savez(o.prefix_out+"_cl_%04d"%(o.isim_ini + i),
                  l=b.get_effective_ells(), cls=cl_ar)
