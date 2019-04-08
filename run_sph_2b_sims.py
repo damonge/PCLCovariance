@@ -248,7 +248,7 @@ workspaces = get_workspaces(fields)
 ############## Generate theory prediction #####################
 if not os.path.isfile(o.prefix_out+'_cl_th.npz') :
     print("Computing theory prediction")
-    cl_ar = get_cls_th(workspaces, f['cls'])
+    cl_ar = get_cls_th(workspaces, f['cls'] + f['nls'])
     np.savez_compressed(o.prefix_out+"_cl_th.npz",
                         ls=b.get_effective_ells(), cls=cl_ar)
 
