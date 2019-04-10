@@ -162,7 +162,7 @@ def get_cls_th(ws, cl_th):
     for c1, dof1 in enumerate(dof):
         index2 = index1
         for dof2 in dof[c1:]:
-            cls_true = cl_th[index1 : index1 + dof1, index2 : index2 + dof2].reshape(dof1 * dof2, -1)
+            cls_true = cl_th[index1 : index1 + dof1, index2 : index2 + dof2, :int(3 * o.nside)].reshape(dof1 * dof2, -1)
             cls = ws[c].decouple_cell(ws[c].couple_cell(cls_true)).reshape((dof1, dof2, -1))
 
             # from matplotlib import pyplot as plt
