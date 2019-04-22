@@ -59,7 +59,7 @@ if o.plot_stuff :
     # plt.legend()
 
 #Read mask
-fmasks = ["data/mask_lss_sph.fits", "data/mask_lss_sph.fits"]
+fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph2.fits"]
 
 mask_lss_ar = []
 
