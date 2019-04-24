@@ -15,6 +15,8 @@ parser.add_option('--prefix-out',dest='prefix_out',default='run',type=str,
                   help='Output prefix')
 parser.add_option('--nside', dest='nside', default=512, type=int,
                   help='HEALPix nside param')
+parser.add_option('--same-mask', dest='same_mask', default=False, action='store_true',
+                  help='Set if you want to use mask1 for both bins')
 parser.add_option('--isim-ini', dest='isim_ini', default=1, type=int,
                   help='Index of first simulation')
 parser.add_option('--isim-end', dest='isim_end', default=100, type=int,
@@ -59,7 +61,10 @@ if o.plot_stuff :
     # plt.legend()
 
 #Read mask
-fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph2.fits"]
+if o.same_mask:
+    fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph1.fits"]
+else:
+    fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph2.fits"]
 
 mask_lss_ar = []
 
