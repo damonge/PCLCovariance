@@ -60,7 +60,7 @@ if o.low_noise_ee_bb:
     nlbb *= 1e-2
 
 #Read mask
-mask_lss=hp.ud_grade(hp.read_map("data/mask_lss_sph.fits",verbose=False),nside_out=o.nside)
+mask_lss=hp.ud_grade(hp.read_map("data/mask_lss_sph1.fits",verbose=False),nside_out=o.nside)
 if o.plot_stuff :
     hp.mollview(mask_lss)
 
