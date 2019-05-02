@@ -270,8 +270,8 @@ def naive_covariance(lTh, l0, lf, fsky, cla1b1, cla1b2, cla2b1, cla2b2, unbinned
 def do_all_checks(lbins, clsims, CovSims, CovTh, modes, hartlap=False, row_cov=True, foutput=None):
     print('Checks for {}'.format(modes))
     print('Diagonal covariance matrix')
-    check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], True)
-    check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], False)
+    check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], True, foutput=foutput)
+    check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], False, foutput=foutput)
     print('Chi2 distribution check')
     chi2_sim, chi2_th = check_chi2_distributions(clsims, CovSims, CovTh, hartlap, foutput)
     print()
