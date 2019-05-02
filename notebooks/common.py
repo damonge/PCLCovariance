@@ -7,10 +7,13 @@ import pymaster as nmt
 import os
 
 DEFAULT_COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
+DPI = 500
+FIGSIZE = (4, 3)
+FIGSIZE2 = (4, 7)
 
 # Diagonal check
-def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True):
-    f, ax = plt.subplots(2, 1, sharex=True, figsize=(4, 7))
+def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True, foutput=None):
+    f, ax = plt.subplots(2, 1, sharex=True, figsize=FIGSIZE2)
 
     c = ['blue', 'orange', 'green', 'purple']
     lsth = ['--', '-.', ':']
@@ -45,11 +48,15 @@ def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True):
     ax[1].legend(loc=0)
 
     plt.subplots_adjust(hspace=0)
+    plt.tight_layout()
+    if foutput is not None:
+        fname = foutput + '_check_diagonal_terms_{}'.format('principal' if principal else 4)
+        plt.savefig(fname, dpi=DPI)
     plt.show()
     plt.close()
 
 # Chi2 check
-def check_chi2_distributions(cls, CovSims, CovTh, hartlap=False):
+def check_chi2_distributions(cls, CovSims, CovTh, hartlap=False, foutput=False):
     Ns, Nl = np.shape(cls)
     if hartlap:
         # arXiv:1601.05786
@@ -60,7 +67,7 @@ def check_chi2_distributions(cls, CovSims, CovTh, hartlap=False):
     chi2_sim, chi2_th = get_chi2(cls, [factor_sim * np.linalg.inv(CovSims),
                                         np.linalg.inv(CovTh)])
     lmax = len(CovSims)
-    plot_chi2([chi2_sim, chi2_th], ['Simulations Cov', 'Theoretical Cov'], lmax=lmax)
+    plot_chi2([chi2_sim, chi2_th], ['Simulations Cov', 'Theoretical Cov'], lmax=lmax, foutput=foutput)
 
     print('KS between sim. and th. distributions: ', stats.ks_2samp(chi2_sim, chi2_th))
     print('KS between sim. and chi2 distributions: ', stats.kstest(chi2_sim, 'chi2', args=([lmax])))
@@ -82,15 +89,20 @@ def get_chi2(cls, array_of_invcovs):
 
     return np.array(chi2_list)
 
-def plot_chi2(chi2s, labels, lmax, bins=30):
-    _, x, _ = plt.hist(chi2s, bins=60, histtype='step', density=True, label=labels)
+def plot_chi2(chi2s, labels, lmax, bins=60, foutput=None):
+    f, ax = plt.subplots(1, 1, figsize=FIGSIZE)
+    _, x, _ = ax.hist(chi2s, bins=bins, histtype='step', density=True, label=labels)
 
-    plt.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax), ls='--', label=r'$\chi^2$ pdf')
+    ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax), ls='--', label=r'$\chi^2$ pdf')
 
-    plt.xlabel(r'$\chi^2$')
-    plt.ylabel('pdf')
+    ax.set_xlabel(r'$\chi^2$')
+    ax.set_ylabel('pdf')
 
-    plt.legend(loc=0)
+    ax.legend(loc=0)
+    plt.tight_layout()
+    if foutput is not None:
+        fname = foutput + '_chi2'
+        plt.savefig(fname, dpi=DPI)
     plt.show()
     plt.close()
 
@@ -106,8 +118,10 @@ def get_correlation_from_covariance(array_of_covs):
 
     return array_of_corrs
 
-def plot_correlation_difference(lbins, CovSims, CovTh):
+def plot_correlation_difference(lbins, CovSims, CovTh, foutput=None):
     CorrSims, CorrTh = get_correlation_from_covariance([CovSims, CovTh])
+
+    f, ax = plt.subplots(1, 1, figsize=FIGSIZE)
     plt.imshow(CorrSims - CorrTh)  #, vmin=-2, vmax=2)
     c = plt.colorbar()
     c.set_label('CorrSims - CorrTh')
@@ -119,6 +133,11 @@ def plot_correlation_difference(lbins, CovSims, CovTh):
 
     plt.xticks(ticks, lbins[ticks])
     plt.yticks(ticks, lbins[ticks])
+
+    plt.tight_layout()
+    if foutput is not None:
+        fname = foutput + '_correlation_difference'
+        plt.savefig(fname, dpi=DPI)
 
     plt.show()
     plt.close()
@@ -150,8 +169,8 @@ def generate_covariance_workspace00(run_path, fa1, fa2, flat=False):
     return w00, cw00
 
 # Plot reldev. eigenvalues
-def plot_reldev_eigv(CovSims, CovTh, labels, yscale=['log', 'linear']):
-    f, ax = plt.subplots(2, 1, sharex=True, figsize=(4, 8))
+def plot_reldev_eigv(CovSims, CovTh, labels, yscale=['log', 'linear'], foutput=None):
+    f, ax = plt.subplots(2, 1, sharex=True, figsize=FIGSIZE2)
 
     Eval_Sims, Evec_Sims = diagonalize(CovSims)
     X = np.arange(len(Eval_Sims))
@@ -174,6 +193,10 @@ def plot_reldev_eigv(CovSims, CovTh, labels, yscale=['log', 'linear']):
     ax[1].set_yscale(yscale[1])
 
     plt.subplots_adjust(wspace=0, hspace=0)
+    plt.tight_layout()
+    if foutput is not None:
+        fname = foutput + '_reldev_eigval'
+        plt.savefig(fname, dpi=DPI)
     plt.show()
     plt.close()
 
@@ -187,10 +210,10 @@ def diagonalize(matrix):
     return Eval, Evec
 
 # Plot rows of covariance matrix
-def plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization, labels, index=20, dx=5, peaks=4):
+def plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization, labels, index=20, dx=5, peaks=4, foutput=None):
     c = DEFAULT_COLOR_CYCLE
 
-    f, ax = plt.subplots(2, 1, sharex=True, figsize=(4, 8))
+    f, ax = plt.subplots(2, 1, sharex=True, figsize=FIGSIZE2)
 
     X = lbins[index - dx:index + dx + 1]
 
@@ -220,6 +243,10 @@ def plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization, labels, index=20,
     ax[1].set_ylabel("Rel. dev. wrt. sims.")
     ax[1].set_xlabel("l'")
 
+    plt.tight_layout()
+    if foutput is not None:
+        fname = foutput + '_rows_cov_matrix'
+        plt.savefig(fname, dpi=DPI)
     plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
     plt.close()
@@ -240,31 +267,31 @@ def naive_covariance(lTh, l0, lf, fsky, cla1b1, cla1b2, cla2b1, cla2b2, unbinned
 
 # Do all checks at once:
 
-def do_all_checks(lbins, clsims, CovSims, CovTh, modes, hartlap=False, row_cov=True):
+def do_all_checks(lbins, clsims, CovSims, CovTh, modes, hartlap=False, row_cov=True, foutput=None):
     print('Checks for {}'.format(modes))
     print('Diagonal covariance matrix')
     check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], True)
     check_Covariance_diagonal_terms(CovSims, [CovTh], ['Analytical'], False)
     print('Chi2 distribution check')
-    chi2_sim, chi2_th = check_chi2_distributions(clsims, CovSims, CovTh, hartlap)
+    chi2_sim, chi2_th = check_chi2_distributions(clsims, CovSims, CovTh, hartlap, foutput)
     print()
     print('Difference between analytic and sims. correlation matrix')
-    CorrSims, CorrTh = plot_correlation_difference(lbins, CovSims, CovTh)
+    CorrSims, CorrTh = plot_correlation_difference(lbins, CovSims, CovTh, foutput=foutput)
     print('Eigenvalues vs l')
-    plot_reldev_eigv(CovSims, [CovTh], ['Analytical'])
+    plot_reldev_eigv(CovSims, [CovTh], ['Analytical'], foutput=foutput)
     if row_cov:
         print('Row of cov. matrix.')
         plot_rows_cov_matrix(lbins, CovSims, [CovTh], np.mean(clsims,
                                                               axis=0)[0]**2,
-                             ['Analytical'])
+                             ['Analytical'], foutput=foutput)
 
     return (chi2_sim, chi2_th), (CorrSims, CorrTh)
 
 def do_check_covariance_terms(lbins, CovSims, CovTh, labelsTh,
                               normalization_rows, principal=False,
                               yscale_eigv=['log', 'linear'], index_rows=20,
-                              dx_rows=5):
-    check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal)
-    plot_reldev_eigv(CovSims, CovTh, labelsTh, yscale_eigv)
-    plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization_rows, labelsTh, index_rows, dx_rows)
+                              dx_rows=5, foutput=None):
+    check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal, foutput=foutput)
+    plot_reldev_eigv(CovSims, CovTh, labelsTh, yscale_eigv, foutput=foutput)
+    plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization_rows, labelsTh, index_rows, dx_rows, foutput=foutput)
 
