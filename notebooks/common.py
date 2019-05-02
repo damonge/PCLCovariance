@@ -9,7 +9,7 @@ import os
 DEFAULT_COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 DPI = 500
 FIGSIZE = (4, 3)
-FIGSIZE2 = (4, 7)
+FIGSIZE2 = (4, 6)
 
 # Diagonal check
 def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True, foutput=None):
@@ -47,8 +47,8 @@ def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True, fo
     ax[1].set_xlabel('Element')
     ax[1].legend(loc=0)
 
-    plt.subplots_adjust(hspace=0)
     plt.tight_layout()
+    plt.subplots_adjust(wspace=0, hspace=0)
     if foutput is not None:
         fname = foutput + '_check_diagonal_terms_{}'.format('principal' if principal else 4)
         plt.savefig(fname, dpi=DPI)
@@ -192,8 +192,8 @@ def plot_reldev_eigv(CovSims, CovTh, labels, yscale=['log', 'linear'], foutput=N
     ax[0].set_yscale(yscale[0])
     ax[1].set_yscale(yscale[1])
 
-    plt.subplots_adjust(wspace=0, hspace=0)
     plt.tight_layout()
+    plt.subplots_adjust(wspace=0, hspace=0)
     if foutput is not None:
         fname = foutput + '_reldev_eigval'
         plt.savefig(fname, dpi=DPI)
@@ -244,10 +244,10 @@ def plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization, labels, index=20,
     ax[1].set_xlabel("l'")
 
     plt.tight_layout()
+    plt.subplots_adjust(wspace=0, hspace=0)
     if foutput is not None:
         fname = foutput + '_rows_cov_matrix'
         plt.savefig(fname, dpi=DPI)
-    plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
     plt.close()
 
