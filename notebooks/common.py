@@ -183,7 +183,7 @@ def plot_reldev_eigv(CovSims, CovTh, labels, yscale=['log', 'linear'], foutput=N
         ax[0].plot(X, Eval_Th, label=labels[i])
         ax[1].plot(X, Eval_Th/Eval_Sims - 1)
 
-    ax[0].set_xlabel('Eigenvalue')
+    ax[0].set_ylabel('Eigenvalue')
     ax[0].legend(loc=0)
 
     ax[1].set_xlabel('# dimmension')
