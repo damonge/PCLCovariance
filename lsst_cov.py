@@ -11,10 +11,34 @@ z_1  = np.array([np.linspace(0,3,512)])
 pz_1 = np.array([nofz(z_1[0],0.955,0.13,7.55)])
 
 # pz new bins
-z  = np.array([np.linspace(0,3,512),np.linspace(0,3,512),np.linspace(0,3,512)])
-pz = np.array([nofz(z[0],0.955,0.13,7.55),nofz(z[1],1.355,0.13,7.55),nofz(z[1],1.755,0.13,7.55)])
 z_2  = np.array([np.linspace(0,3,512),np.linspace(0,3,512)])
-pz_2 = np.array([nofz(z[0],0.955,0.13,7.55),nofz(z[1],1.355,0.13,7.55)])
+pz_2 = np.array([nofz(z_2[0],0.955,0.13,7.55),nofz(z_2[1],1.355,0.13,7.55)])
+z_3  = np.array([np.linspace(0,3,512),np.linspace(0,3,512),np.linspace(0,3,512)])
+pz_3 = np.array([nofz(z_3[0],0.955,0.13,7.55),nofz(z_3[1],1.355,0.13,7.55),nofz(z_3[2],1.755,0.13,7.55)])
+z_n  = np.array([
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512),
+    np.linspace(0,3,512)
+    ])
+pz_n = np.array([
+    nofz(z_n[0],0.955,0.13,7.55),
+    nofz(z_n[1],1.155,0.13,7.55),
+    nofz(z_n[2],1.255,0.13,7.55),
+    nofz(z_n[3],1.355,0.13,7.55),
+    nofz(z_n[4],1.455,0.13,7.55),
+    nofz(z_n[5],1.655,0.13,7.55),
+    nofz(z_n[6],1.755,0.13,7.55),
+    nofz(z_n[7],1.855,0.13,7.55),
+    nofz(z_n[8],1.955,0.13,7.55),
+    nofz(z_n[9],2.055,0.13,7.55)
+    ])
 
 pars = {
     'h'       : 0.67,
@@ -23,17 +47,18 @@ pars = {
     'A_s'     : 2.1e-9,
     'n_s'     : 0.96,
     'w_0'     : -1.,
-    'w_a'     : -0.
+    'w_a'     : -0.,
+    'fsky'    : 1.
 }
 
-
-
 ell_bp = np.load('./data/run_sph_ells.npz')['lsims'].astype(int)
-cov_th = np.load('./data/run_sph_covThTTTEEE.npz')['arr_0']
-cov_sim = np.load('./data/run_sph_covTTTEEE_clsims_0001-20000.npz')['arr_0']
-print(cov_th.shape)
-print(cov_sim.shape)
+cov_th_tmp = np.load('./data/run_sph_covThTTTEEE_short.npz')['arr_0']
+cov_sim = np.load('./data/run_sph_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
+cov_th = np.zeros((1023,1023))
 
+idx = np.triu_indices(1023)
+cov_th[idx] = cov_th_tmp[idx]
+cov_th.T[idx] = cov_th_tmp[idx]
 
 
 def get_cosmo_ccl(pars):
@@ -56,235 +81,160 @@ def get_tracers_ccl(cosmo, z, pz):
     tracers = []
     for i in range(n_bins):
         tracers.append(
-            [ccl.NumberCountsTracer(cosmo,has_rsd=False,dndz=(z[i],pz[i]),bias=(z[i],bz[i])),
-            ccl.WeakLensingTracer(cosmo,dndz=(z[i],pz[i]))]
+            ccl.NumberCountsTracer(cosmo,has_rsd=False,dndz=(z[i],pz[i]),bias=(z[i],bz[i]))
+            )
+        tracers.append(
+            ccl.WeakLensingTracer(cosmo,dndz=(z[i],pz[i]))
             )
     return np.array(tracers)
 
-def get_cl_ccl(cosmo, tracers, ells):
-    n_bins = tracers.shape[0]
-    n_te = tracers.shape[1]
+
+def get_cls_ccl(cosmo, tracers, ells):
+    n_bte = tracers.shape[0]
     n_ells = len(ells)
-    cls = np.zeros([n_bins, n_te, n_bins, n_te, n_ells])
+    cls = np.zeros([n_bte, n_bte, n_ells])
 
-    for c1 in range(n_bins*n_te): # c1=te1+b1*n_te
-        for c2 in range(c1, n_bins*n_te):
-            b1, te1 = np.divmod(c1, n_te)
-            b2, te2 = np.divmod(c2, n_te)
-            cls[b1,te1,b2,te2,:] = ccl.angular_cl(cosmo,tracers[b1,te1],tracers[b2,te2],ells)
-            cls[b2,te2,b1,te1,:] = cls[b1,te1,b2,te2,:]
+    for c1 in range(n_bte): # c1=te1+b1*n_te
+        for c2 in range(c1, n_bte):
+            cls[c1,c2,:] = ccl.angular_cl(cosmo,tracers[c1],tracers[c2],ells)
+            cls[c2,c1,:] = cls[c1,c2,:]
 
     return cls
 
-def flatten_cl(cl):
-    n_bins = cl.shape[0]
-    n_te = cl.shape[1]
-    n_ells = cl.shape[-1]
-    flat_cl = cl.reshape((n_bins*n_te,n_bins*n_te,n_ells))
-    flat_cl = flat_cl[np.triu_indices((n_bins*n_te))]
-    flat_cl = flat_cl.flatten()
-    return flat_cl
+
+def flatten_ell_cls(cls, n_bte, n_ells):
+    flat_cls = np.moveaxis(cls,[-3,-2,-1],[0,1,2])
+    flat_cls = flat_cls[np.triu_indices(n_bte)]
+    return flat_cls
 
 
-def unflatten_cl(cl, shape):
-    n_bins = shape[0]
-    n_te = shape[1]
-    n_ells = shape[-1]
-    tmp_cl = cl.reshape((n_bins*n_te+1)*n_bins*n_te/2,n_ells)
-    unflat_cl = np.zeros((n_bins*n_te,n_bins*n_te,n_ells))
-    unflat_cl[np.triu_indices(n_bins*n_te)] = tmp_cl
-    unflat_cl = np.moveaxis(unflat_cl,[0,1],[1,0])
-    unflat_cl[np.triu_indices(n_bins*n_te)] = tmp_cl
-    unflat_cl = unflat_cl.reshape(n_bins,n_te,n_bins,n_te,n_ells)
-    return unflat_cl
+def flatten_cls(cls, n_bte, n_ells):
+    flat_cls = flatten_ell_cls(cls, n_bte, n_ells)
+    flat_cls = flat_cls.reshape(((n_bte+1)*n_bte*n_ells/2,)+cls.shape[:-3])
+    return flat_cls
 
 
-
-cosmo = get_cosmo_ccl(pars)
-tracers = get_tracers_ccl(cosmo, z_2, pz_2)
-cls = get_cl_ccl(cosmo, tracers, ell_bp)
-flat_cls = flatten_cl(cls)
-print(flat_cls.shape)
-print(len(ell_bp))
-unflat_cls = unflatten_cl(flat_cls, cls.shape)
-print(np.min((cls-unflat_cls).flatten()))
-
-# cls = np.zeros((3,2,3,2,5))
-# std = np.ones(5)
-# cls[0,0,0,0,:] = 1.*std
-# cls[0,0,0,1,:] = 2.*std
-# cls[0,0,1,0,:] = 3.*std
-# cls[0,0,1,1,:] = 4.*std
-# cls[0,0,2,0,:] = 5.*std
-# cls[0,0,2,1,:] = 6.*std
-# cls[0,1,0,0,:] = cls[0,0,0,1,:]
-# cls[0,1,0,1,:] = 7.*std
-# cls[0,1,1,0,:] = 8.*std
-# cls[0,1,1,1,:] = 9.*std
-# cls[0,1,2,0,:] = 10.*std
-# cls[0,1,2,1,:] = 11.*std
-#
-# cls[1,0,0,0,:] = cls[0,0,1,0,:]
-# cls[1,0,0,1,:] = cls[0,1,1,0,:]
-# cls[1,0,1,0,:] = 12.*std
-# cls[1,0,1,1,:] = 13.*std
-# cls[1,0,2,0,:] = 14.*std
-# cls[1,0,2,1,:] = 15.*std
-# cls[1,1,0,0,:] = cls[0,0,1,1,:]
-# cls[1,1,0,1,:] = cls[0,1,1,1,:]
-# cls[1,1,1,0,:] = cls[1,0,1,1,:]
-# cls[1,1,1,1,:] = 16.*std
-# cls[1,1,2,0,:] = 17.*std
-# cls[1,1,2,1,:] = 18.*std
-#
-# cls[2,0,0,0,:] = cls[0,0,2,0,:]
-# cls[2,0,0,1,:] = cls[0,1,2,0,:]
-# cls[2,0,1,0,:] = cls[1,0,2,0,:]
-# cls[2,0,1,1,:] = cls[1,1,2,0,:]
-# cls[2,0,2,0,:] = 19.*std
-# cls[2,0,2,1,:] = 20.*std
-# cls[2,1,0,0,:] = cls[0,0,2,1,:]
-# cls[2,1,0,1,:] = cls[0,1,2,1,:]
-# cls[2,1,1,0,:] = cls[1,0,2,1,:]
-# cls[2,1,1,1,:] = cls[1,1,2,1,:]
-# cls[2,1,2,0,:] = cls[2,0,2,1,:]
-# cls[2,1,2,1,:] = 21.*std
-#
-# flat_cls = flatten_cl(cls)
-# unflat_cls = unflatten_cl(flat_cls, cls.shape)
-# print((cls-unflat_cls).flatten())
-
-exit(1)
+def unflatten_ell_cls(cls, n_bte, n_ells):
+    unflat_cls = np.zeros((n_bte,n_bte,n_ells))
+    unflat_cls[np.triu_indices(n_bte)] = cls
+    unflat_cls = np.moveaxis(unflat_cls,[0,1],[1,0])
+    unflat_cls[np.triu_indices(n_bte)] = cls
+    return unflat_cls
 
 
-def get_cl_ccl(pars, ell_bp, z, pz):
+def unflatten_cls(cls, n_bte, n_ells):
+    tmp_cls = cls.reshape((n_bte+1)*n_bte/2,n_ells)
+    unflat_cls = unflatten_ell_cls(tmp_cls, n_bte, n_ells)
+    return unflat_cls
 
-    n_ells = len(ell_bp)
+
+def flatten_ell_covmat(cov, n_bte, n_ells):
+    flat_cov = flatten_ell_cls(cov, n_bte, n_ells)
+    flat_cov = flatten_ell_cls(flat_cov, n_bte, n_ells)
+    return flat_cov
 
 
-    # Cosmo
+def flatten_covmat(cov, n_bte, n_ells):
+    flat_cov = flatten_cls(cov, n_bte, n_ells)
+    flat_cov = flatten_cls(flat_cov, n_bte, n_ells)
+    return flat_cov
+
+
+def unflatten_covmat(cov, n_bte, n_ells):
+    unflat_cov = np.apply_along_axis(unflatten_cls, -1, cov, n_bte, n_ells)
+    unflat_cov = np.apply_along_axis(unflatten_cls, -4, unflat_cov, n_bte, n_ells)
+    return unflat_cov
+
+
+def unflatten_ell_covmat(cov, n_bte, n_ells):
+    flat_cov = cov.reshape(((n_bte+1)*n_bte*n_ells/2,(n_bte+1)*n_bte*n_ells/2))
+    unflat_cov = unflatten_covmat(flat_cov, n_bte, n_ells)
+    return unflat_cov
+
+
+def get_lambda_cov(cls, ells, fsky, n_bte, n_ells):
+    delta_ell = np.average(np.ediff1d(ells))
+    clscls = np.zeros((n_bte,n_bte,n_bte,n_bte,n_ells))
+    for x in range(n_ells):
+        clscls[:,:,:,:,x] = np.multiply.outer(cls[:,:,x], cls[:,:,x])
+    cov = np.moveaxis(clscls,[0,1,2,3],[0,2,1,3]) + np.moveaxis(clscls,[0,1,2,3],[0,3,1,2])
+    cov = cov/fsky/(2.*ells+1.)/delta_ell
+    return cov
+
+
+def get_cov_N(cov_lambda):
+    cov = np.apply_along_axis(np.diag,-1,cov_lambda)
+    cov = np.moveaxis(cov,[0,1,2,3,4,5],[0,1,3,4,2,5])
+    return cov
+
+
+def get_cov_F(cov_c, cov_n, n_bte, n_ells):
+    cov_c_l = unflatten_covmat(cov_c, n_bte, n_ells)
+    cov_c_l = np.diagonal(cov_c_l,axis1=2,axis2=5)
+    cov_n_l = np.diagonal(cov_n,axis1=2,axis2=5)
+    cov_f = cov_c_l/cov_n_l
+    return cov_f
+
+
+def get_cov_R(cov_c, n_bte, n_ells):
+    cov_c_l = unflatten_covmat(cov_c, n_bte, n_ells)
+    cov_c_l = flatten_ell_covmat(cov_c_l, n_bte, n_ells)
+    cov_c_l_d = np.diagonal(cov_c_l,axis1=1,axis2=3)
+    cov_c_l_2 = np.multiply.outer(cov_c_l_d, cov_c_l_d)
+    cov_c_l_2 = np.diagonal(cov_c_l_2,axis1=0,axis2=3)
+    cov_c_l_2 = np.diagonal(cov_c_l_2,axis1=0,axis2=2)
+    cov_c_l_2 = np.moveaxis(cov_c_l_2,[0,1],[-3,-1])
+    cov_r = cov_c_l/np.sqrt(cov_c_l_2)
+    cov_r = unflatten_ell_covmat(cov_r, n_bte, n_ells)
+    return cov_r
+
+
+def get_idx_cov(pos, idx):
+    if pos>=len(idx[0]):
+        raise IOError('pos is larger than the number of elements. Maximum: {}'.format(len(idx[0])-1))
+    return idx[0][pos], idx[1][pos]
+
+
+def get_cov(cov_c, pars, ells, z_1, pz_1, z_n, pz_n):
+    # Common
+    n_ells = ells.shape[0]
     cosmo = get_cosmo_ccl(pars)
+    # 1 bin
+    tracers = get_tracers_ccl(cosmo, z_1, pz_1)
+    n_bte_1 = tracers.shape[0]
+    cls = get_cls_ccl(cosmo, tracers, ells)
+    lambda_cov = get_lambda_cov(cls, ells, pars['fsky'], n_bte_1, n_ells)
+    cov_n = get_cov_N(lambda_cov)
+    cov_f = get_cov_F(cov_c, cov_n, n_bte_1, n_ells)
+    cov_r = get_cov_R(cov_c, n_bte_1, n_ells)
+    # n bins
+    tracers = get_tracers_ccl(cosmo, z_n, pz_n)
+    n_bte_n = tracers.shape[0]
+    cls = get_cls_ccl(cosmo, tracers, ells)
+    lambda_cov = get_lambda_cov(cls, ells, pars['fsky'], n_bte_n, n_ells)
+    # Wrap everything together
+    n_cls_n = n_bte_n*(n_bte_n+1)/2
+    cov = np.zeros((n_cls_n, n_ells, n_cls_n, n_ells))
+    idx_l = np.triu_indices(n_cls_n)
+    idx_s = np.triu_indices(n_bte_n)
+    for pos in range(n_cls_n*(n_cls_n+1)/2):
+        x, y = get_idx_cov(pos, idx_l)
+        x1, x2 = get_idx_cov(x, idx_s)
+        y1, y2 = get_idx_cov(y, idx_s)
+        x1_1, x2_1 = np.mod(x1, n_bte_1), np.mod(x2, n_bte_1)
+        y1_1, y2_1 = np.mod(y1, n_bte_1), np.mod(y2, n_bte_1)
+        tmp_cov = np.sqrt(lambda_cov[x1,x2,y1,y2,:,None]*lambda_cov[x1,x2,y1,y2,None,:])
+        tmp_cov = tmp_cov*np.sqrt(cov_f[x1_1,x2_1,y1_1,y2_1,:,None]*cov_f[x1_1,x2_1,y1_1,y2_1,None,:])
+        tmp_cov = tmp_cov*cov_r[x1_1,x2_1,:,y1_1,y2_1,:]
+        cov[x,:,y,:] = tmp_cov
+        cov[y,:,x,:] = tmp_cov.T
+    cov = cov.reshape((n_cls_n*n_ells,n_cls_n*n_ells))
 
 
-    # tracers = np.empty([2,n_bins])
-    # tracers[0,0]=ccl.NumberCountsTracer(cosmo,has_rsd=False,dndz=(z[0],pz[0]),bias=(z[0],bz[0]))
-    try:
-        print(tracers.shape)
-    except:
-        pass
 
-    # Cls
-    cls = np.zeros([2,2,n_bins,n_bins,n_ells])
-
-    #
-    # lens=
-    #
-    # ell=np.arange(nell)
-    # cl0=np.zeros(nell)*0.
-    #
-    # cls=np.zeros([3,3,nell])
-    # cls[0,0,:]=ccl.angular_cl(cosmo,clust,clust,ell)
-    # cls[0,1,:]=ccl.angular_cl(cosmo,clust,lens,ell)
-    # cls[0,2,:]=cl0
-    # cls[1,0,:]=cls[0,1,:]
-    # cls[1,1,:]=ccl.angular_cl(cosmo,lens,lens,ell)
-    # cls[1,2,:]=cl0
-    # cls[2,0,:]=cls[0,2,:]
-    # cls[2,1,:]=cls[1,2,:]
-    # cls[2,2,:]=cl0
-
-    cls = 0
-    # cl_flat = np.concatenate(
-    #     [cls[0,0,ell_bp],
-    #     cls[0,1,ell_bp],
-    #     cls[1,1,ell_bp]]
-    # )
-
-    return cls
-
-get_cl_ccl(pars, ell_bp, z_1, pz_1)
-get_cl_ccl(pars, ell_bp, z, pz)
-
-#print(cov_th)
-#print(cov_sim.shape)
-#print(ell_bp)
-
-exit(1)
-
-nell=30000
-dx = 0.1
-
-factor = (20000-len(cov_sim)-2.)/(20000.-1.)
-inv_cov_th = np.linalg.inv(cov_th)
-inv_cov_sim = factor*np.linalg.inv(cov_sim)
-
-factor_sph = (20000-len(cov_sim_sph)-2.)/(20000.-1.)
-inv_cov_th_sph = np.linalg.inv(cov_th_sph)
-inv_cov_sim_sph = factor_sph*np.linalg.inv(cov_sim_sph)
+    return cov
 
 
-z, pz = np.loadtxt('./nz.txt', unpack=True)
-
-def get_cl_ccl(pars,ell_bp):
-
-    cosmo = get_cosmo_ccl(pars)
-    clust=ccl.NumberCountsTracer(cosmo,has_rsd=False,dndz=(z,pz),bias=(z,bz))
-    lens=ccl.WeakLensingTracer(cosmo,dndz=(z,pz))
-
-    ell=np.arange(nell)
-    cl0=np.zeros(nell)*0.
-
-    cls=np.zeros([3,3,nell])
-    cls[0,0,:]=ccl.angular_cl(cosmo,clust,clust,ell)
-    cls[0,1,:]=ccl.angular_cl(cosmo,clust,lens,ell)
-    cls[0,2,:]=cl0
-    cls[1,0,:]=cls[0,1,:]
-    cls[1,1,:]=ccl.angular_cl(cosmo,lens,lens,ell)
-    cls[1,2,:]=cl0
-    cls[2,0,:]=cls[0,2,:]
-    cls[2,1,:]=cls[1,2,:]
-    cls[2,2,:]=cl0
-
-    cl_flat = np.concatenate(
-        [cls[0,0,ell_bp],
-        cls[0,1,ell_bp],
-        cls[1,1,ell_bp]]
-    )
-
-    return cl_flat
-
-
-def diff_cls(pars, var,ell_bp, dx=0.01):
-    if pars[var] == 0.:
-        Dx = dx
-    else:
-        Dx = dx*np.abs(pars[var])
-    parstmp = pars.copy()
-    parstmp[var] = pars[var]+Dx
-    clP = get_cl_ccl(parstmp,ell_bp)
-    parstmp[var] = pars[var]-Dx
-    clM = get_cl_ccl(parstmp,ell_bp)
-    return (clP-clM)/(2.*Dx)
-
-
-print('Flat sky:')
-for var in pars.keys():
-    diff = diff_cls(pars, var,ell_bp, dx=dx)
-    res_th = (diff.dot(inv_cov_th).dot(diff))**(-1./2.)
-    res_sim = (diff.dot(inv_cov_sim).dot(diff))**(-1./2.)
-    rel_diff = np.abs(res_th/res_sim-1.)
-    print('Parameter {}:'.format(var))
-    print('----> Theory      : {}'.format(res_th))
-    print('----> Simulations : {}'.format(res_sim))
-    print('----> Rel diff    : {}'.format(rel_diff))
-
-print('Full sky:')
-for var in pars.keys():
-    diff = diff_cls(pars, var,ell_bp_sph, dx=dx)
-    res_th = (diff.dot(inv_cov_th_sph).dot(diff))**(-1./2.)
-    res_sim = (diff.dot(inv_cov_sim_sph).dot(diff))**(-1./2.)
-    rel_diff = np.abs(res_th/res_sim-1.)
-    print('Parameter {}:'.format(var))
-    print('----> Theory      : {}'.format(res_th))
-    print('----> Simulations : {}'.format(res_sim))
-    print('----> Rel diff    : {}'.format(rel_diff))
+cov = get_cov(cov_th, pars, ell_bp, z_1, pz_1, z_1, pz_1)
+print(np.count_nonzero(cov-cov.T))
+print(np.abs((cov/cov_th-1.).flatten()).max())
