@@ -78,15 +78,15 @@ for i, indices in enumerate(cov_indices):
     nb2 = get_nelems_spin(s_b2)
 
     fname = out_run_path + '_cov_c{}{}{}{}_{}{}{}{}.npz'.format(*cov_spins[i], *cov_bins[i])
-    c = np.load(fname)['arr_0'].reshape((na1 * na2, l_bpw, nb1 * nb2, l_bpw))
+    c = np.load(fname)['arr_0'].reshape((l_bpw, na1 * na2, l_bpw, nb1 * nb2))
 
     #  TT -> 0; TE -> 0;  EE -> 0
-    cov_arr[i] = c[0, :, 0, :]
+    cov_arr[i] = c[:, 0, :, 0]
 
-cov_mat = np.empty((len(cl_bins), l_bpw, len(cl_bins), l_bpw))
+cov_mat = np.empty((l_bpw, len(cl_bins), l_bpw, len(cl_bins)))
 i, j = np.triu_indices(len(cl_bins))
-cov_mat[i, :,  j] = cov_arr
-cov_mat[j, :,  i] = cov_arr
+cov_mat[:, i, :, j] = cov_arr
+cov_mat[:, j, :, i] = cov_arr
 cov_mat = cov_mat.reshape((len(cl_bins) * l_bpw, len(cl_bins) * l_bpw))
 
 fname = out_run_path + '_covTh_TTTEEE_2bins_same_mask.npz'
@@ -94,10 +94,10 @@ np.savez_compressed(fname, cov_mat)
 
 ####################### Short version #############################
 
-cov_mat = np.empty((len(cl_bins), lmax, len(cl_bins), lmax))
+cov_mat = np.empty((lmax, len(cl_bins), lmax, len(cl_bins)))
 i, j = np.triu_indices(len(cl_bins))
-cov_mat[i, :,  j] = cov_arr[:, :lmax, :lmax]
-cov_mat[j, :,  i] = cov_arr[:, :lmax, :lmax]
+cov_mat[:, i, :, j] = cov_arr[:, :lmax, :lmax]
+cov_mat[:, j, :, i] = cov_arr[:, :lmax, :lmax]
 cov_mat = cov_mat.reshape((len(cl_bins) * lmax, len(cl_bins) * lmax))
 
 fname = out_run_path + '_covTh_TTTEEE_short_2bins_same_mask.npz'
