@@ -1,6 +1,7 @@
 import numpy as np
 import pyccl as ccl
 import os
+import sys
 
 
 def nofz(z,z0,sz,ndens):
@@ -56,9 +57,6 @@ cov_th_tmp = np.load('./data/run_sph_covThTTTEEE_short.npz')['arr_0']
 cov_sim = np.load('./data/run_sph_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
 cov_th = np.zeros((1023,1023))
 
-idx = np.triu_indices(1023)
-cov_th[idx] = cov_th_tmp[idx]
-cov_th.T[idx] = cov_th_tmp[idx]
 
 
 def get_cosmo_ccl(pars):
@@ -168,27 +166,6 @@ def get_cov_N(cov_lambda):
     return cov
 
 
-def get_cov_F(cov_c, cov_n, n_bte, n_ells):
-    cov_c_l = unflatten_covmat(cov_c, n_bte, n_ells)
-    cov_c_l = np.diagonal(cov_c_l,axis1=2,axis2=5)
-    cov_n_l = np.diagonal(cov_n,axis1=2,axis2=5)
-    cov_f = cov_c_l/cov_n_l
-    return cov_f
-
-
-def get_cov_R(cov_c, n_bte, n_ells):
-    cov_c_l = unflatten_covmat(cov_c, n_bte, n_ells)
-    cov_c_l = flatten_ell_covmat(cov_c_l, n_bte, n_ells)
-    cov_c_l_d = np.diagonal(cov_c_l,axis1=1,axis2=3)
-    cov_c_l_2 = np.multiply.outer(cov_c_l_d, cov_c_l_d)
-    cov_c_l_2 = np.diagonal(cov_c_l_2,axis1=0,axis2=3)
-    cov_c_l_2 = np.diagonal(cov_c_l_2,axis1=0,axis2=2)
-    cov_c_l_2 = np.moveaxis(cov_c_l_2,[0,1],[-3,-1])
-    cov_r = cov_c_l/np.sqrt(cov_c_l_2)
-    cov_r = unflatten_ell_covmat(cov_r, n_bte, n_ells)
-    return cov_r
-
-
 def get_idx_cov(pos, idx):
     if pos>=len(idx[0]):
         raise IOError('pos is larger than the number of elements. Maximum: {}'.format(len(idx[0])-1))
@@ -205,8 +182,8 @@ def get_cov(cov_c, pars, ells, z_1, pz_1, z_n, pz_n):
     cls = get_cls_ccl(cosmo, tracers, ells)
     lambda_cov = get_lambda_cov(cls, ells, pars['fsky'], n_bte_1, n_ells)
     cov_n = get_cov_N(lambda_cov)
-    cov_f = get_cov_F(cov_c, cov_n, n_bte_1, n_ells)
-    cov_r = get_cov_R(cov_c, n_bte_1, n_ells)
+    cov_f = 1./np.diagonal(cov_n,axis1=2,axis2=5)
+    cov_r = unflatten_covmat(cov_c, n_bte_1, n_ells)
     # n bins
     tracers = get_tracers_ccl(cosmo, z_n, pz_n)
     n_bte_n = tracers.shape[0]
@@ -235,6 +212,23 @@ def get_cov(cov_c, pars, ells, z_1, pz_1, z_n, pz_n):
     return cov
 
 
-cov = get_cov(cov_th, pars, ell_bp, z_1, pz_1, z_1, pz_1)
-print(np.count_nonzero(cov-cov.T))
-print(np.abs((cov/cov_th-1.).flatten()).max())
+nb = 7
+print(nb)
+sys.stdout.flush()
+cov = get_cov(cov_sim, pars, ell_bp, z_1, pz_1, z_n[:nb], pz_n[:nb])
+print(cov.shape)
+sys.stdout.flush()
+
+vec = np.random.randn(cov.shape[0])
+covvec = np.linalg.solve(cov, vec)
+print(covvec.shape)
+sys.stdout.flush()
+
+
+# icov = np.linalg.inv(cov)
+# print(icov.shape)
+# sys.stdout.flush()
+
+
+# print(np.count_nonzero(cov-cov.T))
+# print(np.abs((cov/cov_sim-1.).flatten()).max())

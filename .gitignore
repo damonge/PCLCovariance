@@ -4,3 +4,6 @@ data/mask_lss_sph.fits
 *~
 run*/
 Simulations/
+.bashrc
+python-*.out
+python.sh
