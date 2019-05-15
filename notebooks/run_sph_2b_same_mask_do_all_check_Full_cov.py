@@ -36,7 +36,7 @@ for i, Cli in enumerate(Cls):
 Cls_Bs_ar = np.array(Cls_Bs_ar)
 cl_ar_noBs = cl_ar[np.all(Cls_Bs_ar != 2, axis=1)]
 
-cl_for_C = np.concatenate(cl_ar_noBs[:, :, :lmax])
+cl_for_C = np.concatenate(cl_ar_noBs[:, :, :lmax].swapaxes(1, 2)).T
 lbins_Full = np.concatenate([ells[:lmax]] * cl_ar_noBs.shape[0])
 
 ##################
