@@ -34,5 +34,5 @@ cl_for_C = np.concatenate(cl_ar_noBs[:, :, :lmax].swapaxes(1, 2))
 
 C = np.cov(cl_for_C)
 
-fname = run_path + '_covSims_TTTEEE_short' + ' _0001-20000.npz' # sims_suffix
+fname = output_path + '_covSims_TTTEEE_short_0001-20000.npz' # sims_suffix
 np.savez_compressed(fname, C)
