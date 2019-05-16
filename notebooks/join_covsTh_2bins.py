@@ -83,10 +83,10 @@ for i, indices in enumerate(cov_indices):
     #  TT -> 0; TE -> 0;  EE -> 0
     cov_arr[i] = c[:, 0, :, 0]
 
-cov_mat = np.empty((l_bpw, len(cl_bins), l_bpw, len(cl_bins)))
+cov_mat = np.empty((len(cl_bins), l_bpw, len(cl_bins), l_bpw))
 i, j = np.triu_indices(len(cl_bins))
-cov_mat[:, i, :, j] = cov_arr
-cov_mat[:, j, :, i] = cov_arr
+cov_mat[i, :, j, :] = cov_arr
+cov_mat[j, :, i, :] = cov_arr.swapaxes(1, 2)
 cov_mat = cov_mat.reshape((len(cl_bins) * l_bpw, len(cl_bins) * l_bpw))
 
 fname = out_run_path + '_covTh_TTTEEE_2bins_same_mask.npz'
@@ -94,11 +94,20 @@ np.savez_compressed(fname, cov_mat)
 
 ####################### Short version #############################
 
-cov_mat = np.empty((lmax, len(cl_bins), lmax, len(cl_bins)))
+cov_mat = np.empty((len(cl_bins), lmax, len(cl_bins), lmax))
 i, j = np.triu_indices(len(cl_bins))
-cov_mat[:, i, :, j] = cov_arr[:, :lmax, :lmax]
-cov_mat[:, j, :, i] = cov_arr[:, :lmax, :lmax]
+cov_mat[i, :, j, :] = cov_arr[:, :lmax, :lmax]
+cov_mat[j, :, i, :] = cov_arr[:, :lmax, :lmax].swapaxes(1, 2)
 cov_mat = cov_mat.reshape((len(cl_bins) * lmax, len(cl_bins) * lmax))
 
 fname = out_run_path + '_covTh_TTTEEE_short_2bins_same_mask.npz'
 np.savez_compressed(fname, cov_mat)
+
+# cov_mat = np.empty((len(cl_bins), len(cl_bins), lmax, lmax))
+# i, j = np.triu_indices(len(cl_bins))
+# cov_mat[i, j] = cov_arr[:, :lmax, :lmax]
+# cov_mat[j, i] = cov_arr[:, :lmax, :lmax].swapaxes(1, 2)
+# cov_mat = np.block([[mat for mat in cov_mati] for cov_mati in cov_mat])
+#
+# fname = out_run_path + '_covTh_TTTEEE_short_2bins_same_mask.npz'
+# np.savez_compressed(fname, cov_mat)
