@@ -118,9 +118,18 @@ recover the fiducial power spectra for; i.e. $\sim 2 \times 512$. This
 corresponds to $l_{\mbox{bpw}} = 1023$. For the lecture of the sky maps and
 masks we used \textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}
 and
-\textit{NaMaster}~\cite{2018arXiv180909603A}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}
+\textit{NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}~\cite{2018arXiv180909603A}
 for the computation of the pseudo-$\cl$ and the covariances. Our code is
 publicly available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
+
+The same results are obtained even in the presence of foregrounds. In
+particular, we tested the case with 100 foregrounds both at low scales and
+large scales, adding a mock power spectra computed as $\clf = A (l +
+1)^{\beta}$. Here, $A$ was fixed so that the ratio of the foreground power
+spectra and the theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$
+and $\beta$ was randomly chosen from $U[-3, -1)$ for large scale effects and
+fixed to $\beta = 0$ for small scale ones.
+
 
 
 
