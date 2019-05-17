@@ -42,10 +42,11 @@
 \newcommand{\fsky}{f_{\mbox{sky}}}
 \newcommand{\clth}{C_l^{th}}
 \newcommand{\clf}{C_l^{fore}}
+\newcommand{\cl}{C_l}
 
 
 \title[Covariance]{Covariance}
-\author[C. Garc\'{i}a Garc\'{i}a et al.]{Carlos Garc\'{i}a Garc\'{i}a$^1$\thanks{carlosgarcia@iff.csic.es}, David Alonso$^2$\thanks{david.alonso@physics.ox.ac.uk}, Emilio Bellini$^2$\thanks{emilio.bellini@physics.ox.ac.uk}\\
+\author[C. Garc\'{i}a-Garc\'{i}a et al.]{Carlos Garc\'{i}a-Garc\'{i}a$^1$\thanks{carlosgarcia@iff.csic.es}, David Alonso$^2$\thanks{david.alonso@physics.ox.ac.uk}, Emilio Bellini$^2$\thanks{emilio.bellini@physics.ox.ac.uk}\\
 $^{1}$IFF\\
 $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, UK
 }
@@ -104,42 +105,50 @@ Plots:
 \item Eigenvalues
 \end{itemize}
 
-In this section we will show the performance of each approximation and up to
-which point they hold. We will compare the analytical covariance matrices with
-those from simulated power spectra. 
+In this section we will show that our approximation is good and reliable; i.e.
+that can be used to obtain the cosmological parameters within the same error
+as using the covariance matrix from simulations. 
 
-The simulations were generated as follow. First, we starts from some realistic
-large scale structure power spectra ($\clth$) and mask, which determines the
-number of modes. To this theoretical power spectra, in some cases, we
-added some foregrounds to study their impact on the approximated covariances.
-The mock power spectra was computed as follows:
-\begin{eqnarray}
-  \clf = A (l + 1)^\beta\,,
-\end{eqnarray}
-where $A$ was fixed so that $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
-randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
-0$ for small scale ones.
+In order to generate the simulated $\cl$ we computed the correlations between
+Gaussian fields obtained from a fiducial power spectra. The covariance
+matrices were obtained from 20000 simulations, for the band powers determined
+by the fraction of sky observed and the maximum band power we were able to
+recover the fiducial power spectra for; i.e. $\sim 2 \times 512$. This
+corresponds to $l_{\mbox{bpw}} = 1023$. For the lecture of the sky maps and
+masks we used \textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}
+and
+\textit{NaMaster}~\cite{2018arXiv180909603A}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}
+for the computation of the pseudo-$\cl$ and the covariances. Our code is
+publicly available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
 
-The resulting power spectra was then used to generate a map of the sky and
-two random fields (one of spin-0 and other of spin-2), in turn. Their
-correlations give  are used to obtain the simulated power spectra. In order to
-find the real power spectra, it is necessary to subtract the contribution of
-the mask, which mixes the closest modes:
-\begin{equation}
-  C^{obs}_l = \sum_{l'} M_{ll'} C_{l'}\,
-\end{equation}
-where $M$ depends on the mask. In general, $M$ is not invertible and, in order
-to be able to recover the true power spectra, $C_l$, one needs to bin the
-$l$-space. The bin width is given by the characteristics of the window
-function and must be, approximately, of the size of the range of the mixed
-modes. That way, each $\tilde C_l$ is almost independent of the others
-$\tilde C_{l'}$, and $M$ is invertible.
 
-The code to generate simulated power spectra and analyze the posterior
-results is publicly available in
-\url{https://github.com/damonge/PCLCovariance} and uses
-NaMaster~\cite{2018arXiv180909603A}, in order to compute the necessary fields
-and their correlations. 
+
+% The simulations were generated as follow. First, we starts from some realistic
+% large scale structure power spectra ($\clth$) and mask, which determines the
+% number of modes. To this theoretical power spectra, in some cases, we
+% added some foregrounds to study their impact on the approximated covariances.
+% The mock power spectra was computed as follows:
+% \begin{eqnarray}
+%   \clf = A (l + 1)^\beta\,,
+% \end{eqnarray}
+% where $A$ was fixed so that $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
+% randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
+% 0$ for small scale ones.
+
+% The resulting power spectra was then used to generate a map of the sky and
+% two random fields (one of spin-0 and other of spin-2), in turn. Their
+% correlations give  are used to obtain the simulated power spectra. In order to
+% find the real power spectra, it is necessary to subtract the contribution of
+% the mask, which mixes the closest modes:
+% \begin{equation}
+%   C^{obs}_l = \sum_{l'} M_{ll'} C_{l'}\,
+% \end{equation}
+% where $M$ depends on the mask. In general, $M$ is not invertible and, in order
+% to be able to recover the true power spectra, $C_l$, one needs to bin the
+% $l$-space. The bin width is given by the characteristics of the window
+% function and must be, approximately, of the size of the range of the mixed
+% modes. That way, each $\tilde C_l$ is almost independent of the others
+% $\tilde C_{l'}$, and $M$ is invertible.
 
 
 \section{Discussion}\label{sec:discussion}
@@ -147,9 +156,12 @@ and their correlations.
 
 \section*{Acknowledgements}
 We would like to thank Eva-Maria Mueller for useful discussion. CGG is
-supported by AYA2015-67854-P from the Ministry of Industry, Science and
-Innovation of Spain and the FEDER funds and by the Spanish grant, partially
-funded by the ESF, BES-2016-077038.
+supported the Spanish grant BES-2016-077038, partially funded by the ESF and by
+AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain
+and the FEDER funds. He was partially supported by a Balzan Fellowship while
+in Oxford. He would like to thank New College and the Department of Physics at
+Oxford for their hospitality. DA acknowledges support from STFC through an
+Ernest Rutherford Fellowship, grant reference ST/P004474/1.
 
 \setlength{\bibhang}{2.0em}
 \setlength\labelwidth{0.0em}
