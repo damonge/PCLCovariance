@@ -3,3 +3,7 @@ data/mask_lss_sph.fits
 *.pyc
 *~
 run*/
+Simulations/
+.bashrc
+python-*.out
+python.sh
