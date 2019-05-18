@@ -141,7 +141,12 @@ worst case (i.e. EEEE) we are able to recover its shape, although sifted
 toward lower values. This might be consequence of the fact that the inverse of
 the covariance matrix is biased. It is interesting to note that even
 the approximation of the mixing matrix as that of the case with spin 0, gives
-good results.
+good results. The eigenvalues of the covariance matrix
+(Fig.~\ref{fig:TTTT_EEEE_eigv}) are also recovered within the 1\%, for all
+scales in the TTTT case, and for the smaller scales in the EEEE case. Finally,
+the analytical approximations are shown to describe the scale coupling (see
+Fig.~\ref{fig:TTTT_rows} that comes from the fact we are masking some regions
+of the sky.
 
 \begin{figure*} %[htb]
   \centering
@@ -151,6 +156,22 @@ good results.
     covariances for the TTTT (left) and EEEE (right) cases.}
   \label{fig:TTTT_EEEE_chi2}
 \end{figure*}
+
+\begin{figure*} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_reldev_eigval.png}~
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_EEEE_reldev_eigval.png}
+  \caption{Comparison of the covariance matrix eigenvalues for the TTTT (left)
+    and EEEE (right) cases.} 
+  \label{fig:TTTT_EEEE_eigv}
+\end{figure*}
+
+\begin{figure} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_rows_cov_matrix.png}~
+  \caption{Mask induced scale correlations for the TTTT case.}
+  \label{fig:TTTT_rows}
+\end{figure}
 
 The goodness of the approximation is also seen in the correlation matrices.
 The subtraction of the correlation matrix from the simulations and that from
@@ -164,8 +185,22 @@ scales of the EEEE modes (see Fig.~\ref{fig:TTTT_EEEE_corr}).
   \includegraphics[width=\columnwidth]{./figures/run_sph_Efstathiou_EEEE_correlation_difference.png}
   \caption{Differences between the simulations and analytical approximation of
     the correlation matrices for the TTTT (left) and EEEE (right) cases.}
-  \label{fig:TTTT_EEEE_chi2}
+  \label{fig:TTTT_EEEE_corr}
 \end{figure*}
+
+These approximations do not work well for the B-modes, though. We can see in
+Fig.~\ref{fig:BBBB} that we are not able to recover with accuracy the first
+diagonal elements.
+
+
+\begin{figure} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_BBBB_check_diagonal_terms_4.png}
+  \caption{The analytical approximation are not able to reproduce accurately
+    the terms involving the B-modes. Here we show the most extreme case, the
+    corresponding to the BBBB modes.}
+  \label{fig:BBBB}
+\end{figure}
 
 
 % The resulting power spectra was then used to generate a map of the sky and
