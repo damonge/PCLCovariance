@@ -9,7 +9,7 @@ import os
 DEFAULT_COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 DPI = 500
 FIGSIZE = (4, 3)
-FIGSIZE2 = (4, 6)
+FIGSIZE2 = (4, 4)
 
 # Diagonal check
 def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True, foutput=None):
@@ -39,11 +39,11 @@ def check_Covariance_diagonal_terms(CovSims, CovTh, labelsTh, principal=True, fo
             if principal:
                 break
 
-    ax[0].set_ylabel('abs(Diag terms covariance matrix)')
+    ax[0].set_ylabel('abs(Diag terms cov.)')
     ax[0].set_yscale('log')
     ax[0].legend(loc=0)
 
-    ax[1].set_ylabel('Rel.dev. wrt. sim. cov.')
+    ax[1].set_ylabel('Rdev. wrt. sim. cov.')
     ax[1].set_xlabel('Element')
     ax[1].legend(loc=0)
 
