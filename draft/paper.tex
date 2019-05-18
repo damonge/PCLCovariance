@@ -206,6 +206,38 @@ diagonal elements.
   \label{fig:BBBB}
 \end{figure}
 
+Finally, the analytical covariance also works for 2-bin correlations. The
+$\chi^2$ distribution for the covariance matrix of the modes TT, TE and EE
+among two bins is shown in Fig.~\ref{fig:TTTEEE_chi2}. The eigenvalues
+are recovered well except for the lower ones that diverge up to $20\%$ (see
+Fig.~\ref{fig:TTTEEE_eigv}, this is not translated to any substantial
+difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
+
+\begin{figure} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_chi2.png}
+  \caption{$\chi^2$ distribution check for the full analytical covariance
+    matrix for the modes TT, TE and EE among two bins.}
+  \label{fig:TTTEEE_chi2}
+\end{figure}
+
+\begin{figure} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_reldev_eigval.png}
+  \caption{Relative difference between the analytical and simulations
+    covariance matrix eigenvalues for the modes TT, TE and EE among two bins.}
+  \label{fig:TTTEEE_eigv}
+\end{figure}
+
+\begin{figure} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_correlation_difference.png}
+  \caption{Difference of the correlation matrices of the simulated $\cl$ and
+    the analytical one for the modes TT, TE and EE among two bins..}
+  \label{fig:TTTEEE_corr}
+\end{figure}
+
+
 
 % The resulting power spectra was then used to generate a map of the sky and
 % two random fields (one of spin-0 and other of spin-2), in turn. Their
