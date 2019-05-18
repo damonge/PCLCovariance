@@ -130,20 +130,29 @@ spectra and the theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$
 and $\beta$ was randomly chosen from $U[-3, -1)$ for large scale effects and
 fixed to $\beta = 0$ for small scale ones.
 
+Apart from checking that we recover the same cosmological predictions from the
+covariance matrices from both the analytical approximation and the
+simulations, we studied the differences between them.
+
+In this sense, one can see in Fig.~\ref{fig:TTTT_EEEE_chi2} that, we fully
+recover the $\chi^2$ distribution (defining $\chi^2 = \cl - \langle \cl
+\rangle C^{-1} \cl - \langle \cl \rangle$) for the TTTT case; whereas for the
+worst case (i.e. EEEE) we are able to recover its shape, although sifted
+toward lower values. This might be consequence of the fact that the inverse of
+the covariance matrix is biased. It is interesting to note that even
+the approximation of the mixing matrix as that of the case with spin 0, gives
+good results.
+
+\begin{figure*} %[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_chi2.png}~
+  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_EEEE_chi2.png}
+  \caption{Comparison of the distributions found using different
+    covariances for the TTTT (left) and EEEE (right) cases.}
+  \label{fig:TTTT_EEEE_chi2}
+\end{figure*}
 
 
-
-% The simulations were generated as follow. First, we starts from some realistic
-% large scale structure power spectra ($\clth$) and mask, which determines the
-% number of modes. To this theoretical power spectra, in some cases, we
-% added some foregrounds to study their impact on the approximated covariances.
-% The mock power spectra was computed as follows:
-% \begin{eqnarray}
-%   \clf = A (l + 1)^\beta\,,
-% \end{eqnarray}
-% where $A$ was fixed so that $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
-% randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
-% 0$ for small scale ones.
 
 % The resulting power spectra was then used to generate a map of the sky and
 % two random fields (one of spin-0 and other of spin-2), in turn. Their
