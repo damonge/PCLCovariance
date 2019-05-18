@@ -76,6 +76,7 @@ This section presents the analytical calculation of the pseudo-$C_\ell$ covarian
   \begin{equation}
     C^{abcd} = \frac{\pcl{l}ad \pcl{l}bc + \pcl{l}ac \pcl{l}bd}{f_{sky} (2l +
       1) \Delta l} \delta_{ll'}
+    \label{eq:naive}
   \end{equation}
 \item Approximation 1
 \item Approximation 2
@@ -146,7 +147,10 @@ good results. The eigenvalues of the covariance matrix
 scales in the TTTT case, and for the smaller scales in the EEEE case. Finally,
 the analytical approximations are shown to describe the scale coupling (see
 Fig.~\ref{fig:TTTT_rows} that comes from the fact we are masking some regions
-of the sky.
+of the sky. The larger relative deviation for the better approximations are
+due to the fact that there is a division by $0$, while for the naive
+approximation, which is defined diagonal (see Eq.~\ref{eq:naive}), the
+relative deviation is exactly $-1$ for all values with $l \neq l'$.
 
 \begin{figure*} %[htb]
   \centering
