@@ -85,7 +85,7 @@ for i in range(axs.shape[0]):
     axs[i, i].xaxis.set_tick_params(labelbottom=True)
     axs[i, i].yaxis.set_tick_params(labelleft=True)
     axs[0, i].set_title(labels[i])
-    axs[i, -1].text(1, 0.5, labels[i], rotation=270,
+    axs[i, -1].text(1, 0.5, labels[i], fontsize=12,
                     transform=axs[i, -1].transAxes)
 
 
@@ -159,18 +159,22 @@ plt.close()
 ############################# Foregrounds ####################################
 ##############################################################################
 
-cl_ss = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(0, 0), N=1)
-cl_ls1 = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(-3, -3), N=1)[0]
-cl_ls2 = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(-1, -1), N=1)[0]
+# cl_ss = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(0, 0), N=1)
+# cl_ls1 = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(-3, -3), N=1)[0]
+# cl_ls2 = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(-1, -1), N=1)[0]
+
+cl_ss = tp.create_cl_templates(lTh, clTh_TT,  exp_range=(0, 0), N=1)
+cl_ls1 = tp.create_cl_templates(lTh, clTh_TT, exp_range=(-3, -3), N=1)[0]
+cl_ls2 = tp.create_cl_templates(lTh, clTh_TT, exp_range=(-1, -1), N=1)[0]
 
 fname = os.path.join(outdir, 'foreground.png')
 
 f, ax = plt.subplots(1, 1, figsize=FSIZE1)
-ax.loglog(ell, cl_ls1, c='orange')
-ax.loglog(ell, cl_ls2, c='orange', label='Large scales')
-ax.fill_between(ell, cl_ls1, cl_ls2, facecolor="orange", alpha=0.5)
+ax.loglog(lTh, cl_ls1, c='orange')
+ax.loglog(lTh, cl_ls2, c='orange', label='Large scales')
+ax.fill_between(lTh, cl_ls1, cl_ls2, facecolor="orange", alpha=0.5)
 
-ax.loglog(ell, cl_ss[0], c='b', label='Small scales')
+ax.loglog(lTh, cl_ss[0], c='b', label='Small scales')
 
 ax.set_xlabel('l')
 ax.set_ylabel(r'$C_l^{gg}$')
