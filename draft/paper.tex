@@ -43,6 +43,7 @@
 \newcommand{\clth}{C_l^{th}}
 \newcommand{\clf}{C_l^{fore}}
 \newcommand{\cl}{C_l}
+\newcommand{\red}[1]{{\color{red} #1}}
 
 
 \title[Reliable analytic approximation of pseudo-$\cl$ covariances]{Reliable analytic approximation of pseudo-$\cl$ covariances}
@@ -111,26 +112,76 @@ In this section we will show that our approximation is good and reliable; i.e.
 that can be used to obtain the cosmological parameters within the same error
 as using the covariance matrix from simulations. 
 
-In order to generate the simulated $\cl$ we computed the correlations between
-Gaussian fields obtained from a fiducial power spectra. The covariance
-matrices were obtained from 20000 simulations, for the band powers determined
-by the fraction of sky observed and the maximum band power we were able to
-recover the fiducial power spectra for; i.e. $\sim 2 \times 512$. This
-corresponds to $l_{\mbox{bpw}} = 1023$. For the lecture of the sky maps and
-masks we used \textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}
-and
+\subsection{Simulations}
+
+Simulations were drawn from Gaussian fields that followed a fiducial power
+spectrum. The fiducial cosmology (\red{For the 2-bin case}) is given by
+$\Omega_{cdm} = 0.27$, $\Omega_b = 0.045$, $h = 0.67$, $A_s = 2.1 10^{-9}$ and
+$n_s = 0.9$, where each term correspond, respectively, to the amount of cold
+dark matter and baryons today, the reduced Hubble constant, the primordial
+curvature fluctuation amplitude and the spectral index. The redshift bins are
+shown in Fig.~\ref{fig:pz} and the theoretical $\cl$ are in
+Fig.~\ref{fig:cl-2bins}. Since all parts of sky will not be equally observed, a
+realist mask (see Fig.~\ref{fig:mask}) was applied.  The results shown here
+were obtained using the same mas for each redshift bin, as it is expected to
+be that way in real observations. We checked, however, that using different
+masks yielded same results. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/pz.png}
+  \caption{Galaxy distribution redshift bins.}
+  \label{fig:pz}
+\end{figure}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{./figures/cls-sph-2b.png}
+  \caption{Fiducial power spectra. We show only the $T$ and $E$ modes.}
+  \label{fig:cl-2bins}
+\end{figure*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/mask-lss1.png}
+  \caption{Example of sky mask used in our analysis}
+  \label{fig:mask}
+\end{figure}
+
+The covariance matrices were obtained from 20000 simulations, for the band
+powers determined by the fraction of sky observed and the maximum band power
+we were able to recover the fiducial power spectra for; i.e. $\sim 2 \times
+512$. This corresponds to $l_{\mbox{bpw}} = 1023$. To work with the sky
+maps and masks we used
+\textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}, whereas 
 \textit{NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}~\cite{2018arXiv180909603A}
-for the computation of the pseudo-$\cl$ and the covariances. Our code is
-publicly available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
+was used for the computation of the pseudo-$\cl$ and the covariances. Our code
+is publicly
+available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
 
 The same results are obtained even in the presence of foregrounds. In
 particular, we tested the case with 100 foregrounds both at low scales and
-large scales, adding a mock power spectra computed as $\clf = A (l +
-1)^{\beta}$. Here, $A$ was fixed so that the ratio of the foreground power
-spectra and the theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$
-and $\beta$ was randomly chosen from $U[-3, -1)$ for large scale effects and
-fixed to $\beta = 0$ for small scale ones.
+large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:fore}) computed as 
+\begin{equation}
+  \clf = A (l + 1)^{\beta}\,.
+  \label{eq:fore}
+\end{equation}
+Here, $A$ was fixed so that the ratio of the foreground power spectra and the
+theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
+randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
+0$ for small scale ones. 
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{./figures/foreground.png}
+  \caption{$\cl$ foregrounds used in order to check the reliability of the
+    analytical approximations in their presence. They did not affect. The
+    limiting cases for the large-scale contaminants are given by $\beta=-1,\,
+    -3$ in Eq.~\ref{eq:fore}}
+  \label{fig:fore}
+\end{figure}
+
+\subsection{$\chi^2$ distribution and covariance matrices}
 Apart from checking that we recover the same cosmological predictions from the
 covariance matrices from both the analytical approximation and the
 simulations, we studied the differences between them.
@@ -266,6 +317,10 @@ and the FEDER funds. He was partially supported by a Balzan Fellowship while
 in Oxford. He would like to thank New College and the Department of Physics at
 Oxford for their hospitality. DA acknowledges support from STFC through an
 Ernest Rutherford Fellowship, grant reference ST/P004474/1.
+
+\appendix
+
+\section{Flat sky}
 
 \setlength{\bibhang}{2.0em}
 \setlength\labelwidth{0.0em}
