@@ -50,7 +50,6 @@ plt.close()
 
 fname = os.path.join(outdir, 'cls-sph-2b.png')
 
-ell_cl1bin = np.loadtxt('./data/cls_lss.txt')
 
 ell_cl2bin_file = np.load('./data/cls_lss_2bins.npz')
 ell, cl2bin, nls2bin = ell_cl2bin_file['ls'], ell_cl2bin_file['cls'], ell_cl2bin_file['nls']
@@ -89,6 +88,55 @@ for i in range(axs.shape[0]):
     axs[i, -1].text(1, 0.5, labels[i], rotation=270,
                     transform=axs[i, -1].transAxes)
 
+
+plt.tight_layout()
+plt.savefig(fname, dpi=DPI)
+plt.close()
+
+##############################################################################
+########################## Compare 1bin sph Cls ##############################
+##############################################################################
+
+fname = os.path.join(outdir, 'compare-sph-cls-used-1bin.png')
+
+clTh = np.loadtxt('./data/cls_lss.txt', unpack=True)
+lTh = clTh[0][:3*512]
+clTh_TT = (clTh[1] + clTh[5])[:3*512]
+clTh_EE = (clTh[2] + clTh[6])[:3*512]
+clTh_TE = (clTh[4] + clTh[-1])[:3*512]
+
+f, axs = plt.subplots(1, 3, figsize=(8, 3), gridspec_kw={'hspace': 0, 'wspace': 0}, sharex=True, sharey='row')
+
+cl2bins_1 = (cl2bin + nls2bin)[:3, :3]
+cl2bins_2 = (cl2bin + nls2bin)[3:, 3:]
+i, j = np.triu_indices(3)
+
+#### TT #####
+axs[0].loglog(lTh, clTh_TT, label='1-bin Fid.')
+axs[0].loglog(ell, cl2bins_1[0, 0], label='1st 2-bin Fid.', ls='--')
+axs[0].loglog(ell, cl2bins_2[0, 0], label='2nd 2-bin Fid.', ls='--')
+axs[0].set_ylabel(r'$C_l$')
+
+axs[0].text(0.5, 0.9, r'$C_l^{gg}$', transform=axs[0].transAxes)
+
+#### TE #####
+axs[1].loglog(lTh, clTh_TE, label='1-bin Fid.')
+axs[1].loglog(ell, cl2bins_1[0, 1], label='1st 2-bin Fid.', ls='--')
+axs[1].loglog(ell, cl2bins_2[0, 1], label='2nd 2-bin Fid.', ls='--')
+axs[1].text(0.5, 0.9, r'$C_l^{g\gamma}$', transform=axs[1].transAxes)
+#axs[1].set_ylabel(r'$C_l^{g\gamma}$')
+
+#### EE #####
+axs[2].loglog(lTh, clTh_EE, label='1-bin Fid.')
+axs[2].loglog(ell, cl2bins_1[1, 1], label='1st 2-bin Fid.', ls='--')
+axs[2].loglog(ell, cl2bins_2[1, 1], label='2nd 2-bin Fid.', ls='--')
+axs[2].text(0.5, 0.9, r'$C_l^{\gamma\gamma}$', transform=axs[2].transAxes)
+#axs[2].set_ylabel(r'$C_l^{\gamma\gamma}$')
+
+axs[0].legend(loc=0)
+
+for i in range(axs.shape[0]):
+    axs[i].set_xlabel('l')
 
 plt.tight_layout()
 plt.savefig(fname, dpi=DPI)
