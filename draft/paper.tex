@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{dcolumn}
 \usepackage{bm}
-\usepackage{amssymb,amsmath,bm}
+\usepackage{amssymb,amsmath,bm,dsfont}
 \usepackage{color}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[colorlinks,linkcolor=red,citecolor=blue,urlcolor=blue ]{hyperref}
@@ -39,13 +39,14 @@
 
 \newcommand{\pcl}[3]{\hat C_{#1}^{#2 #3}}
 \newcommand{\avg}[1]{\langle #1 \rangle}
-\newcommand{\fsky}{f_{\mbox{sky}}}
-\newcommand{\clth}{C_l^{th}}
-\newcommand{\clf}{C_l^{fore}}
-\newcommand{\cl}{C_l}
+\newcommand{\fsky}{f_{\mbox{\rm sky}}}
+\newcommand{\clth}{C_\ell^{th}}
+\newcommand{\clf}{C_\ell^{fore}}
+\newcommand{\cl}{C_\ell}
+\newcommand{\summ}[1]{\sum_{\bf #1}\Delta #1^2}
+\newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
 
-
-\title[Reliable analytic approximation of pseudo-$\cl$ covariances]{Reliable analytic approximation of pseudo-$\cl$ covariances}
+\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
 \author[C. Garc\'{i}a-Garc\'{i}a et al.]{Carlos Garc\'{i}a-Garc\'{i}a$^{1,\,2}$\thanks{carlosgarcia@iff.csic.es}, David Alonso$^2$\thanks{david.alonso@physics.ox.ac.uk}, Emilio Bellini$^2$\thanks{emilio.bellini@physics.ox.ac.uk}\\
 $^{1}$ Instituto de Física Fundamental, Consejo Superior de Investigaciones
 Científicas, c/. Serrano 123, E–28006, Madrid, Spain\\
@@ -66,7 +67,39 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
 
 \section{Introduction}
     
-\section{Analytical Covariance}
+\section{Analytical Gaussian covariances}
+
+  \subsection{Preliminaries}
+    We will deal with spin-0 and spin-2 fields defined on a 2-dimensional space. We will use a generic notation that can then be applied to both curved and flat skies. Given a field ${\bf a}({\bf x})$, with 1 (spin-0) or 2 components (spin-2), and defined on the coordinates ${\bf x}$, we define its generalized Fourier coefficients as
+    \begin{equation}
+      {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
+    \end{equation}
+    where the operator $\summ{x}$ denotes a integral or sum of all coordinates ${\bf x}$, and $\Ylm{\dag}{k}{x}$ are a set of orthogonal functions. We will also assume that the $\Ylm{\dag}{k}{x}$ are a \emph{complete} set of basis functions, in which case:
+    \begin{align}
+      &\summ{x}\,\Ylm{\dag}{k}{x}\Ylm{}{l}{x}=\mathds{1}\Delta^x({\bf k},{\bf l}),\\
+      &\summ{k}\,\Ylm{}{k}{x}\Ylm{\dag}{k}{y}=\mathds{1}\Delta^k({\bf x},{\bf y}),
+    \end{align}
+    where $\summ{k}$ denotes an integral over all possible generalised Fourier coefficients ${\bf k}$, and $\Delta^x$ and $\Delta^k$ are generalized delta functions:
+    \begin{align}
+      &\summ{k}\,f({\bf k})\Delta^x({\bf k},{\bf l})\equiv f({\bf l}),\\
+      &\summ{x}\,f({\bf x})\Delta^k({\bf x},{\bf y})\equiv f({\bf y}).
+    \end{align}
+    
+    Finally, we will assume that all fields are Gaussian stochastic fields that are additionally statistically isotropic. As a consequence of this, different generalised Fourier modes are uncorrelated:
+    \begin{equation}
+      \langle {\bf a}_{\bf k}{\bf b}^\dag_{\bf l}\rangle\equiv {\sf C}^{ab}_k\,F\,\Delta^x({\bf k},{\bf l}),
+    \end{equation}
+    where $F$ is a volume factor (see below) and ${\sf C}^{ab}_k$ is the power spectrum.
+    
+    All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky) as follows:
+    
+  
+  \subsection{The pseudo-$C_\ell$ method}
+  
+  \subsection{Covariance matrices}
+
+This section presents the analytical approximations used here to estimate the pseudo-$C_\ell$ Gaussian covariance matrix.
+
 This section presents the analytical calculation of the pseudo-$C_\ell$ covariance. The treatment and approximations used are similar to those presented in \todo{cite} for spin-0 quantities, in \todo{cite} for particular spin-0 and spin-2 correlations and in \todo{cite} for the 3D density field. We reproduce the formalism here in order to provide a complete set of formulas applicable to any cross-correlation in both curved and flat skies.
 
 
