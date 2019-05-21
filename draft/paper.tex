@@ -37,6 +37,7 @@
 \newcommand{\todo}[1]{{\bf TODO: #1}}
 %\newcommand{\todo}[1]{$\,$}
 
+\newcommand{\PCL}{pseudo-$C_\ell$~}
 \newcommand{\pcl}[3]{\hat C_{#1}^{#2 #3}}
 \newcommand{\avg}[1]{\langle #1 \rangle}
 \newcommand{\fsky}{f_{\mbox{\rm sky}}}
@@ -70,7 +71,8 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
     
 \section{Analytical Gaussian covariances}
 
-  \subsection{Preliminaries}
+  \subsection{Preliminaries}\label{ssec:theory.prelim}
+    \todo{cites everywhere}
     We will deal with spin-0 and spin-2 fields defined on a 2-dimensional space. We will use a generic notation that can then be applied to both curved and flat skies. Given a field ${\bf a}({\bf x})$, with 1 (spin-0) or 2 components (spin-2), and defined on the coordinates ${\bf x}$, we define its generalized Fourier coefficients as
     \begin{equation}
       {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
@@ -97,7 +99,7 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
     
     Finally, we will assume that all fields are Gaussian stochastic fields that are additionally statistically isotropic. As a consequence of this, different generalised Fourier modes are uncorrelated:
     \begin{equation}
-      \langle {\bf a}_{\bf k}{\bf b}^\dag_{\bf l}\rangle\equiv {\sf C}^{ab}_k\,F\,\Delta^x({\bf k},{\bf l}),
+      \langle {\bf a}_{\bf k}{\bf b}^\dag_{\bf l}\rangle\equiv {\sf C}^{ab}_\ell\,F\,\Delta^x({\bf k},{\bf l}),
     \end{equation}
     where $F$ is a volume factor (see below) and ${\sf C}^{ab}_k$ is the power spectrum.
     
@@ -108,7 +110,7 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
       Mathematical object & Curved sky & Flat sky (continuum $\rightarrow$ discretized) \\
       \hline
       \(\displaystyle {\bf l} \) & \(\displaystyle (\ell,m) \) & \(\displaystyle (l_x,l_y) \) \\
-      \(\displaystyle \summ{l} \) & \(\displaystyle \sum_{\ell=0}^{\infty} \sum_{m=-\ell}^{\ell} \) & \(\displaystyle \int \frac{dl^2}{2\pi} \rightarrow \sum_{\bf k}\frac{2\pi}{L_xL_y}\) \\
+      \(\displaystyle \summ{l} \) & \(\displaystyle \sum_{\ell=0}^{\infty} \sum_{m=-\ell}^{\ell} \) & \(\displaystyle \int \frac{dl^2}{2\pi} \rightarrow \sum_{\bf l}\frac{2\pi}{L_xL_y}\) \\
       \(\displaystyle \Delta^x({\bf l},{\bf l}')\) & \(\displaystyle \delta^K_{\ell\ell'}\delta^K_{mm'}\) & \(\displaystyle 2\pi\,\delta^D({\bf l}-{\bf l}')\rightarrow \delta^K_{l_xl'_x}\delta^K_{l_yl'_y}\frac{L_xL_y}{(2\pi)^2}2\pi\) \\
       \(\displaystyle {\bf x}\) & \(\displaystyle \nv\equiv(\theta,\varphi) \) & \(\displaystyle (x,y)\) \\
       \(\displaystyle \summ{x} \) & \(\displaystyle \int_0^{\phi} d\phi \int_{-1}^{1} d(\cos\theta)\) & \(\displaystyle \int \frac{dx^2}{2\pi}\rightarrow\sum_{\bf x}\frac{L_xL_y}{2\pi N_xN_y}\) \\
@@ -119,20 +121,50 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
       \(\displaystyle F \) & \(\displaystyle 1 \) & \(\displaystyle (2\pi)^{-1}\) \\
       \hline
      \end{tabular}
-     \caption{Lookup table describing the generalized notation used here in for quantities defined on the sphere (second column) and on the flat 2D plane (third column). For the flat-sky case, we also provide expressions for a discretized, finite 2D plane with }
-
+     \caption{Lookup table describing the generalized notation introduced in Section \ref{ssec:theory.prelim}p for quantities defined on the sphere (second column) and on the flat 2D plane (third column). For the flat-sky case, we also provide expressions for a discretized, finite 2D plane with periodic boundary conditions. In this case, the map has dimensions $(L_x,L_y)$ subdivided into $(N_x,N_y)$ equi-spaced pixels in $(x,y)$. $\delta^D$ and $\delta^K$ are the Dirac and Kronecker delta functions respectively.}\label{tab:notation}
     \end{table*}
-
     
-    All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky) as follows:
-    Curved sky:
+    All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky approximation) as described in Table \ref{tab:notation}.
 
   
   \subsection{The pseudo-$C_\ell$ method}
+    This section provides a very brief introduction to the \PCL power spectrum estimator. Further details can be found in \todo{cite}. 
+    In any practical situation we do not have access to maps of a given field ${\bf a}$ over the full sky, but rather to a weighted or masked version of them
+    \begin{equation}
+      \tilde{\bf a}({\bf x})\equiv w^a({\bf x}){\bf a}({\bf x}),
+    \end{equation}
+    where $w^a$ is commonly called the ``mask''. Due to the convolution theorem, the generalized Fourier coefficients of the masked field will be a convolution of the mask and true field coefficients:
+    \begin{align}\nonumber
+      \tilde{\bf a}_{\bf l}=&\summ{k}\left[\summ{x}\,w^a({\bf x})\,\Ylm{\dag}{l}{x}\,\Ylm{}{k}{x}\right]{\bf a}_{\bf k}\\
+                      \equiv&\summ{l}\,^a{\sf M}_{{\bf l}{\bf k}}\,{\bf a}_{\bf k},
+    \end{align}
+    where we have defined the mode-coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf k}}$ in the second line.
+    
+    Correlating the generalized Fourier coefficients of two masked fields therefore yields a mode-coupled version of their true underlying power spectrum:
+    \begin{align}\nonumber
+      \left\langle\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l}\right\rangle=&\summ{k}\summ{q}\,^a{\sf M}_{{\bf l}{\bf k}}\left\langle{\bf a}_{\bf k}{\bf b}^\dag_{\bf q}\right\rangle\,^b{\sf M}^\dag_{{\bf l}{\bf q}}\\
+                                                                              =&F\,\summ{k}\,^a{\sf M}_{{\bf l}{\bf k}}{\sf C}^{ab}_k\,^b{\sf M}^\dag_{{\bf l}{\bf k}}
+    \end{align}
+    
+    The \PCL estimator then proceeds in two steps:
+    \begin{enumerate}
+      \item We first bin different ${\bf l}$ modes into sets of them called bandpowers (typically bands of similar $\ell$ or annuli of flat-sky Fourier modes spanning a narrow range of radii). Let us denote a given bandpower by its index $q$. The binned pseudo-power spectrum is:
+      \begin{equation}
+        \tilde{\sf C}^{ab}_q=\sum_{{\bf l}\in q} B_q^{\bf l}\,\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l},
+      \end{equation}
+      where the bandpower weights are normalized such that $\sum_{{\bf l}\in q}B_q^{\bf l}=1$.
+      \item Then, the correlation between bandpowers induced by the mode-coupling coefficients is partially reversed by multiplying $\tilde{\sf C}^{ab}_q$ by the so-called binned ``mode-coupling matrix'' $\mathcal{M}$, giving the final estimator
+      \begin{equation}
+        {\rm vec}\left(\hat{\sf C}^{ab}_q\right) = \sum_{q'} \left(\mathcal{M}^{-1}\right)_{qq'}\,{\rm vec}\left(\tilde{\sf C}^{ab}_{q'}\right).
+      \end{equation}
+
+      The main advantage of the \PCL estimator is that the mode-coupling matrix $\mathcal{M}$ is directly related to the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ (see \todo{cite}), and can be computed analytically making use of methods that scale like $\ell_{\rm max}^3$.
+    \end{enumerate}
+
+    Before we move on to covariances, it is worth considering the case of unmasked field (i.e $w^a({\bf x})=1$ everywhere). In this case $\,^a{\sf M}_{{\bf l}{\bf l}'}=\mathds{1}\Delta^x({\bf k},{\bf l})$, and therefore different modes are uncorrelated (as should have been obvious). In a non-ideal case where the mask is still sufficiently well behaved (i.e. masks without too much small-scale structure), we can still expect the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ to be sharply peaked around ${\bf l}={\bf l}'$.
   
   \subsection{Covariance matrices}
-
-This section presents the analytical approximations used here to estimate the pseudo-$C_\ell$ Gaussian covariance matrix.
+    This section presents the analytical approximations used here to estimate the pseudo-$C_\ell$ Gaussian covariance matrix.
 
 This section presents the analytical calculation of the pseudo-$C_\ell$ covariance. The treatment and approximations used are similar to those presented in \todo{cite} for spin-0 quantities, in \todo{cite} for particular spin-0 and spin-2 correlations and in \todo{cite} for the 3D density field. We reproduce the formalism here in order to provide a complete set of formulas applicable to any cross-correlation in both curved and flat skies.
 
