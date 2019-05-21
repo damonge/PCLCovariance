@@ -1,17 +1,20 @@
-\documentclass[useAMS,usenatbib]{mn2e}
-\bibliographystyle{mn2e}
-\pdfoutput=1
-\pdfminorversion=5
+%\documentclass[useAMS,usenatbib]{mn2e}
+%\bibliographystyle{mn2e}
 
+\documentclass[a4paper,11pt]{article}
+%\pdfoutput=1
+%\pdfminorversion=5
+
+\usepackage{jcappub}
 %\usepackage{widetext}
 \usepackage{graphicx}
-\usepackage{dcolumn}
+%\usepackage{dcolumn}
 \usepackage{bm}
 \usepackage{amssymb,amsmath,bm,dsfont}
 \usepackage{color}
 \usepackage[dvipsnames]{xcolor}
-\usepackage[colorlinks,linkcolor=red,citecolor=blue,urlcolor=blue ]{hyperref}
-\usepackage{multirow}
+%\usepackage[colorlinks,linkcolor=red,citecolor=blue,urlcolor=blue ]{hyperref}
+%\usepackage{multirow}
 \usepackage[utf8]{inputenc}
 \usepackage{balance}
 \usepackage{enumitem}
@@ -48,24 +51,25 @@
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
 \newcommand{\red}[1]{{\color{red} #1}}
 
-\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
-\author[C. Garc\'{i}a-Garc\'{i}a et al.]{Carlos Garc\'{i}a-Garc\'{i}a$^{1,\,2}$\thanks{carlosgarcia@iff.csic.es}, David Alonso$^2$\thanks{david.alonso@physics.ox.ac.uk}, Emilio Bellini$^2$\thanks{emilio.bellini@physics.ox.ac.uk}\\
-$^{1}$ Instituto de Física Fundamental, Consejo Superior de Investigaciones
-Científicas, c/. Serrano 123, E–28006, Madrid, Spain\\
-$^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, UK
-}
+%\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
+\title{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
+
+\author[a,b,1]{Carlos Garc\'{i}a-Garc\'{i}a}
+\author[b,1]{David Alonso}
+\author[b,1]{Emilio Bellini}
+
+\affiliation[a]{Instituto de Física Fundamental, Consejo Superior de Investigaciones Científicas, c/. Serrano 123, E–28006, Madrid, Spain}
+\affiliation[b]{Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, UK}
+
+\emailAdd{carlosgarcia@iff.csic.es}
+\emailAdd{david.alonso@physics.ox.ac.uk}
+\emailAdd{emilio.bellini@physics.ox.ac.uk}
+
+\abstract{\lipsum[1]}
 
 \begin{document}
-  \date{\today}
-  \pagerange{1--18} \pubyear{2019}
   \maketitle
-
-\begin{abstract}
-\end{abstract}
-
-\begin{keywords}
-  cosmology: large-scale structure of the Universe -- methods: data analysis
-\end{keywords}
+  \flushbottom
 
 \section{Introduction}
     
@@ -98,10 +102,15 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
 
     
     Finally, we will assume that all fields are Gaussian stochastic fields that are additionally statistically isotropic. As a consequence of this, different generalised Fourier modes are uncorrelated:
-    \begin{equation}
+    \begin{equation}\label{eq:iso}
       \langle {\bf a}_{\bf k}{\bf b}^\dag_{\bf l}\rangle\equiv {\sf C}^{ab}_\ell\,F\,\Delta^x({\bf k},{\bf l}),
     \end{equation}
-    where $F$ is a volume factor (see below) and ${\sf C}^{ab}_k$ is the power spectrum.
+    where $F$ is a volume factor (see below) and ${\sf C}^{ab}_k$ is the power spectrum. Defined this way, the power spectrum is a matrix, with elements
+    \begin{equation}
+      \left\langle a^\alpha_{\bf k}\left(b^\beta_{\bf l}\right)^*\right\rangle\equiv \left({\sf C}^{ab}_\ell\right)_{\alpha\beta}\,F\,\Delta^x({\bf k},{\bf l}),
+    \end{equation}
+    where $a^\alpha$ is the $\alpha$-th element of field ${\bf a}$. It will often be useful in what follows to think of ${\sf C}^{ab}_\ell$ as a 1-dimensional vector that we will denote by ${\rm vec}({\sf C}^{ab}_\ell)$. To do so, we simply map the two indices $(\alpha,\beta)$ into a single number $A$, such that ${\rm vec}({\sf C}^{ab}_\ell)_A = ({\sf C}^{ab}_\ell)_{\alpha\beta}$.
+
     
     \begin{table*}
      \centering
@@ -114,7 +123,7 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
       \(\displaystyle \Delta^x({\bf l},{\bf l}')\) & \(\displaystyle \delta^K_{\ell\ell'}\delta^K_{mm'}\) & \(\displaystyle 2\pi\,\delta^D({\bf l}-{\bf l}')\rightarrow \delta^K_{l_xl'_x}\delta^K_{l_yl'_y}\frac{L_xL_y}{(2\pi)^2}2\pi\) \\
       \(\displaystyle {\bf x}\) & \(\displaystyle \nv\equiv(\theta,\varphi) \) & \(\displaystyle (x,y)\) \\
       \(\displaystyle \summ{x} \) & \(\displaystyle \int_0^{\phi} d\phi \int_{-1}^{1} d(\cos\theta)\) & \(\displaystyle \int \frac{dx^2}{2\pi}\rightarrow\sum_{\bf x}\frac{L_xL_y}{2\pi N_xN_y}\) \\
-      \(\displaystyle \Delta^k(\nv,\nv')\) & \(\displaystyle \delta^D(\cos\theta-\cos\theta')\delta^D(\varphi-\varphi')\) & \(\displaystyle 2\pi\,\delta^D({\bf x}-{\bf y})\rightarrow\delta^K_{xx'}\delta^K_{yy'}\frac{N_xN_y}{L_xL_y}2\pi\) \\
+      \(\displaystyle \Delta^k({\bf x},{\bf y})\) & \(\displaystyle \delta^D(\cos\theta-\cos\theta')\delta^D(\varphi-\varphi')\) & \(\displaystyle 2\pi\,\delta^D({\bf x}-{\bf y})\rightarrow\delta^K_{xx'}\delta^K_{yy'}\frac{N_xN_y}{L_xL_y}2\pi\) \\
       \(\displaystyle q({\bf l},{\bf x})\) & \(\displaystyle Y_{\ell m}(\nv)\) & \(\displaystyle e^{i{\bf l}\cdot{\bf x}}\) \\
       \(\displaystyle \eth\,_sf\) & \(\displaystyle -(\sin\theta)^s\left(\partial_\theta+i\frac{\partial_\varphi}{\sin\theta}\right)(\sin\theta)^{-s}\,_sf(\nv)\) & \(\displaystyle (\partial_x-i\partial_y)\,_sf\) \\
       \(\displaystyle \bar{\eth}\,_sf\) & \(\displaystyle -(\sin\theta)^{-s}\left(\partial_\theta-i\frac{\partial_\varphi}{\sin\theta}\right)(\sin\theta)^s\,_sf(\nv)\) & \(\displaystyle (\partial_x+i\partial_y)\,_sf\) \\
@@ -152,7 +161,7 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
       \begin{equation}
         \tilde{\sf C}^{ab}_q=\sum_{{\bf l}\in q} B_q^{\bf l}\,\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l},
       \end{equation}
-      where the bandpower weights are normalized such that $\sum_{{\bf l}\in q}B_q^{\bf l}=1$.
+      where the bandpower weights are normalized such that $\sum_{{\bf l}\in q}B_q^{\bf l}=(F\Delta^x({\bf l},{\bf l}))^{-1}$.
       \item Then, the correlation between bandpowers induced by the mode-coupling coefficients is partially reversed by multiplying $\tilde{\sf C}^{ab}_q$ by the so-called binned ``mode-coupling matrix'' $\mathcal{M}$, giving the final estimator
       \begin{equation}
         {\rm vec}\left(\hat{\sf C}^{ab}_q\right) = \sum_{q'} \left(\mathcal{M}^{-1}\right)_{qq'}\,{\rm vec}\left(\tilde{\sf C}^{ab}_{q'}\right).
@@ -164,7 +173,45 @@ $^{2}$Oxford Astrophysics, Department of Physics, Keble Road, Oxford, OX1 3RH, U
     Before we move on to covariances, it is worth considering the case of unmasked field (i.e $w^a({\bf x})=1$ everywhere). In this case $\,^a{\sf M}_{{\bf l}{\bf l}'}=\mathds{1}\Delta^x({\bf k},{\bf l})$, and therefore different modes are uncorrelated (as should have been obvious). In a non-ideal case where the mask is still sufficiently well behaved (i.e. masks without too much small-scale structure), we can still expect the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ to be sharply peaked around ${\bf l}={\bf l}'$.
   
   \subsection{Covariance matrices}
-    This section presents the analytical approximations used here to estimate the pseudo-$C_\ell$ Gaussian covariance matrix.
+    So far we have not assumed anything about the statistics of the fields, other than the fact that they are isotropic (Eq. \ref{eq:iso}). This section presents a method to estimate the disconnected part of the power spectrum covariance for the \PCL estimator, which is the contribution to the power spectrum covariance if all fields involved were Gaussianly distributed.
+    
+    Let $A$ and $C$ be the vector indices corresponding to the pairs of field indices $(\alpha,\beta)$ and $(\gamma,\delta)$ respectively, and let us start by considering the covariance
+    \begin{equation}
+      \Sigma^{AC}_{{\bf l}{\bf l}'}\equiv\left\langle\tilde{a}^\alpha_{\bf l}\tilde{b}^{\beta *}_{\bf l}\tilde{c}^\gamma_{{\bf l}'}\tilde{d}^{\delta *}_{{\bf l}'}\right\rangle-\left\langle\tilde{a}^\alpha_{\bf l}\tilde{b}^{\beta *}_{\bf l}\right\rangle\left\langle\tilde{c}^\gamma_{{\bf l}'}\tilde{d}^{\delta *}_{{\bf l}'}\right\rangle
+    \end{equation}
+    The covariance of the binned bandpowers $\tilde{\sf C}$ can then be computed as
+    \begin{equation}\nonumber
+      {\rm Cov}\left({\rm vec}\left(\tilde{\sf C}^{ab}_q\right)_A,{\rm vec}\left(\tilde{\sf C}^{cd}_{q'}\right)_C\right)=\sum_{{\bf l}\in q} B^{\bf l}_q\sum_{{\bf l}'\in q'} B^{{\bf l}'}_{q'}\,\Sigma^{AC}_{{\bf l}{\bf l}'}.
+    \end{equation}
+    which can then be used to estimate the covariance of the mode-decoupled bandpowers multiplying it by the inverse mode-coupling matrix twice. I.e., schematically:
+    \begin{equation}
+      {\rm Cov}\left(\hat{\sf C}\right)=\mathcal{M}^{-1}\cdot{\rm Cov}\left(\tilde{C}\right)\cdot\left(\mathcal{M}^{-1}\right)^{T},
+    \end{equation}
+    where we have suppressed all indices for simplicity. The problem of estimating the \PCL covariance therefore reduces to estimating $\Sigma^{AC}_{\ell\ell'}$.
+    
+    We now make use of Wick's theorem, which states that, for Gaussian fields $\langle a\,b\,c\,d\rangle=\langle a\,b\rangle\langle c\,d\rangle+\langle a\,c\rangle\langle b\,d\rangle+\langle a\,d\rangle\langle b\,c\rangle$. In this case, the expression for $\Sigma^{AC}_{{\bf l}{\bf l'}}$ reads:
+    \begin{align}\nonumber
+      \Sigma^{AC}_{{\bf l}{\bf l}'}=&\left[F\summ{k}\,^aM^{\alpha\alpha'}_{{\bf l}{\bf k}}\,^dM^{\delta\delta'*}_{{\bf l}'{\bf k}}C^{ad,(\alpha'\delta')}_k\right]\left[\summ{q}\,^bM^{\beta\beta'*}_{{\bf l}{\bf q}}\,^cM^{\gamma\gamma'}_{{\bf l}'{\bf q}}C^{bc,(\beta'\gamma')}_q\right]^*\\
+      &+\left((d,\delta)\leftrightarrow(c,\gamma)\right),
+    \end{align}
+    where we implicitly sum over repeated indices (e.g. $\alpha'$), and the second term is equivalent to the first one after swapping the roles of fields ${\bf c}$ and ${\bf d}$. Without any further approximations, for each pair $({\bf l},{\bf l}')$, we would need to perform two 2-dimensional integrals, and therefore the calculation would scale like $\ell_{\rm max}^6$, quickly becoming unfeasible.
+    
+    Under the assumption that the coupling coefficients $M_{{\bf l}{\bf k}}$ are sharply peaked around ${\bf l}={\bf k}$, we can simplify the expression above approximating the power spectra as constants within the support of the coupling coefficients. Explicitly, we approximate 
+    \begin{equation}\nonumber
+     C^{ad,(\alpha'\delta')}_kC^{bc,(\beta',\gamma')}_q\simeq C^{ad,(\alpha'\delta')}_{(\ell}C^{bc,(\beta',\gamma')}_{\ell')}\equiv\frac{1}{2}\left(C^{ad,(\alpha'\delta')}_\ell C^{bc,(\beta',\gamma')}_{\ell'}+C^{ad,(\alpha'\delta')}_{\ell'} C^{bc,(\beta',\gamma')}_\ell\right).
+    \end{equation}
+    In this case, the expression for $\Sigma^{AC}_{{\bf l}{\bf l}'}$ reads
+    \begin{align}
+      \Sigma^{AC}_{{\bf l}{\bf l}'}=C^{ad,(\alpha'\delta')}_{(\ell}C^{bc,(\beta',\gamma')}_{\ell')}\,^{ad}W^{\alpha\delta,\alpha'\delta'}_{{\bf l}{\bf l}'}\,^{bc}\left(\,^{bc}W^{\beta\gamma,\beta'\gamma'}_{{\bf l}{\bf l}'}\right)^*+\left((d,\delta)\leftrightarrow(c,\gamma)\right),
+    \end{align}
+    where we have defined the covariance coupling coefficients
+    \begin{equation}
+      \,^{ad}W^{\alpha\delta,\alpha'\delta'}_{{\bf l}{\bf l}'}=\summ{k}\,^aM^{\alpha\alpha'}_{{\bf l}{\bf k}}\left(\,^bM^{\delta\delta'}_{{\bf l}'{\bf k}}\right)^*.
+    \end{equation}
+
+
+
+    To simplify the calculation we now approximation that the underlying power spectra are smooth over the support of the kernel functions 
 
 This section presents the analytical calculation of the pseudo-$C_\ell$ covariance. The treatment and approximations used are similar to those presented in \todo{cite} for spin-0 quantities, in \todo{cite} for particular spin-0 and spin-2 correlations and in \todo{cite} for the 3D density field. We reproduce the formalism here in order to provide a complete set of formulas applicable to any cross-correlation in both curved and flat skies.
 
@@ -180,6 +227,8 @@ This section presents the analytical calculation of the pseudo-$C_\ell$ covarian
 \item Approximation 1
 \item Approximation 2
 \end{itemize}
+
+
 
 \section{Results}
 For both flat and curved sky we should discuss:
@@ -420,10 +469,17 @@ difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
 % $\tilde C_{l'}$, and $M$ is invertible.
 
 
+
+
 \section{Discussion}\label{sec:discussion}
 
+\appendix
+\section{Flat sky}
+\todo{Plot mascara}
+\todo{Plot chi2 TT-TT TE-TE, EE-EE}
 
-\section*{Acknowledgements}
+\acknowledgments
+
 We would like to thank Eva-Maria Mueller for useful discussion. CGG is
 supported the Spanish grant BES-2016-077038, partially funded by the ESF and by
 AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain
@@ -434,12 +490,9 @@ Ernest Rutherford Fellowship, grant reference ST/P004474/1.
 
 \appendix
 
-\section{Flat sky}
-\todo{Plot mascara}
-\todo{Plot chi2 TT-TT TE-TE, EE-EE}
 
-\setlength{\bibhang}{2.0em}
-\setlength\labelwidth{0.0em}
-\bibliography{paper.bib}
+%\setlength{\bibhang}{2.0em}
+%\setlength\labelwidth{0.0em}
+\bibliography{paper}
 
 \end{document}
