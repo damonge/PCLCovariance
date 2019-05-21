@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import flatmaps as fm
 import healpy as hp
 import numpy as np
 import templates as tp
@@ -56,6 +57,7 @@ ell, cl2bin, nls2bin = ell_cl2bin_file['ls'], ell_cl2bin_file['cls'], ell_cl2bin
 
 f, axs = plt.subplots(4, 4, figsize=(8, 6), gridspec_kw={'hspace': 0, 'wspace': 0}, sharex=True, sharey='row')
 
+labels = [r'$\delta_1$', r'$\gamma_{E,\, 1}$', r'$\delta_2$', r'$\gamma_{E,\, 2}$']
 ci = 0
 for i in range(cl2bin.shape[0]):
     if i in (2, 5):
@@ -65,8 +67,10 @@ for i in range(cl2bin.shape[0]):
         if j in (2, 5):
             continue
         axs[ci, cj].loglog(ell, cl2bin[i, j], label='Th. w/o noise')
-        axs[ci, cj].loglog(ell, cl2bin[i, j] + nls2bin[ci, cj], label='Th.', ls='--')
+        axs[ci, cj].loglog(ell, cl2bin[i, j] + nls2bin[i, j], label='Th.', ls='--')
         axs[ci, cj].loglog(ell, nls2bin[i, j], label='Noise')
+        axs[ci, cj].text(0.8, 0.9, "({}, {})".format(labels[ci], labels[cj]),
+                         transform=axs[ci, cj].transAxes)
         cj += 1
 
     ci += 1
@@ -77,16 +81,15 @@ i, j = np.triu_indices(axs.shape[0])
 for ax in axs[j, i].reshape((-1)):
     ax.set_visible(False)
 
-labels = ['T1', 'E1', 'T2', 'E2']
 for i in range(axs.shape[0]):
     axs[i, i].set_xlabel('l')
     axs[i, i].set_ylabel(r'$C_l$')
     axs[i, i].set_visible(True)
     axs[i, i].xaxis.set_tick_params(labelbottom=True)
     axs[i, i].yaxis.set_tick_params(labelleft=True)
-    axs[0, i].set_title(labels[i])
-    axs[i, -1].text(1, 0.5, labels[i], fontsize=12,
-                    transform=axs[i, -1].transAxes)
+    # axs[0, i].set_title(labels[i])
+    # axs[i, -1].text(1, 0.5, labels[i], fontsize=12,
+    #                 transform=axs[i, -1].transAxes)
 
 
 plt.tight_layout()
@@ -175,9 +178,11 @@ plt.close()
 fname = os.path.join(outdir, 'mask-lss_flat1.png')
 
 fmask = "./data/mask_lss_flat.fits"
-mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
 
-hp.mollview(mask_lss, title="", coord=['G', 'C'])
+fmi, mask_hsc = fm.read_flat_map(fmask)
+
+fmi.view_map(mask_hsc)
+
 plt.savefig(fname, dpi=DPI)
 plt.close()
 
@@ -187,10 +192,11 @@ plt.close()
 
 fname = os.path.join(outdir, 'mask-lss_flat2.png')
 
-fmask = "./data/mask_lss_flat2.fits"
-mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+fmask = "./data/mask_lss_flat_2.fits"
 
-hp.mollview(mask_lss, title="", coord=['G', 'C'])
+fmi, mask_hsc = fm.read_flat_map(fmask)
+
+fmi.view_map(mask_hsc)
 plt.savefig(fname, dpi=DPI)
 plt.close()
 
