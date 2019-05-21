@@ -151,7 +151,20 @@ fname = os.path.join(outdir, 'mask-lss1.png')
 fmask = "./data/mask_lss_sph1.fits"
 mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
 
-hp.mollview(mask_lss)
+hp.mollview(mask_lss, title="", cbar=False, coord=['G', 'C'])
+plt.savefig(fname, dpi=DPI)
+plt.close()
+
+##############################################################################
+############################# Mask sph1 ######################################
+##############################################################################
+
+fname = os.path.join(outdir, 'mask-lss2.png')
+
+fmask = "./data/mask_lss_sph2.fits"
+mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+
+hp.mollview(mask_lss, title="", coord=['G', 'C'])
 plt.savefig(fname, dpi=DPI)
 plt.close()
 
