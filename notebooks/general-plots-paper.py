@@ -169,6 +169,32 @@ plt.savefig(fname, dpi=DPI)
 plt.close()
 
 ##############################################################################
+############################# Mask flat1 ######################################
+##############################################################################
+
+fname = os.path.join(outdir, 'mask-lss_flat1.png')
+
+fmask = "./data/mask_lss_flat.fits"
+mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+
+hp.mollview(mask_lss, title="", coord=['G', 'C'])
+plt.savefig(fname, dpi=DPI)
+plt.close()
+
+##############################################################################
+############################# Mask flat2 ######################################
+##############################################################################
+
+fname = os.path.join(outdir, 'mask-lss_flat2.png')
+
+fmask = "./data/mask_lss_flat2.fits"
+mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+
+hp.mollview(mask_lss, title="", coord=['G', 'C'])
+plt.savefig(fname, dpi=DPI)
+plt.close()
+
+##############################################################################
 ############################# Foregrounds ####################################
 ##############################################################################
 
