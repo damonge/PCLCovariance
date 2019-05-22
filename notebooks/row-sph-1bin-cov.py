@@ -33,14 +33,20 @@ clth = interp1d(ell_th, clth)(ell)
 i, j = np.triu_indices(3)
 clth_ar = clth[i, j]
 
+lmax = (ell < 2*512).sum()
+nlbins_orig = int(ell.shape[0])
+nlbins = lmax
+ell = ell[:lmax]
+
 ##############################################################################
 
 CovSims_path = run_path + '_cov_b1' + sims_suffix
 Csims = np.load(CovSims_path)['arr_0']
 
-CsimOld = Csims.copy()
-nlbins = int(Csims.shape[0] / 6)
-Csims = Csims.reshape((6, nlbins, 6, nlbins))
+Csims = Csims.reshape((6, nlbins_orig, 6, nlbins_orig))
+Csims = Csims[:, :lmax, :, :lmax]
+
+CsimOld = Csims.reshape(6 * nlbins, 6 * nlbins)
 
 ##############################################################################
 c0000 = np.load(run_path+'_c0000_b1.npz')['arr_0']
@@ -77,16 +83,16 @@ Cth_ar = np.array([CovTh_TT, CovTh_TTTE, CovTh_TTTB, CovTh_TTEE, CovTh_TTEB, Cov
 
 Cth = np.empty((6, nlbins, 6, nlbins))
 i, j = np.triu_indices(6)
-Cth[i, :,  j, :] = Cth_ar
-Cth[j, :,  i, :] = Cth_ar
+Cth[i, :,  j, :] = Cth_ar[:, :lmax, :lmax]
+Cth[j, :,  i, :] = Cth_ar[:, :lmax, :lmax]
 
 ##############################################################################
 
 CthN = np.empty((6, nlbins, 6, nlbins))
 CthN_ar = np.load(run_path + '_covNaive_ar_b1.npz')['arr_0']
 i, j = np.triu_indices(6)
-CthN[i, :,  j, :] = CthN_ar
-CthN[j, :,  i, :] = CthN_ar
+CthN[i, :,  j, :] = CthN_ar[:, :lmax, :lmax]
+CthN[j, :,  i, :] = CthN_ar[:, :lmax, :lmax]
 
 ##############################################################################
 
@@ -114,7 +120,7 @@ def ax_plot_row(ax, lbins, CovSims, CovTh, CovThN, normalization, index=20, dx=5
     indexi = index
     Xi = lbins[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
     Yth = np.diag(CovThN)[indexi : indexi + (peaks * 2 * dx) : 2 * dx]/normalization[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
-    ax.scatter(Xi, Yth, s=3, c=c[3], label='Naive')
+    ax.scatter(Xi, Yth, marker="*", s=6, c='k', label='Naive', zorder=3)
 
     # dl = lbins[1] - lbins[0]
     # Naive = 1. / (0.4 * (2 * lbins  + 1) * dl)
