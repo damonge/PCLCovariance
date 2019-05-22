@@ -20,7 +20,7 @@ if not os.path.isdir(outdir):
 ######################### Fig with z-bins ####################################
 ##############################################################################
 
-fname = os.path.join(outdir, 'pz.png')
+fname = os.path.join(outdir, 'pz.pdf')
 
 nell = 30000
 
@@ -49,7 +49,7 @@ plt.close()
 ######################### Theoretical sph 2b Cls #############################
 ##############################################################################
 
-fname = os.path.join(outdir, 'cls-sph-2b.png')
+fname = os.path.join(outdir, 'cls-sph-2b.pdf')
 
 
 ell_cl2bin_file = np.load('./data/cls_lss_2bins.npz')
@@ -101,7 +101,7 @@ plt.close()
 ########################## Compare 1bin sph Cls ##############################
 ##############################################################################
 
-fname = os.path.join(outdir, 'compare-sph-cls-used-1bin.png')
+fname = os.path.join(outdir, 'compare-sph-cls-used-1bin.pdf')
 
 clTh = np.loadtxt('./data/cls_lss.txt', unpack=True)
 lTh = clTh[0][:3*512]
@@ -150,7 +150,7 @@ plt.close()
 ############################# Mask sph1 ######################################
 ##############################################################################
 
-fname = os.path.join(outdir, 'mask-lss1.png')
+fname = os.path.join(outdir, 'mask-lss1.pdf')
 
 fmask = "./data/mask_lss_sph1.fits"
 mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
@@ -163,7 +163,7 @@ plt.close()
 ############################# Mask sph1 ######################################
 ##############################################################################
 
-fname = os.path.join(outdir, 'mask-lss2.png')
+fname = os.path.join(outdir, 'mask-lss2.pdf')
 
 fmask = "./data/mask_lss_sph2.fits"
 mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
@@ -176,7 +176,7 @@ plt.close()
 ############################# Mask flat1 ######################################
 ##############################################################################
 
-fname = os.path.join(outdir, 'mask-lss_flat1.png')
+fname = os.path.join(outdir, 'mask-lss_flat1.pdf')
 
 fmask = "./data/mask_lss_flat.fits"
 
@@ -191,7 +191,7 @@ plt.close()
 ############################# Mask flat2 ######################################
 ##############################################################################
 
-fname = os.path.join(outdir, 'mask-lss_flat2.png')
+fname = os.path.join(outdir, 'mask-lss_flat2.pdf')
 
 fmask = "./data/mask_lss_flat_2.fits"
 
@@ -213,7 +213,7 @@ cl_ls2 = tp.create_cl_templates(ell, cl2bin[0, 0] + nls2bin[0, 0], exp_range=(-1
 # cl_ls1 = tp.create_cl_templates(lTh, clTh_TT, exp_range=(-3, -3), N=1)[0]
 # cl_ls2 = tp.create_cl_templates(lTh, clTh_TT, exp_range=(-1, -1), N=1)[0]
 
-fname = os.path.join(outdir, 'foreground.png')
+fname = os.path.join(outdir, 'foreground.pdf')
 
 f, ax = plt.subplots(1, 1, figsize=FSIZE1)
 ax.loglog(ell, cl_ls1, c='orange')
