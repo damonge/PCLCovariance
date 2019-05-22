@@ -50,6 +50,7 @@
 \newcommand{\summ}[1]{\sum_{\bf #1}\Delta #1^2}
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
 \newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\wtj}[6]{\left(\begin{array}{ccc} #1 & #2 & #3\\#4 & #5 & #6\end{array} \right)}
 
 %\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
 \title{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
@@ -137,7 +138,7 @@
     All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky approximation) as described in Table \ref{tab:notation}.
 
   
-  \subsection{The pseudo-$C_\ell$ method}
+  \subsection{The pseudo-$C_\ell$ method}\label{ssec:theory.pcl}
     This section provides a very brief introduction to the \PCL power spectrum estimator. Further details can be found in \todo{cite}. 
     In any practical situation we do not have access to maps of a given field ${\bf a}$ over the full sky, but rather to a weighted or masked version of them
     \begin{equation}
@@ -170,10 +171,72 @@
 
       The main advantage of the \PCL estimator is that the mode-coupling matrix $\mathcal{M}$ is directly related to the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ (see \todo{cite}), and can be computed analytically making use of methods that scale like $\ell_{\rm max}^3$.
     \end{enumerate}
+    
+    For completeness, the mode-coupling matrices for flat-sky and curved-sky fields are given by \todo{cite}:
+    \begin{itemize}
+      \item {\bf Curved sky.} After averaging over the harmonic number $m$, the mode-coupling matrices are:
+      \begin{equation}
+        \left\langle\frac{1}{2\ell+1}\sum_{m=-\ell}^\ell {\rm vec}\left[\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l}\right]\right\rangle=\sum_{\ell'}{\sf M}^{s_as_b}_{\ell\ell'} {\rm vec}\left[{\sf C}^{ab}_{\ell'}\right],
+      \end{equation}
+      with
+      \begin{align}
+        &{\sf M}^{00}_{\ell\ell'}=(2\ell'+1)\,\Xi^{00}_{\ell\ell'}(w_a,w_b),\hspace{12pt}
+        {\sf M}^{02}_{\ell\ell'}=(2\ell'+1)\,\Xi^{0+}_{\ell\ell'}(w_a,w_b)\,\mathds{1},\\
+        &{\sf M}^{22}_{\ell\ell'}=(2\ell'+1)
+        \left(
+        \begin{array}{cccc}
+          \Xi^{++}_{\ell\ell'} & 0 & 0 & \Xi^{--}_{\ell\ell'} \\
+          0 & \Xi^{++}_{\ell\ell'} & -\Xi^{--}_{\ell\ell'} & 0 \\
+          0 & -\Xi^{--}_{\ell\ell'} & \Xi^{++}_{\ell\ell'} & 0 \\
+          \Xi^{--}_{\ell\ell'} & 0 & 0 & \Xi^{++}_{\ell\ell'}
+        \end{array}\right),\\\nonumber
+      \end{align}
+      where
+      \begin{align}\label{eq:coeff_mcm}
+        &\Xi^{00}_{\ell\ell'}(w,v)  \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{0}{0}{0}^2\\
+        &\Xi^{0+}_{\ell\ell'}(w,v)  \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{0}{0}{0}\wtj{\ell}{\ell'}{\ell''}{2}{-2}{0}\\
+        &\Xi^{\pm\pm}_{\ell\ell'}(w,v) \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{2}{-2}{0}^2\frac{1\pm(-1)^{\ell+\ell'+\ell''}}{2}.
+      \end{align}
+      Here the 2-by-3 matrix-like quantities are the Wigner 3-$j$ symbols, and
+      \begin{equation}
+        P^{vw}_\ell\equiv\sum_{m=-\ell}^\ell v_{\ell m}w^*_{\ell m}.
+      \end{equation}
+      \item {\bf Flat sky.} In this case the averaging over the Fourier-space azimuth happens while binning into bandpowers, and therefore the unbinned mode-coupling matrix is defined before that:
+      \begin{equation}
+        \left\langle{\rm vec}\left[\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l}\right]\right\rangle=\sum_{\bf k}{\sf M}^{s_as_b}_{{\bf l}{\bf k}}{\rm vec}\left[{\sf C}^{ab}_k\right]
+      \end{equation}
+      with
+      \begin{align}
+        {\sf M}^{00}_{{\bf l}\,{\bf k}}&\equiv \bar{\Xi}^{00}_{{\bf l}{\bf k}},\\\label{eq:m02_flat}
+        {\sf M}^{02}_{{\bf l}\,{\bf k}}&\equiv 
+        \left(
+        \begin{array}{cc}
+         \bar{\Xi}^{0+}_{{\bf l}{\bf k}} & -\bar{\Xi}^{0-}_{{\bf l}{\bf k}} \\
+         \bar{\Xi}^{0-}_{{\bf l}{\bf k}} &  \bar{\Xi}^{0+}_{{\bf l}{\bf k}}
+        \end{array}\right)\\\label{eq:m22_flat}
+        {\sf M}^{22}_{{\bf l}\,{\bf k}}&\equiv (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\left(
+        \begin{array}{cccc}
+         \bar{\Xi}^{++}_{{\bf l}{\bf k}} & -\bar{\Xi}^{+-}_{{\bf l}{\bf k}} & -\bar{\Xi}^{+-}_{{\bf l}{\bf k}} &  \bar{\Xi}^{--}_{{\bf l}{\bf k}} \\
+         \bar{\Xi}^{+-}_{{\bf l}{\bf k}} &  \bar{\Xi}^{++}_{{\bf l}{\bf k}} & -\bar{\Xi}^{--}_{{\bf l}{\bf k}} & -\bar{\Xi}^{+-}_{{\bf l}{\bf k}} \\
+         \bar{\Xi}^{+-}_{{\bf l}{\bf k}} & -\bar{\Xi}^{--}_{{\bf l}{\bf k}} &  \bar{\Xi}^{++}_{{\bf l}{\bf k}} & -\bar{\Xi}^{+-}_{{\bf l}{\bf k}} \\
+         \bar{\Xi}^{--}_{{\bf l}{\bf k}} &  \bar{\Xi}^{+-}_{{\bf l}{\bf k}} &  \bar{\Xi}^{+-}_{{\bf l}{\bf k}} & \bar{\Xi}^{++}_{{\bf l}{\bf k}}
+        \end{array}\right),
+      \end{align}
+      where
+      \begin{align}
+        &\bar{\Xi}^{00}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}},\\
+        &\bar{\Xi}^{0+}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos2\Delta\varphi,\\
+        &\bar{\Xi}^{0-}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin2\Delta\varphi,\\
+        &\bar{\Xi}^{++}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos^22\Delta\varphi,\\
+        &\bar{\Xi}^{+-}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos2\Delta\varphi\,\sin2\Delta\varphi,\\
+        &\bar{\Xi}^{--}_{{\bf l}{\bf k}}=(w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin^22\Delta\varphi,\\
+      \end{align}
+      and $\Delta\varphi$ is the relative angle between ${\bf l}$ and ${\bf k}$.
+    \end{itemize}
 
     Before we move on to covariances, it is worth considering the case of unmasked field (i.e $w^a({\bf x})=1$ everywhere). In this case $\,^a{\sf M}_{{\bf l}{\bf l}'}=\mathds{1}\Delta^x({\bf k},{\bf l})$, and therefore different modes are uncorrelated (as should have been obvious). In a non-ideal case where the mask is still sufficiently well behaved (i.e. masks without too much small-scale structure), we can still expect the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ to be sharply peaked around ${\bf l}={\bf l}'$.
   
-  \subsection{Covariance matrices}
+  \subsection{Covariance matrices}\label{ssec:theory.pclcov}
     So far we have not assumed anything about the statistics of the fields, other than the fact that they are isotropic (Eq. \ref{eq:iso}). This section presents a method to estimate the disconnected part of the power spectrum covariance for the \PCL estimator, which is the contribution to the power spectrum covariance if all fields involved were Gaussianly distributed.
     
     Let $A$ and $F$ be the vector indices corresponding to the pairs of field indices $(\alpha,\beta)$ and $(\phi,\gamma)$ respectively, and let us start by considering the covariance
@@ -181,7 +244,7 @@
       \Sigma^{AF}_{{\bf l}{\bf l}'}\equiv\left\langle\tilde{a}^\alpha_{\bf l}\tilde{b}^{\beta *}_{\bf l}\tilde{f}^\phi_{{\bf l}'}\tilde{g}^{\gamma *}_{{\bf l}'}\right\rangle-\left\langle\tilde{a}^\alpha_{\bf l}\tilde{b}^{\beta *}_{\bf l}\right\rangle\left\langle\tilde{f}^\phi_{{\bf l}'}\tilde{g}^{\gamma *}_{{\bf l}'}\right\rangle
     \end{equation}
     The covariance of the binned bandpowers $\tilde{\sf C}$ can then be computed as
-    \begin{equation}\nonumber
+    \begin{equation}\label{eq:cov_binned}
       {\rm Cov}\left({\rm vec}\left(\tilde{\sf C}^{ab}_q\right)_A,{\rm vec}\left(\tilde{\sf C}^{fg}_{q'}\right)_F\right)=\sum_{{\bf l}\in q} B^{\bf l}_q\sum_{{\bf l}'\in q'} B^{{\bf l}'}_{q'}\,\Sigma^{AF}_{{\bf l}{\bf l}'}.
     \end{equation}
     which can then be used to estimate the covariance of the mode-decoupled bandpowers multiplying it by the inverse mode-coupling matrix twice. I.e., schematically:
@@ -192,7 +255,7 @@
     
     We now make use of Wick's theorem, which states that, for Gaussian fields $\langle a\,b\,f\,g\rangle=\langle a\,b\rangle\langle f\,g\rangle+\langle a\,f\rangle\langle b\,g\rangle+\langle a\,g\rangle\langle b\,f\rangle$. In this case, the expression for $\Sigma^{AF}_{{\bf l}{\bf l'}}$ reads:
     \begin{align}\nonumber
-      \Sigma^{AF}_{{\bf l}{\bf l}'}=&\left[K\summ{k}\,^aM^{\alpha\alpha'}_{{\bf l}{\bf k}}\,^gM^{\gamma\gamma'*}_{{\bf l}'{\bf k}}C^{ag,(\alpha'\gamma')}_k\right]\left[\summ{q}\,^bM^{\beta\beta'*}_{{\bf l}{\bf q}}\,^fM^{\phi\phi'}_{{\bf l}'{\bf q}}C^{bf,(\beta'\phi')}_q\right]^*\\
+      \Sigma^{AF}_{{\bf l}{\bf l}'}=&\left[K\summ{k}\,^aM^{\alpha\alpha'}_{{\bf l}{\bf k}}\,^gM^{\gamma\gamma'*}_{{\bf l}'{\bf k}}C^{ag,(\alpha'\gamma')}_k\right]\left[\summ{q}\,^bM^{\beta\beta'*}_{{\bf l}{\bf q}}\,^fM^{\phi\phi'}_{{\bf l}'{\bf q}}C^{bf,(\beta'\phi')}_q\right]^*\\\label{eq:covar_general}
       &+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
     \end{align}
     where we implicitly sum over repeated indices (e.g. $\alpha'$), and the second term is equivalent to the first one after swapping the roles of fields ${\bf f}$ and ${\bf g}$. Without any further approximations, for each pair $({\bf l},{\bf l}')$, we would need to perform two 2-dimensional integrals, and therefore the calculation would scale like $\ell_{\rm max}^6$, quickly becoming unfeasible.
@@ -201,12 +264,12 @@
     \begin{equation}\nonumber
      C^{ag,(\alpha'\gamma')}_kC^{bf,(\beta',\phi')}_q\simeq C^{ag,(\alpha'\gamma')}_{(\ell}C^{bf,(\beta',\phi')}_{\ell')}\equiv\frac{1}{2}\left(C^{ag,(\alpha'\gamma')}_\ell C^{bf,(\beta',\phi')}_{\ell'}+C^{ag,(\alpha'\gamma')}_{\ell'} C^{bf,(\beta',\phi')}_\ell\right).
     \end{equation}
-    In this case, the expression for $\Sigma^{AF}_{{\bf l}{\bf l}'}$ reads
-    \begin{align}
+    In this case, the expression for $\Sigma^{AF}_{{\bf l}{\bf l}'}$ simplifies to
+    \begin{align}\label{eq:covar_efstathiou}
       \Sigma^{AF}_{{\bf l}{\bf l}'}=C^{ag,(\alpha'\gamma')}_{(\ell}C^{bf,(\beta',\phi')}_{\ell')}\,^{ag}W^{\alpha\gamma,\alpha'\gamma'}_{{\bf l}{\bf l}'}\left(\,^{bf}W^{\beta\phi,\beta'\phi'}_{{\bf l}{\bf l}'}\right)^*+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
     \end{align}
     where we have defined the covariance coupling coefficients
-    \begin{equation}
+    \begin{equation}\label{eq:covar_coupling}
       \,^{ab}W^{\alpha\beta,\alpha'\beta'}_{{\bf l}{\bf l}'}=\summ{k}\,^aM^{\alpha\alpha'}_{{\bf l}{\bf k}}\left(\,^bM^{\beta\beta'}_{{\bf l}'{\bf k}}\right)^*.
     \end{equation}
 
@@ -220,7 +283,7 @@
     \end{equation}
 
     Now, in what follows, we will be concerned with the auto- and cross-correlations of spin-0 and spin-2 fields. Thus, to simplify the notation, we will enumerate the different types of coupling coefficients that exist for a spin-0 field with a single component that we will call $\delta$, in analogy to the projected galaxy overensity, and for a spin-2 field $\mathbf{\gamma}$ with $E$ and $B$ components $\gamma_E$ and $\gamma_B$, in analogy to the cosmic shear field. With this setup, all the possible non-zero $W^{\alpha\beta,\alpha'\beta'}_{{\bf l}{\bf l}'}$ can be expressed in terms of the $I^{\pm s_a,\pm s_b}_{{\bf l}{\bf l}'}$ as follows:
-    \begin{align}
+    \begin{align}\label{eq:coeff}
       &W^{\delta\delta,\delta\delta}_{{\bf l},{\bf l}'}=I^{0,0}_{{\bf l}{\bf l}'}; \\
       &W^{\delta\gamma_E,\delta\gamma_E}_{{\bf l},{\bf l}'}=W^{\delta\gamma_B,\delta\gamma_B}_{{\bf l},{\bf l}'}=I^{0,+2}_{{\bf l},{\bf l}'};\hspace{12pt}
       W^{\delta\gamma_E,\delta\gamma_B}_{{\bf l},{\bf l}'}=-W^{\delta\gamma_E,\delta\gamma_B}_{{\bf l},{\bf l}'}=-i\,I^{0,-2}_{{\bf l},{\bf l}'};\\
@@ -250,26 +313,72 @@
       \,^{ab}I^{0,-2}_{{\bf l}{\bf l}'}=\,^{ab}I^{-2,-2}_{{\bf l}{\bf l}'}=0,
     \end{align}
     where  we have defined
-    \begin{align}
+    \begin{align}\label{eq:covar_coupling_J}
       &\,^{ab}J^0_{{\bf l}{\bf l}'}=\summ{x}\left(w_a w_b\right)({\bf x})\,q({\bf l},{\bf x})\,\left(q({\bf l}',{\bf x})\right)^*,\\
-      &\,^{ab}J^\pm_{{\bf l}{\bf l}'}=\summ{x}\left(w_a w_b\right)({\bf x})\,q^{\pm2}_{{\bf l}{\bf l}'}({\bf x}).\\
+      &\,^{ab}J^\pm_{{\bf l}{\bf l}'}=\summ{x}\left(w_a w_b\right)({\bf x})\,q^{\pm2}_{{\bf l}{\bf l}'}({\bf x}).
     \end{align}
     Thus, the only surviving non-zero coupling coefficients are
     \begin{align}
-      &W^{\delta\delta,\delta\delta}_{{\bf l},{\bf l}'}=W^{\delta\gamma_E,\delta\gamma_E}_{{\bf l},{\bf l}'}=W^{\delta\gamma_B,\delta\gamma_B}_{{\bf l},{\bf l}'}=J^0_{{\bf l},{\bf l}'};\\
+      &W^{\delta\delta,\delta\delta}_{{\bf l},{\bf l}'}=W^{\delta\gamma_E,\delta\gamma_E}_{{\bf l},{\bf l}'}=W^{\delta\gamma_B,\delta\gamma_B}_{{\bf l},{\bf l}'}=J^0_{{\bf l}{\bf l}'};\\
       &W^{\gamma_E\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_E\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=J^+_{{\bf l}{\bf l}'}\\\nonumber
       &W^{\gamma_E\gamma_E,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_B,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=\\
       &\hspace{20pt}=-W^{\gamma_E\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-i\,J^-_{{\bf l}{\bf l}'}.
     \end{align}
-
-
-
-
-
     
+    We have reduced the problem of computing the covariance in Eq. \ref{eq:covar_general} to the problem of computing the coupling coefficients \ref{eq:covar_coupling} entering Eq. \ref{eq:covar_efstathiou}, and we have now shown that there are only 3 independent coefficients, given by Eq. \ref{eq:covar_coupling_J}. In order to simplify the calculation further, it is now useful to inspect these results for the specific case of fields defined on the sphere.
+    
+    \subsubsection{Covariances for curved skies}
+      As described in Section \ref{ssec:theory.pcl}, in the curved-sky estimator it is common to average over the harmonic number $m$ as part of the bandpower binning operation. Let us therefore define
+      \begin{equation}
+        \tilde{C}^{a_\alpha b_\beta}_\ell=\frac{1}{2\ell+1}\sum_{m=-\ell}^\ell (\tilde{a}_\alpha)_{\ell m} (\tilde{b}_\beta)_{\ell m}^*.
+      \end{equation}
+      The covariance of these objects under the approximation in Eq. \ref{eq:covar_efstathiou}, can be computed as:
+      \begin{equation}\label{eq:cov_sph}
+        {\rm Cov}\left(\tilde{C}^{a_\alpha b_\beta}_\ell,\tilde{C}^{f_\phi g_\gamma}_{\ell'}\right) = C^{a_{\alpha'} f_{\phi'}}_{(\ell}C^{b_{\beta'} g_{\gamma'}}_{\ell')}\,^{af}_{bg}\mathcal{W}^{\alpha\phi,\alpha'\phi'}_{\beta\gamma,\beta'\gamma'}(\ell,\ell')+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
+      \end{equation}
+      where we have defined the symbols
+      \begin{equation}
+        ^{af}_{bg}\mathcal{W}^{\alpha\phi,\alpha'\phi'}_{\beta\gamma,\beta'\gamma'}(\ell,\ell')=\equiv\sum_{m=-\ell}^\ell \sum_{m'=-\ell'}^{\ell'}\frac{\,^{af}W^{\alpha\phi,\alpha'\phi'}_{{\bf l}{\bf l}'}\left(\,^{bg}W^{\beta\gamma,\beta'\gamma'}_{{\bf l}{\bf l}'}\right)^*}{(2\ell+1)(2\ell'+1)}.
+      \end{equation}
+      These quantities involve terms of the form:
+      \begin{equation}
+        \,^{af}_{bg}\mathcal{J}^{XY}_{\ell\ell'}\equiv\sum_{m=-\ell}^\ell \sum_{m'=-\ell'}^{\ell'}\frac{\,^{af}J^X_{{\bf l}{\bf l}'}\left(\,^{bg}J^Y_{{\bf l}{\bf l}'}\right)^*}{(2\ell+1)(2\ell'+1)}
+      \end{equation}
+      Making use of the completeness relation for the Wigner 3-j symbols, it is possible to show, that these can be written as:
+      \begin{align}
+        &\,^{af}_{bg}\mathcal{J}^{00}_{\ell\ell'}=\frac{\Xi^{00}_{\ell\ell'}(w_aw_f,w_bw_g)}{2\ell'+1},\hspace{12pt}
+         \,^{af}_{bg}\mathcal{J}^{0+}_{\ell\ell'}=\frac{\Xi^{0+}_{\ell\ell'}(w_aw_f,w_bw_g)}{2\ell'+1},\\
+        &\,^{af}_{bg}\mathcal{J}^{++}_{\ell\ell'}=\frac{\Xi^{++}_{\ell\ell'}(w_aw_f,w_bw_g)}{2\ell'+1},\hspace{12pt}
+         \,^{af}_{bg}\mathcal{J}^{--}_{\ell\ell'}=\frac{\Xi^{--}_{\ell\ell'}(w_aw_f,w_bw_g)}{2\ell'+1},\\
+        &\,^{af}_{bg}\mathcal{J}^{+-}_{\ell\ell'}=\,^{af}_{bg}\mathcal{J}^{-+}_{\ell\ell'}=\,^{af}_{bg}\mathcal{J}^{0-}_{\ell\ell'}=0,
+      \end{align}
+      where the $\Xi^{XY}_{\ell\ell'}$ are defined in Eq. \ref{eq:coeff_mcm}.
+      Thus, computationally speaking, the problem of computing covariance matrices reduces to that of computing the same coupling coefficients needed for the computation of the \PCL power spectra themselves. Using the same notation as in Eq. \ref{eq:coeff}, the only non-zero $\mathcal{W}$ coefficients are:
+      \begin{align}
+        &\mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \delta  ,\delta  \delta  }=
+         \mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \gamma_X,\delta  \gamma_X}=
+         \mathcal{W}^{\delta  \gamma_X,\delta  \gamma_X}_{\delta  \gamma_Y,\delta  \gamma_Y}=\mathcal{J}^{00}\\
+        &\mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=
+         \mathcal{W}^{\delta  \gamma_Z,\delta  \gamma_Z}_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=\mathcal{J}^{0+}\\
+        &\mathcal{W}^{\gamma_X\gamma_Y,\gamma_X\gamma_Y}_{\gamma_W\gamma_Z,\gamma_W\gamma_Z}=\mathcal{J}^{++}\\
+        &\mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
+         \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
+         \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
+        &\hspace{12pt}
+         \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
+         \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
+         \mathcal{W}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=-\mathcal{J}^{--}\\
+        &\mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
+         \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
+         \mathcal{W}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
+        &\hspace{12pt}
+         \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
+         \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
+         \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},\\
+      \end{align}
+      where $(X,Y,Z,W)$ stand for either $E$ or $B$, and where we have suppressed all redundant indices (including $\ell\ell'$). Any \PCL covariance element can then be found by replacing these results in Eq. \ref{eq:cov_sph}. Some explicit examples for common terms can be found in Appendix A.3.3 of \todo{cite}.
 
-This section presents the analytical calculation of the pseudo-$C_\ell$ covariance. The treatment and approximations used are similar to those presented in \todo{cite} for spin-0 quantities, in \todo{cite} for particular spin-0 and spin-2 correlations and in \todo{cite} for the 3D density field. We reproduce the formalism here in order to provide a complete set of formulas applicable to any cross-correlation in both curved and flat skies.
-
+    \subsubsection{Covariances for flat skies}
 
 
 \begin{itemize}
@@ -282,6 +391,7 @@ This section presents the analytical calculation of the pseudo-$C_\ell$ covarian
 \item Approximation 1
 \item Approximation 2
 \end{itemize}
+
 
 
 
@@ -523,8 +633,6 @@ difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
 % function and must be, approximately, of the size of the range of the mixed
 % modes. That way, each $\tilde C_l$ is almost independent of the others
 % $\tilde C_{l'}$, and $M$ is invertible.
-
-
 
 
 \section{Discussion}\label{sec:discussion}
