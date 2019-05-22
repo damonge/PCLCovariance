@@ -231,3 +231,41 @@ plt.tight_layout()
 plt.savefig(fname, dpi=DPI)
 plt.close()
 
+##############################################################################
+############################# 2bins corr diff ################################
+##############################################################################
+
+Cth = np.load('../run_sph_2b_same_mask/full_covariance/run_sph_2b_same_mask_covTh_TTTEEE_short_2bins_same_mask.npz')['arr_0']
+Csims = np.load('../run_sph_2b_same_mask/full_covariance/run_sph_2b_same_mask_covSims_TTTEEE_short_0001-20000.npz')['arr_0']
+
+ell = np.loadtxt('../run_sph_2b_same_mask/run_sph_2b_same_mask_ells.txt')
+
+CorrSims = Csims/np.sqrt(np.diag(Csims)[:, None] * np.diag(Csims)[None, :])
+CorrTh = Cth/np.sqrt(np.diag(Cth)[:, None] * np.diag(Cth)[None, :])
+
+
+labels_cov = []
+for i in range(4):
+    for j in range(i, 4):
+        labels_cov.append(labels[i] + labels[j])
+
+
+f, ax = plt.subplots(1, 1, figsize=(8, 8))
+nlbins = CorrSims.shape[0] / 10
+print(nlbins)
+cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
+f.colorbar(cb)
+for i in range(1, 10):
+    ax.plot([0, 10*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
+    ax.plot([i*nlbins, i*nlbins], [0, 10*nlbins-1], 'k-', lw=0.5)
+
+ticks = [(i + 0.5) * nlbins for i in range(10)]
+ax.set_xticks(ticks)
+ax.set_xticklabels(labels_cov)
+ax.set_yticks(ticks)
+ax.set_yticklabels(labels_cov)
+
+fname = os.path.join(outdir, 'sph_2bin_diff_corr.pdf')
+plt.savefig(fname, dpi=DPI)
+# plt.show()
+plt.close()
