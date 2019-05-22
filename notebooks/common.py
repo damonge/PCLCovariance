@@ -6,6 +6,8 @@ import numpy as np
 import pymaster as nmt
 import os
 
+plt.rcParams["savefig.format"] = 'pdf'
+
 DEFAULT_COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 DPI = 500
 FIGSIZE = (4, 3)
@@ -231,6 +233,7 @@ def plot_rows_cov_matrix(lbins, CovSims, CovTh, normalization, labels, index=20,
         Xi = X
         for _ in range(peaks):
             Xi = lbins[indexi - dx:indexi + dx + 1]
+            Y = CovSims[indexi, indexi - dx:indexi + dx + 1]/normalization
             Yth = covth[indexi, indexi - dx:indexi + dx + 1]/normalization
             ax[0].plot(Xi, Yth, c=c[i+1], label=labels[i] if not _ else '')
             ax[1].plot(Xi, Yth/Y - 1, c=c[i+1])
