@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from scipy import stats
+import common as co
 import flatmaps as fm
 import healpy as hp
 import numpy as np
@@ -232,6 +234,49 @@ plt.savefig(fname, dpi=DPI)
 plt.close()
 
 ##############################################################################
+############################ Chi2 foregrounds ################################
+##############################################################################
+
+CovSims = np.load('../run_sph/run_sph_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
+CovSims_fore = np.load('../run_sph_contaminants_ls100_ss100/run_sph_contaminants_ls100_ss100_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
+CovTh = np.load('../run_sph_contaminants_ls100_ss100/run_sph_contaminants_ls100_ss100_covThTTTEEE_short.npz')['arr_0']
+
+clsims = np.load('../run_sph_contaminants_ls100_ss100/run_sph_contaminants_ls100_ss100_clsims_0001-20000.npz')
+clTT = np.reshape(clsims['cl00'], np.array(np.shape(clsims['cl00']))[[0, 2]])
+clTE = clsims['cl02'][:, 0, :]
+clEE = clsims['cl22'][:, 0, :]
+lbins = clsims['l']
+lmax = (clsims['l'] < 2*512).sum()
+
+clTTTEEE = np.concatenate([clTT[:, :lmax], clTE[:, :lmax], clEE[:, :lmax]], axis=1)
+
+chi2_list = co.get_chi2(clTTTEEE, [np.linalg.inv(CovSims), np.linalg.inv(CovSims_fore), np.linalg.inv(CovTh)])
+
+f, ax = plt.subplots(1, 1, figsize=FSIZE1)
+bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
+_, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
+                  label='Sim. w/o cont.', ls='-')
+_, x, _ = ax.hist(chi2_list[1], bins=bins, histtype='step', density=True,
+                  label='Sim. w/ cont.', ls='-.')
+_, x, _ = ax.hist(chi2_list[2], bins=bins, histtype='step', density=True,
+                  label='NKA', ls='-')
+
+ax.plot(x[:-1], stats.chi2.pdf(x[:-1], clTTTEEE.shape[1]), ls='--', label=r'$\chi^2$ pdf')
+
+ax.set_xlabel(r'$\chi^2$')
+ax.set_ylabel('$10^3$ pdf')
+
+y_vals = ax.get_yticks()
+ax.set_yticklabels([str(x * 1000) for x in y_vals])
+
+ax.legend(loc='upper right', fontsize='9') # , frameon=False)
+plt.tight_layout()
+fname = os.path.join(outdir, 'contaminants_chi2.pdf')
+plt.savefig(fname, dpi=DPI)
+# plt.show()
+plt.close()
+
+##############################################################################
 ############################# 2bins corr diff ################################
 ##############################################################################
 
@@ -252,7 +297,6 @@ for i in range(4):
 
 f, ax = plt.subplots(1, 1, figsize=(8, 8))
 nlbins = CorrSims.shape[0] / 10
-print(nlbins)
 cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
 f.colorbar(cb)
 for i in range(1, 10):
