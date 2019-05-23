@@ -58,7 +58,7 @@ def cls_2b():
     ell_cl2bin_file = np.load('./data/cls_lss_2bins.npz')
     ell, cl2bin, nls2bin = ell_cl2bin_file['ls'], ell_cl2bin_file['cls'], ell_cl2bin_file['nls']
 
-    f, axs = plt.subplots(4, 4, figsize=(8, 6), gridspec_kw={'hspace': 0, 'wspace': 0}, sharex=True, sharey='row')
+    f, axs = plt.subplots(4, 4, figsize=(9, 6), gridspec_kw={'hspace': 0, 'wspace': 0}, sharex=True, sharey='row')
 
     labels = [r'$\delta_1$', r'$\gamma_{E,1}$', r'$\delta_2$', r'$\gamma_{E,2}$']
     ci = 0
@@ -86,11 +86,12 @@ def cls_2b():
         ax.set_visible(False)
 
     for i in range(axs.shape[0]):
-        axs[i, i].set_xlabel('l')
-        axs[i, i].set_ylabel(r'$C_l$')
+        axs[i, i].set_xlabel('$\ell$')
+        axs[i, i].set_ylabel(r'$C_\ell$')
         axs[i, i].set_visible(True)
-        axs[i, i].xaxis.set_tick_params(labelbottom=True)
-        axs[i, i].yaxis.set_tick_params(labelleft=True)
+        axs[i, i].xaxis.set_tick_params(labelbottom=True, labelsize=8)
+        axs[i, i].yaxis.set_tick_params(labelleft=True, labelsize=8,
+                                        labelrotation=45, pad=-3)
         # axs[0, i].set_title(labels[i])
         # axs[i, -1].text(1, 0.5, labels[i], fontsize=12,
         #                 transform=axs[i, -1].transAxes)
@@ -126,28 +127,28 @@ def compare_cls_1bin():
     axs[0].loglog(lTh, clTh_TT, label='1-bin Fid.')
     axs[0].loglog(ell, cl2bins_1[0, 0], label='1st 2-bin Fid.', ls='--')
     axs[0].loglog(ell, cl2bins_2[0, 0], label='2nd 2-bin Fid.', ls='--')
-    axs[0].set_ylabel(r'$C_l$')
+    axs[0].set_ylabel(r'$C_\ell$')
 
-    axs[0].text(0.5, 0.9, r'$C_l^{gg}$', transform=axs[0].transAxes)
+    axs[0].text(0.5, 0.9, r'$C_\ell^{gg}$', transform=axs[0].transAxes)
 
     #### TE #####
     axs[1].loglog(lTh, clTh_TE, label='1-bin Fid.')
     axs[1].loglog(ell, cl2bins_1[0, 1], label='1st 2-bin Fid.', ls='--')
     axs[1].loglog(ell, cl2bins_2[0, 1], label='2nd 2-bin Fid.', ls='--')
-    axs[1].text(0.5, 0.9, r'$C_l^{g\gamma}$', transform=axs[1].transAxes)
-    #axs[1].set_ylabel(r'$C_l^{g\gamma}$')
+    axs[1].text(0.5, 0.9, r'$C_\ell^{g\gamma}$', transform=axs[1].transAxes)
+    #axs[1].set_ylabel(r'$C_\ell^{g\gamma}$')
 
     #### EE #####
     axs[2].loglog(lTh, clTh_EE, label='1-bin Fid.')
     axs[2].loglog(ell, cl2bins_1[1, 1], label='1st 2-bin Fid.', ls='--')
     axs[2].loglog(ell, cl2bins_2[1, 1], label='2nd 2-bin Fid.', ls='--')
-    axs[2].text(0.5, 0.9, r'$C_l^{\gamma\gamma}$', transform=axs[2].transAxes)
-    #axs[2].set_ylabel(r'$C_l^{\gamma\gamma}$')
+    axs[2].text(0.5, 0.9, r'$C_\ell^{\gamma\gamma}$', transform=axs[2].transAxes)
+    #axs[2].set_ylabel(r'$C_\ell^{\gamma\gamma}$')
 
     axs[0].legend(loc=0)
 
     for i in range(axs.shape[0]):
-        axs[i].set_xlabel('l')
+        axs[i].set_xlabel('$\ell$')
 
     plt.tight_layout()
     plt.savefig(fname, dpi=DPI)
@@ -229,8 +230,8 @@ def foregrounds():
 
     ax.loglog(ell, cl_ss[0], c='b', label='Small scales')
 
-    ax.set_xlabel('l')
-    ax.set_ylabel(r'$C_l^{gg}$')
+    ax.set_xlabel('$\ell$')
+    ax.set_ylabel(r'$C_\ell^{gg}$')
 
     ax.legend(loc=0)
 
@@ -520,9 +521,7 @@ if __name__ == '__main__':
     foregrounds()
     chi2_foregrounds()
     corr_diff_2bins()
-    compare_cls_1bin()
+    # compare_cls_1bin()
     cls_2b()
     chi2_sph_TT_TE_EE()
     chi2_flat_TT_TE_EE()
-
-
