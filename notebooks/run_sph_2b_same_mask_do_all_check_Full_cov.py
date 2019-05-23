@@ -44,3 +44,6 @@ foutput = figures_path + '_Efstathiou'
 chi2_Full, corr_Full = co.do_all_checks(lbins_Full, cl_for_C, CovSims_Full,
                                         CovTh_Full, modes="All TTTEEE",
                                         row_cov=False, foutput=foutput + '_TTTEEE_Full')
+
+np.savez_compressed(output_path + '_chi2_sims_th_TTTEEE_short_Full.npz', chi2_Full)
+np.savez_compressed(output_path + '_corr_sims_th_TTTEEE_short_Full.npz', corr_Full)
