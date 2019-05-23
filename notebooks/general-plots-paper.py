@@ -309,3 +309,190 @@ fname = os.path.join(outdir, 'run_sph_2b_same_mask_NKA_diff_corr.pdf')
 plt.savefig(fname, dpi=DPI)
 # plt.show()
 plt.close()
+
+##############################################################################
+####################### TTTT, TETE, EEEE chi2 plot ###########################
+##############################################################################
+
+prefix = 'run_sph_2b'
+run_path = os.path.join('./simulations_outputs/', prefix, prefix)
+sims_suffix = '_cl_0001-20000.npz'
+
+##############################################################################
+
+ell = np.loadtxt(run_path + '_ells.txt')
+lmax = (ell < 2*512).sum()
+nlbins = lmax
+
+clsims = np.load(run_path + '_b1' + sims_suffix)['arr_0']
+
+clTT = clsims[0, 0, :, :lmax]
+clEE = clsims[1, 1, :, :lmax]
+clTE = clsims[0, 1, :, :lmax]
+
+##############################################################################
+
+CovSims_path = run_path + '_cov_b1' + sims_suffix
+Csims = np.load(CovSims_path)['arr_0']
+
+nlbins_orig = int(Csims.shape[0] / 6)
+Csims = Csims.reshape((6, nlbins_orig, 6, nlbins_orig))
+Csims = Csims[:, :lmax, :, :lmax]
+
+Csims_TT = Csims[0, :, 0, :]
+Csims_TE = Csims[1, :, 1, :]
+Csims_EE = Csims[3, :, 3, :]
+
+##############################################################################
+c0000 = np.load(run_path+'_c0000_b1.npz')['arr_0']
+c0202 = np.load(run_path+'_c0202_b1.npz')['arr_0']
+c2222 = np.load(run_path+'_c2222_b1.npz')['arr_0']
+
+CovTh_TT = c0000[:lmax, :lmax]
+CovTh_TETE, CovTh_TETB = c0202[:, 0, :, [0, 1] ]
+CovTh_EEEE, CovTh_EEEB, CovTh_EEBE, CovTh_EEBB = c2222[:, 0, :, [0, 1, 2, 3] ]
+
+CovTh_TE = CovTh_TETE[:lmax, :lmax]
+CovTh_EE = CovTh_EEEE[:lmax, :lmax]
+
+##############################################################################
+
+Cth0 = np.empty((6, nlbins, 6, nlbins))
+Cth0_ar = np.load(run_path + '_covSpin0_ar_b1.npz')['arr_0']
+i, j = np.triu_indices(6)
+Cth0[i, :,  j, :] = Cth0_ar[:, :lmax, :lmax]
+Cth0[j, :,  i, :] = Cth0_ar[:, :lmax, :lmax]
+
+Cth0_TT = Cth0[0, :, 0, :]
+Cth0_TE = Cth0[1, :, 1, :]
+Cth0_EE = Cth0[3, :, 3, :]
+
+##############################################################################
+
+chi2_TT_ar = co.get_chi2(clTT, list(map(np.linalg.inv, [Csims_TT, CovTh_TT, Cth0_TT])))
+chi2_EE_ar = co.get_chi2(clEE, list(map(np.linalg.inv, [Csims_EE, CovTh_EE, Cth0_EE])))
+chi2_TE_ar = co.get_chi2(clTE, list(map(np.linalg.inv, [Csims_TE, CovTh_TE, Cth0_TE])))
+
+f, axs = plt.subplots(1, 3, figsize=(8, 3), sharey=True, gridspec_kw={'hspace': 0, 'wspace': 0})
+
+label = [r"$(\delta \delta, \delta \delta)$", r"$(\delta \gamma_E, \delta \gamma_E)$",
+         r"$(\gamma_E \gamma_E, \gamma_E \gamma_E)$"]
+i = 0
+for ax, chi2_list in zip(axs, [chi2_TT_ar, chi2_TE_ar, chi2_EE_ar]):
+    bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
+    _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
+                      label='Simulations')
+    _, x, _ = ax.hist(chi2_list[1], bins=bins, histtype='step', density=True,
+                      label='NKA')
+    _, x, _ = ax.hist(chi2_list[2], bins=bins, histtype='step', density=True,
+                      label='Spin-0')
+
+    ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax), ls='--', label=r'$\chi^2$ pdf')
+
+    ax.text(0.8, 0.9, label[i], horizontalalignment='center',
+            transform=ax.transAxes)
+    ax.set_xlabel(r'$\chi^2$')
+
+    i += 1
+
+axs[0].set_ylabel('pdf')
+
+axs[0].legend(loc='upper left', fontsize='9') # , frameon=False)
+plt.tight_layout()
+fname = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_TT_TE_EE.pdf')
+plt.savefig(fname, dpi=DPI)
+# plt.show()
+plt.close()
+
+##############################################################################
+##################### TTTT, TETE, EEEE chi2 plot flat ########################
+##############################################################################
+
+prefix = 'run'
+run_path = os.path.join('./simulations_outputs/', prefix, prefix)
+sims_suffix = '_clsims_0001-20000.npz'
+
+##############################################################################
+clsims = np.load(run_path + sims_suffix)
+
+clTT = cl00 = np.reshape(clsims['cl00'], np.array(np.shape(clsims['cl00']))[[0,2]])
+clTE = clsims['cl02'][:,0,:]
+clEE = clsims['cl22'][:,0,:]
+
+lmax = nlbins = len(clTT[0])
+lbins = clsims['l']
+
+##############################################################################
+
+CovSims_path = run_path + '_cov' + sims_suffix
+Csims = np.load(CovSims_path)['arr_0']
+
+nlbins_orig = int(Csims.shape[0] / 6)
+Csims = Csims.reshape((6, nlbins_orig, 6, nlbins_orig))
+Csims = Csims[:, :lmax, :, :lmax]
+
+Csims_TT = Csims[0, :, 0, :]
+Csims_TE = Csims[1, :, 1, :]
+Csims_EE = Csims[3, :, 3, :]
+
+##############################################################################
+c0000 = np.load(run_path+'_c0000.npz')['arr_0']
+c0202 = np.load(run_path+'_c0202.npz')['arr_0']
+c2222 = np.load(run_path+'_c2222.npz')['arr_0']
+
+CovTh_TT = c0000[:lmax, :lmax]
+CovTh_TETE, CovTh_TETB = c0202[:, 0, :, [0, 1] ]
+CovTh_EEEE, CovTh_EEEB, CovTh_EEBE, CovTh_EEBB = c2222[:, 0, :, [0, 1, 2, 3] ]
+
+CovTh_TE = CovTh_TETE[:lmax, :lmax]
+CovTh_EE = CovTh_EEEE[:lmax, :lmax]
+
+##############################################################################
+
+Cth0 = np.empty((6, nlbins, 6, nlbins))
+Cth0_ar = np.load(run_path + '_covSpin0_ar.npz')['arr_0']
+i, j = np.triu_indices(6)
+Cth0[i, :,  j, :] = Cth0_ar[:, :lmax, :lmax]
+Cth0[j, :,  i, :] = Cth0_ar[:, :lmax, :lmax]
+
+Cth0_TT = Cth0[0, :, 0, :]
+Cth0_TE = Cth0[1, :, 1, :]
+Cth0_EE = Cth0[3, :, 3, :]
+
+##############################################################################
+
+chi2_TT_ar = co.get_chi2(clTT, list(map(np.linalg.inv, [Csims_TT, CovTh_TT, Cth0_TT])))
+chi2_EE_ar = co.get_chi2(clEE, list(map(np.linalg.inv, [Csims_EE, CovTh_EE, Cth0_EE])))
+chi2_TE_ar = co.get_chi2(clTE, list(map(np.linalg.inv, [Csims_TE, CovTh_TE, Cth0_TE])))
+
+f, axs = plt.subplots(1, 3, figsize=(8, 3), sharey=True, gridspec_kw={'hspace': 0, 'wspace': 0})
+
+label = [r"$(\delta \delta, \delta \delta)$", r"$(\delta \gamma_E, \delta \gamma_E)$",
+         r"$(\gamma_E \gamma_E, \gamma_E \gamma_E)$"]
+i = 0
+for ax, chi2_list in zip(axs, [chi2_TT_ar, chi2_TE_ar, chi2_EE_ar]):
+    bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
+    _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
+                      label='Simulations')
+    _, x, _ = ax.hist(chi2_list[1], bins=bins, histtype='step', density=True,
+                      label='NKA')
+    _, x, _ = ax.hist(chi2_list[2], bins=bins, histtype='step', density=True,
+                      label='Spin-0')
+
+    ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax), ls='--', label=r'$\chi^2$ pdf')
+
+    ax.text(0.8, 0.9, label[i], horizontalalignment='center',
+            transform=ax.transAxes)
+    ax.set_xlabel(r'$\chi^2$')
+
+    i += 1
+
+axs[0].set_ylabel('pdf')
+
+axs[0].legend(loc='upper left', fontsize='9') # , frameon=False)
+plt.tight_layout()
+fname = os.path.join(outdir, 'run_chi2_TT_TE_EE.pdf')
+plt.savefig(fname, dpi=DPI)
+# plt.show()
+plt.close()
+
