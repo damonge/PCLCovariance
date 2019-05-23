@@ -12,6 +12,7 @@ import os
 
 DPI = 500
 FSIZE1 = (4, 3)
+DEFAULT_COLOR_CYCLE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 outdir = './general-plots/'
 
@@ -224,16 +225,19 @@ def foregrounds():
     fname = os.path.join(outdir, 'foreground.pdf')
 
     f, ax = plt.subplots(1, 1, figsize=FSIZE1)
-    ax.loglog(ell, cl_ls1, c='orange')
-    ax.loglog(ell, cl_ls2, c='orange', label='Large scales')
-    ax.fill_between(ell, cl_ls1, cl_ls2, facecolor="orange", alpha=0.5)
+    color = DEFAULT_COLOR_CYCLE
 
-    ax.loglog(ell, cl_ss[0], c='b', label='Small scales')
+    ax.loglog(ell, cl2bin[0, 0] + nls2bin[0, 0], label='Fiducial')
+    ax.loglog(ell, cl_ls1, c=color[1])
+    ax.loglog(ell, cl_ls2, c=color[1], label='Large scales cont.')
+    ax.fill_between(ell, cl_ls1, cl_ls2, facecolor=color[1], alpha=0.5)
+
+    ax.loglog(ell, cl_ss[0], c=color[2], label='Small scales cont.')
 
     ax.set_xlabel('$\ell$')
     ax.set_ylabel(r'$C_\ell^{gg}$')
 
-    ax.legend(loc=0)
+    ax.legend(loc=0, fontsize=8)
 
     plt.tight_layout()
     plt.savefig(fname, dpi=DPI)
