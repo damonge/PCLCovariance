@@ -441,22 +441,22 @@ masks yielded same results.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth]{./figures/pz.png}
+  \includegraphics[width=0.6\textwidth]{./figures/pz.pdf}
   \caption{Galaxy distribution redshift bins.}
   \label{fig:pz}
 \end{figure}
 
 \begin{figure*}
   \centering
-  \includegraphics[width=\textwidth]{./figures/cls-sph-2b.png}
+  \includegraphics[width=\textwidth]{./figures/cls-sph-2b.pdf}
   \caption{Fiducial power spectra. We show only the $T$ and $E$ modes.}
   \label{fig:cl-2bins}
 \end{figure*}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth]{./figures/mask-lss1.png}\\
-  \includegraphics[width=\columnwidth]{./figures/mask-lss2.png}
+  \includegraphics[width=0.45\textwidth]{./figures/mask-lss1.pdf}
+  \includegraphics[width=0.45\textwidth]{./figures/mask-lss2.pdf}
   \caption{Sky mask used in our analysis}
   \label{fig:mask}
 \end{figure}
@@ -474,40 +474,86 @@ available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
 
 The same results are obtained even in the presence of foregrounds. In
 particular, we tested the case with 100 foregrounds both at low scales and
-large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:fore}) computed as 
+large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:conts}) computed as 
 \begin{equation}
   \clf = A (l + 1)^{\beta}\,.
-  \label{eq:fore}
+  \label{eq:conts}
 \end{equation}
 Here, $A$ was fixed so that the ratio of the foreground power spectra and the
 theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
 randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
 0$ for small scale ones. 
 
+
+\subsection{Visual inspection}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\textwidth]{./figures/all_rows_sph_1bin.pdf}
+  \caption{Rows plot para todas las combinaciones}
+  \label{fig:rows_1bin}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./figures/sph_1bin_diff_corr.pdf}
+  \caption{Corr differences 1bin}
+  \label{fig:diff_corr_1bin}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_NKA_TTTEEE_reldev_eigval_1stbin.pdf}
+  \caption{Eigenvalues for the simulation and NKA covariance matrices.}
+  \label{fig:eigv_1bin}
+\end{figure}
+
+\subsection{Quantitative checks}
+
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\textwidth]{./figures/run_sph_2b_1stbin_chi2_TT_TE_EE.pdf}
+  \caption{Plot $\chi^2$ TT-TT, TE-TE, EE-EE. \todo{Join them, sharey}}
+  \label{fig:chi2_1bin}
+\end{figure}
+
+
+\subsection{Contaminant deprojection}
 \begin{figure}
   \centering
-  \includegraphics[width=\columnwidth]{./figures/foreground.png}
+  \includegraphics[width=\columnwidth]{./figures/foreground.pdf}
   \caption{$\cl$ foregrounds used in order to check the reliability of the
     analytical approximations in their presence. They did not affect. The
     limiting cases for the large-scale contaminants are given by $\beta=-1,\,
-    -3$ in Eq.~\ref{eq:fore}}
-  \label{fig:fore}
+    -3$ in Eq.~\ref{eq:conts}}
+  \label{fig:conts}
 \end{figure}
 
-\subsection{Visual inspection}
-\todo{Rows plot para todas las combinaciones}
-\todo{diff-correlation TTTT BBBB}
-\todo{Eigenvalue plot}
-
-\subsection{Quantitative checks}
-\todo{Plot $\chi^2$ TT-TT, TE-TE, EE-EE}
-
-\subsection{Contaminant deprojection}
-\todo{}
+\begin{figure}[htb]
+  \centering
+  \includegraphics{./figures/contaminants_chi2.pdf}
+  \caption{$\chi^2$ distributions for the case with and without contaminants.
+    We see they are perfectly removed.}
+  \label{fig:chi2_conts}
+\end{figure}
 
 \subsection{Impact on parameter estimation}
-\todo{$\chi^2$ plot para 2 bines}
-\todo{diff-correlaton plot para 2 bines ver Fig. 8  de 1809.09603}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_same_mask_NKA_TTTEEE_Full_chi2.pdf}
+  \caption{$\chi^2$ plot para 2 bines TT-TE-EE}
+  \label{fig:chi2_2bins}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.9\textwidth]{./figures/run_sph_2b_same_mask_NKA_diff_corr.pdf}
+  \caption{Correlation difference between simulation's and NKA covariance
+    matrices}
+  \label{fig:corr_diff_2bins}
+\end{figure}
+
 \todo{Contours}
 
 \subsection{$\chi^2$ distribution and covariance matrices - old section}
@@ -532,59 +578,15 @@ due to the fact that there is a division by $0$, while for the naive
 approximation, which is defined diagonal (see Eq.~\ref{eq:naive}), the
 relative deviation is exactly $-1$ for all values with $l \neq l'$.
 
-\begin{figure*} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_chi2.png}~
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_EEEE_chi2.png}
-  \caption{Comparison of the distributions found using different
-    covariances for the TTTT (left) and EEEE (right) cases.}
-  \label{fig:TTTT_EEEE_chi2}
-\end{figure*}
-
-\begin{figure*} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_reldev_eigval.png}~
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_EEEE_reldev_eigval.png}
-  \caption{Comparison of the covariance matrix eigenvalues for the TTTT (left)
-    and EEEE (right) cases.} 
-  \label{fig:TTTT_EEEE_eigv}
-\end{figure*}
-
-\begin{figure} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_TTTT_rows_cov_matrix.png}~
-  \caption{Mask induced scale correlations for the TTTT case.}
-  \label{fig:TTTT_rows}
-\end{figure}
-
-The goodness of the approximation is also seen in the correlation matrices.
 The subtraction of the correlation matrix from the simulations and that from
 the best analytical approximation (which we have just seen gives almost same
 results as the spin-0 one) shows no structure but for the case of the larger
 scales of the EEEE modes (see Fig.~\ref{fig:TTTT_EEEE_corr}).
 
-\begin{figure*} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_Efstathiou_TTTT_correlation_difference.png}~
-  \includegraphics[width=\columnwidth]{./figures/run_sph_Efstathiou_EEEE_correlation_difference.png}
-  \caption{Differences between the simulations and analytical approximation of
-    the correlation matrices for the TTTT (left) and EEEE (right) cases.}
-  \label{fig:TTTT_EEEE_corr}
-\end{figure*}
-
 These approximations do not work well for the B-modes, though. We can see in
 Fig.~\ref{fig:BBBB} that we are not able to recover with accuracy the first
 diagonal elements.
 
-
-\begin{figure} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_ALL_BBBB_check_diagonal_terms_4.png}
-  \caption{The analytical approximation are not able to reproduce accurately
-    the terms involving the B-modes. Here we show the most extreme case, the
-    corresponding to the BBBB modes.}
-  \label{fig:BBBB}
-\end{figure}
 
 Finally, the analytical covariance also works for 2-bin correlations. The
 $\chi^2$ distribution for the covariance matrix of the modes TT, TE and EE
@@ -592,30 +594,6 @@ among two bins is shown in Fig.~\ref{fig:TTTEEE_chi2}. The eigenvalues
 are recovered well except for the lower ones that diverge up to $20\%$ (see
 Fig.~\ref{fig:TTTEEE_eigv}, this is not translated to any substantial
 difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
-
-\begin{figure} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_chi2.png}
-  \caption{$\chi^2$ distribution check for the full analytical covariance
-    matrix for the modes TT, TE and EE among two bins.}
-  \label{fig:TTTEEE_chi2}
-\end{figure}
-
-\begin{figure} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_reldev_eigval.png}
-  \caption{Relative difference between the analytical and simulations
-    covariance matrix eigenvalues for the modes TT, TE and EE among two bins.}
-  \label{fig:TTTEEE_eigv}
-\end{figure}
-
-\begin{figure} %[htb]
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/run_sph_2b_same_mask_Efstathiou_TTTEEE_Full_correlation_difference.png}
-  \caption{Difference of the correlation matrices of the simulated $\cl$ and
-    the analytical one for the modes TT, TE and EE among two bins..}
-  \label{fig:TTTEEE_corr}
-\end{figure}
 
 
 
@@ -639,8 +617,19 @@ difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
 
 \appendix
 \section{Flat sky}
-\todo{Plot mascara}
-\todo{Plot chi2 TT-TT TE-TE, EE-EE}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./figures/mask-lss_flat1.pdf}
+  \caption{Mask used for a flat-sky approximation in one of the redshift-bins}
+  \label{fig:mask_flat}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\textwidth]{./figures/run_chi2_TT_TE_EE.pdf}
+  \caption{Plot chi2 TT-TT TE-TE, EE-EE}
+  \label{fig:chi2_1bin_flat}
+\end{figure}
 
 \acknowledgments
 
