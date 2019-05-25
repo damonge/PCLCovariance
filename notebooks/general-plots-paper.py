@@ -70,8 +70,8 @@ def cls_2b():
         for j in range(i, cl2bin.shape[0]):
             if j in (2, 5):
                 continue
-            axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2], label='Th. w/o noise')
-            axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2] + nls2bin[i, j, ell >= 2], label='Th.', ls='--')
+            axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2], label='Signal')
+            axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2] + nls2bin[i, j, ell >= 2], label='Signal + Noise', ls='--')
             axs[ci, cj].loglog(ell[ell >= 2], nls2bin[i, j, ell >= 2], label='Noise')
             axs[ci, cj].text(0.78, 0.9, "({}, {})".format(labels[ci], labels[cj]),
                              transform=axs[ci, cj].transAxes,
@@ -164,6 +164,7 @@ def masks():
 
     fmask = "./data/mask_lss_sph1.fits"
     mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+    mask_lss[mask_lss == 0] = hp.UNSEEN
 
     hp.mollview(mask_lss, title="", cbar=False, coord=['G', 'C'], notext=True)
     plt.savefig(fname, dpi=DPI)
@@ -177,6 +178,7 @@ def masks():
 
     fmask = "./data/mask_lss_sph2.fits"
     mask_lss = hp.ud_grade(hp.read_map(fmask, verbose=False), nside_out=512)
+    mask_lss[mask_lss == 0] = hp.UNSEEN
 
     hp.mollview(mask_lss, title="", coord=['G', 'C'], cbar=False, notext=True)
     plt.savefig(fname, dpi=DPI)
@@ -191,10 +193,11 @@ def masks():
     fmask = "./data/mask_lss_flat.fits"
 
     fmi, mask_hsc = fm.read_flat_map(fmask)
+    mask_hsc[mask_hsc == 0] = hp.UNSEEN
 
     fmi.view_map(mask_hsc, addColorbar=False)
 
-    plt.savefig(fname, dpi=DPI)
+    plt.savefig(fname, dpi=DPI, bbox_iches='tight')
     plt.close()
 
 ##############################################################################
@@ -206,6 +209,7 @@ def masks():
     fmask = "./data/mask_lss_flat_2.fits"
 
     fmi, mask_hsc = fm.read_flat_map(fmask)
+    mask_hsc[mask_hsc == 0] = hp.UNSEEN
 
     fmi.view_map(mask_hsc)
     plt.savefig(fname, dpi=DPI)
@@ -229,10 +233,10 @@ def foregrounds():
 
     ax.loglog(ell, cl2bin[0, 0] + nls2bin[0, 0], label='Fiducial')
     ax.loglog(ell, cl_ls1, c=color[1])
-    ax.loglog(ell, cl_ls2, c=color[1], label='Large scales cont.')
+    ax.loglog(ell, cl_ls2, c=color[1], label='Large-scale cont.')
     ax.fill_between(ell, cl_ls1, cl_ls2, facecolor=color[1], alpha=0.5)
 
-    ax.loglog(ell, cl_ss[0], c=color[2], label='Small scales cont.')
+    ax.loglog(ell, cl_ss[0], c=color[2], label='Small-scale cont.')
 
     ax.set_xlabel('$\ell$')
     ax.set_ylabel(r'$C_\ell^{gg}$')
@@ -266,7 +270,7 @@ def chi2_foregrounds():
     f, ax = plt.subplots(1, 1, figsize=FSIZE1)
     bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
     _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
-                      label='Sim. w/o cont.', ls='-')
+                      label='Sim.', ls='-')
     _, x, _ = ax.hist(chi2_list[1], bins=bins, histtype='step', density=True,
                       label='Sim. w/ cont.', ls='-.')
     _, x, _ = ax.hist(chi2_list[2], bins=bins, histtype='step', density=True,
@@ -280,7 +284,7 @@ def chi2_foregrounds():
     y_vals = ax.get_yticks()
     ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
-    ax.legend(loc='upper right', fontsize='9') # , frameon=False)
+    ax.legend(loc='upper right', fontsize='8', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'contaminants_chi2.pdf')
     plt.savefig(fname, dpi=DPI)
@@ -415,7 +419,8 @@ def chi2_sph_TT_TE_EE():
 
     axs[0].set_ylabel('pdf')
 
-    axs[1].legend(loc='center right', fontsize='9') # , frameon=False)
+    # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
+    axs[0].legend(loc='center right', fontsize='9', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_TT_TE_EE.pdf')
     plt.savefig(fname, dpi=DPI)
@@ -426,7 +431,7 @@ def chi2_sph_TT_TE_EE():
 ##################### TTTT, TETE, EEEE chi2 plot flat ########################
 ##############################################################################
 
-def chi2_flat_TT_TE_EE():
+def chi2_flat_TT_TE_EE_TB_EB_BB():
     prefix = 'run'
     run_path = os.path.join('./simulations_outputs/', prefix, prefix)
     sims_suffix = '_clsims_0001-20000.npz'
@@ -434,9 +439,12 @@ def chi2_flat_TT_TE_EE():
     ##############################################################################
     clsims = np.load(run_path + sims_suffix)
 
-    clTT = cl00 = np.reshape(clsims['cl00'], np.array(np.shape(clsims['cl00']))[[0,2]])
-    clTE = clsims['cl02'][:,0,:]
-    clEE = clsims['cl22'][:,0,:]
+    clTT = cl00 = np.reshape(clsims['cl00'], np.array(np.shape(clsims['cl00']))[[0, 2]])
+    clTE = clsims['cl02'][:, 0, :]
+    clTB = clsims['cl02'][:, 1, :]
+    clEE = clsims['cl22'][:, 0, :]
+    clEB = clsims['cl22'][:, 1, :]
+    clBB = clsims['cl22'][:, 3, :]
 
     lmax = nlbins = len(clTT[0])
     lbins = clsims['l']
@@ -452,7 +460,10 @@ def chi2_flat_TT_TE_EE():
 
     Csims_TT = Csims[0, :, 0, :]
     Csims_TE = Csims[1, :, 1, :]
+    Csims_TB = Csims[2, :, 2, :]
     Csims_EE = Csims[3, :, 3, :]
+    Csims_EB = Csims[4, :, 4, :]
+    Csims_BB = Csims[5, :, 5, :]
 
     ##############################################################################
     c0000 = np.load(run_path+'_c0000.npz')['arr_0']
@@ -462,9 +473,17 @@ def chi2_flat_TT_TE_EE():
     CovTh_TT = c0000[:lmax, :lmax]
     CovTh_TETE, CovTh_TETB = c0202[:, 0, :, [0, 1] ]
     CovTh_EEEE, CovTh_EEEB, CovTh_EEBE, CovTh_EEBB = c2222[:, 0, :, [0, 1, 2, 3] ]
+    CovTh_TBTE, CovTh_TBTB = c0202[:, 1, :, [0, 1] ]
+    CovTh_EBEE, CovTh_EBEB, CovTh_EBBE, CovTh_EBBB = c2222[:, 1, :, [0, 1, 2, 3] ]
+    CovTh_BBEE, CovTh_BBEB, CovTh_BBBE, CovTh_BBBB = c2222[:, 3, :, [0, 1, 2, 3] ]
+
 
     CovTh_TE = CovTh_TETE[:lmax, :lmax]
     CovTh_EE = CovTh_EEEE[:lmax, :lmax]
+
+    CovTh_TB = CovTh_TBTB[:lmax, :lmax]
+    CovTh_EB = CovTh_EBEB[:lmax, :lmax]
+    CovTh_BB = CovTh_BBBB[:lmax, :lmax]
 
     ##############################################################################
 
@@ -476,20 +495,29 @@ def chi2_flat_TT_TE_EE():
 
     Cth0_TT = Cth0[0, :, 0, :]
     Cth0_TE = Cth0[1, :, 1, :]
+    Cth0_TB = Cth0[2, :, 2, :]
     Cth0_EE = Cth0[3, :, 3, :]
+    Cth0_EB = Cth0[4, :, 4, :]
+    Cth0_BB = Cth0[5, :, 5, :]
+
 
     ##############################################################################
 
     chi2_TT_ar = co.get_chi2(clTT, list(map(np.linalg.inv, [Csims_TT, CovTh_TT, Cth0_TT])))
     chi2_EE_ar = co.get_chi2(clEE, list(map(np.linalg.inv, [Csims_EE, CovTh_EE, Cth0_EE])))
     chi2_TE_ar = co.get_chi2(clTE, list(map(np.linalg.inv, [Csims_TE, CovTh_TE, Cth0_TE])))
+    chi2_TB_ar = co.get_chi2(clTB, list(map(np.linalg.inv, [Csims_TB, CovTh_TB, Cth0_TB])))
+    chi2_EB_ar = co.get_chi2(clEB, list(map(np.linalg.inv, [Csims_EB, CovTh_EB, Cth0_EB])))
+    chi2_BB_ar = co.get_chi2(clBB, list(map(np.linalg.inv, [Csims_BB, CovTh_BB, Cth0_BB])))
 
-    f, axs = plt.subplots(1, 3, figsize=(8, 3), sharey=True, gridspec_kw={'hspace': 0, 'wspace': 0})
+    f, axs = plt.subplots(2, 3, figsize=(8, 4), sharex=True, sharey=True,
+                          gridspec_kw={'hspace': 0, 'wspace': 0})
 
     label = [r"$(\delta \delta, \delta \delta)$", r"$(\delta \gamma_E, \delta \gamma_E)$",
-             r"$(\gamma_E \gamma_E, \gamma_E \gamma_E)$"]
+             r"$(\gamma_E \gamma_E, \gamma_E \gamma_E)$", r"$(\delta \gamma_B, \delta \gamma_B)$",
+             r"$(\gamma_E \gamma_B, \gamma_E \gamma_B)$", r"$(\gamma_B \gamma_B, \gamma_B \gamma_B)$"]
     i = 0
-    for ax, chi2_list in zip(axs, [chi2_TT_ar, chi2_TE_ar, chi2_EE_ar]):
+    for ax, chi2_list in zip(axs.reshape((6)), [chi2_TT_ar, chi2_TE_ar, chi2_EE_ar, chi2_TB_ar, chi2_EB_ar, chi2_BB_ar]):
         bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
         _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
                           label='Sims.')
@@ -506,11 +534,12 @@ def chi2_flat_TT_TE_EE():
 
         i += 1
 
-    axs[0].set_ylabel('pdf')
+    axs[0, 0].set_ylabel('pdf')
 
-    axs[1].legend(loc='center right', fontsize='9') # , frameon=False)
+    # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
+    axs[0, 0].legend(loc='center right', fontsize='8', frameon=False)
     plt.tight_layout()
-    fname = os.path.join(outdir, 'run_chi2_TT_TE_EE.pdf')
+    fname = os.path.join(outdir, 'run_chi2_TT_TE_EE_TB_EB_BB.pdf')
     plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
@@ -561,6 +590,6 @@ if __name__ == '__main__':
     # compare_cls_1bin()
     cls_2b()
     chi2_sph_TT_TE_EE()
-    chi2_flat_TT_TE_EE()
+    chi2_flat_TT_TE_EE_TB_EB_BB()
     chi2_NKA_TTTEEE_full()
 
