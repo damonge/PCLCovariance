@@ -204,16 +204,16 @@ def masks():
 ############################# Mask flat2 ######################################
 ##############################################################################
 
-    fname = os.path.join(outdir, 'mask-lss_flat2.pdf')
+    # fname = os.path.join(outdir, 'mask-lss_flat2.pdf')
 
-    fmask = "./data/mask_lss_flat_2.fits"
+    # fmask = "./data/mask_lss_flat_2.fits"
 
-    fmi, mask_hsc = fm.read_flat_map(fmask)
-    mask_hsc[mask_hsc == 0] = hp.UNSEEN
+    # fmi, mask_hsc = fm.read_flat_map(fmask)
+    # mask_hsc[mask_hsc == 0] = hp.UNSEEN
 
-    fmi.view_map(mask_hsc)
-    plt.savefig(fname, dpi=DPI)
-    plt.close()
+    # fmi.view_map(mask_hsc)
+    # plt.savefig(fname, dpi=DPI)
+    # plt.close()
 
 ##############################################################################
 ############################# Foregrounds ####################################
@@ -581,6 +581,39 @@ def chi2_NKA_TTTEEE_full():
 ############################## What to plot ##################################
 ##############################################################################
 
+def eigv_sph_1bin():
+    CovSims = np.load('../run_sph_2b/run_sph_2b_covTTTEE_b1_short_cl_0001-20000.npz')['arr_0']
+    CovTh = np.load('../run_sph_2b/run_sph_2b_covThTTTEEE_b1_short.npz')['arr_0']
+
+    f, ax = plt.subplots(2, 1, sharex=True, figsize=(4,4))
+
+    Eval_Sims, Evec_Sims = co.diagonalize(CovSims)
+    X = np.arange(len(Eval_Sims))
+    ax[0].plot(X, Eval_Sims, label='Sim.')
+    ax[1].plot(X, 0 * X)
+
+    Eval_Th, Evec_Th = co.diagonalize(CovTh)
+
+    ax[0].plot(X, Eval_Th, label='NKA')
+    ax[1].plot(X, Eval_Th/Eval_Sims - 1)
+
+    ax[0].set_ylabel('Eigenvalue')
+    ax[0].legend(loc=0)
+
+    ax[1].set_xlabel('Element')
+    ax[1].set_ylabel(r'$\tilde e_{i}^{NKA} / \tilde e_{i}^{Sim.} - 1$')
+
+    ax[0].set_yscale('log')
+    ax[1].set_yscale('linear')
+
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0, hspace=0)
+
+    fname = os.path.join(outdir, 'run_sph_2b_NKA_TTTEEE_reldev_eigval_1stbin.pdf')
+    plt.savefig(fname, dpi=DPI)
+    plt.show()
+    plt.close()
+
 if __name__ == '__main__':
     pz()
     masks()
@@ -592,4 +625,5 @@ if __name__ == '__main__':
     chi2_sph_TT_TE_EE()
     chi2_flat_TT_TE_EE_TB_EB_BB()
     chi2_NKA_TTTEEE_full()
+    eigv_sph_1bin()
 
