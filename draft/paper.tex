@@ -51,6 +51,8 @@
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
 \newcommand{\red}[1]{{\color{red} #1}}
 \newcommand{\wtj}[6]{\left(\begin{array}{ccc} #1 & #2 & #3\\#4 & #5 & #6\end{array} \right)}
+\newcommand{\lbpw}{\ell_{\mbox{bpw}}}
+\newcommand{\fsky}{f_{\mbox{sky}}}
 
 %\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
 \title{\boldmath Disconnected pseudo-$C_\ell$ covariances for projected datasets}
@@ -458,17 +460,16 @@ as using the covariance matrix from simulations.
 \subsection{Simulations}
 
 Simulations were drawn from Gaussian fields that followed a fiducial power
-spectrum. The fiducial cosmology (\red{For the 2-bin case}) is given by
-$\Omega_{cdm} = 0.27$, $\Omega_b = 0.045$, $h = 0.67$, $A_s = 2.1 10^{-9}$ and
-$n_s = 0.9$, where each term correspond, respectively, to the amount of cold
-dark matter and baryons today, the reduced Hubble constant, the primordial
-curvature fluctuation amplitude and the spectral index. The redshift bins are
-shown in Fig.~\ref{fig:pz} and the theoretical $\cl$ are in
-Fig.~\ref{fig:cl-2bins}. Since all parts of sky will not be equally observed,
-realist masks (see Fig.~\ref{fig:mask}) were applied.  The results shown here
-were obtained using the same mas for each redshift bin, as it is expected to
-be that way in real observations. We checked, however, that using different
-masks yielded same results. 
+spectrum. The fiducial cosmology is given by $\Omega_{cdm} = 0.27$, $\Omega_b
+= 0.045$, $h = 0.67$, $A_s = 2.1 10^{-9}$ and $n_s = 0.9$, where each term
+corresponds, respectively, to the amount of cold dark matter and baryons today,
+the reduced Hubble constant, the primordial curvature fluctuation amplitude
+and the spectral index. The redshift bins are shown in Fig.~\ref{fig:pz} and
+the theoretical $\cl$ are in Fig.~\ref{fig:cl-2bins}. Since all parts of sky
+will not be equally observed, realist masks (see Fig.~\ref{fig:mask}) were
+applied.  The results shown here were obtained using the same mask for each
+redshift bin, as it is expected to be the case in real observations. We
+checked, however, that using different masks yielded similar results. 
 
 \begin{figure}
   \centering
@@ -493,48 +494,68 @@ masks yielded same results.
 \end{figure}
 
 The covariance matrices were obtained from 20000 simulations, for the band
-powers determined by the fraction of sky observed and the maximum band power
-we were able to recover the fiducial power spectra for; i.e. $\sim 2 \times
-512$. This corresponds to $l_{\mbox{bpw}} = 1023$. To work with the sky
-maps and masks we used
-\textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}, whereas 
+powers determined by the fraction of sky observed ($\Delta \lbpw = 1/\fsky$,
+$\fsky = \Pi_{\mbox{p}} \langle \mbox{masks} \rangle_{p}$, where $p$ stands
+for pixel). The highest accurate band power corresponds to $l_{\mbox{bpw}} =
+1023$; i.e. $\sim 2 \times 512$, where 512 is the \todo{nside} our maps. To
+work with the sky maps and masks we used
+\textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}, whereas
 \textit{NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}~\cite{2018arXiv180909603A}
 was used for the computation of the pseudo-$\cl$ and the covariances. Our code
 is publicly
 available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
 
-The same results are obtained even in the presence of foregrounds. In
-particular, we tested the case with 100 foregrounds both at low scales and
-large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:conts}) computed as 
-\begin{equation}
-  \clf = A (l + 1)^{\beta}\,.
-  \label{eq:conts}
-\end{equation}
-Here, $A$ was fixed so that the ratio of the foreground power spectra and the
-theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
-randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
-0$ for small scale ones. 
-
 
 \subsection{Visual inspection}
+
+In this section we will show a qualitative analysis of the NKA covariance
+matrices. As we anticipated, the NKA agrees with the simulation covariance
+matrices for all interesting cases of studies in LSS; i.e.\ the correlations
+involving pairs of $(\delta, \delta)$, $(\delta, \gamma_E)$ and $(\gamma_E,
+\gamma_E)$. The $\gamma_B$-modes are not well recovered. 
+
+The NKA is able to reproduce the mask-induced coupling between
+nearest $\cl$ (see Fig.\ref{fig:rows_1bin}), except for the cases involving
+the $\gamma_B$ terms. \todo{Explain why this was expected}. We have also
+compared the spin-0 approximation and saw it gives results similar to the NKA.
+The naive approximation which, by construction, neglects the correlations
+between multipoles is clearly off, not only because of the lack of
+correlations but also because it fails to recover the autocorrelations. 
+
 \begin{figure}[htb]
   \centering
   \includegraphics[width=\textwidth]{./figures/all_rows_sph_1bin.pdf}
-  \caption{Rows plot para todas las combinaciones}
+  \caption{$\cl$ correlations for the different approximations and modes. It
+    can be seen the mask induced coupling, which the NKA approximation is able
+    to reproduce accurately.}
   \label{fig:rows_1bin}
 \end{figure}
+
+The difference of the correlation matrices obtained with the NKA and the
+simulations (Fig.~\ref{fig:diff_corr_1bin}) shows no structure, i.e. agreement
+up to small random differences, except for the $\gamma_B$ involving cases and,
+more subtlety, for the first multipoles of the $(\gamma_E\gamma_E,
+\gamma_E\gamma_E)$. For this case, the NKA is not accurate at low $\ell$. 
+The covariance matrix eigenvalues, for the joined case
+$(\delta\delta-\delta\gamma_E- \gamma_E\gamma_E)$ (Fig.~\ref{fig:eigv_1bin}),
+show an agreement around $5\%$, growing up to $10\%$ at the lowest
+eigenvalues. 
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.6\textwidth]{./figures/sph_1bin_diff_corr.pdf}
-  \caption{Corr differences 1bin}
+  \caption{Correlation matrices difference between that of the simulations and
+    the NKA. There is no structure except for the $\gamma_B$ modes and the
+    $(\gamma_E\gamma_E, \gamma_E\gamma_E)$ case. In this case, it is only
+    present at low scales and in a more mildly way.} 
   \label{fig:diff_corr_1bin}
 \end{figure}
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_NKA_TTTEEE_reldev_eigval_1stbin.pdf}
-  \caption{Eigenvalues for the simulation and NKA covariance matrices.}
+  \caption{Covariance matrix eigenvalues and the relative difference between
+    that from the simulations and NKA.}
   \label{fig:eigv_1bin}
 \end{figure}
 
@@ -550,6 +571,19 @@ randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
 
 
 \subsection{Contaminant deprojection}
+The same results are obtained even in the presence of foregrounds. In
+particular, we tested the case with 100 foregrounds both at low scales and
+large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:conts}) computed as 
+\begin{equation}
+  \clf = A (l + 1)^{\beta}\,.
+  \label{eq:conts}
+\end{equation}
+Here, $A$ was fixed so that the ratio of the foreground power spectra and the
+theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
+randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
+0$ for small scale ones. 
+
+
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{./figures/foreground.pdf}
@@ -567,6 +601,7 @@ randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
     We see they are perfectly removed.}
   \label{fig:chi2_conts}
 \end{figure}
+
 
 \subsection{Impact on parameter estimation}
 
@@ -657,7 +692,7 @@ difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\textwidth]{./figures/run_chi2_TT_TE_EE.pdf}
+  \includegraphics[width=\textwidth]{./figures/run_chi2_TT_TE_EE_TB_EB_BB.pdf}
   \caption{Plot chi2 TT-TT TE-TE, EE-EE}
   \label{fig:chi2_1bin_flat}
 \end{figure}
