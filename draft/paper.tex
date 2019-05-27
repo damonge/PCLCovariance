@@ -650,63 +650,6 @@ the effect of the $\gamma_E$ modes.
 
 \todo{Contours}
 
-\subsection{$\chi^2$ distribution and covariance matrices - old section}
-Apart from checking that we recover the same cosmological predictions from the
-covariance matrices from both the analytical approximation and the
-simulations, we studied the differences between them.
-
-In this sense, one can see in Fig.~\ref{fig:TTTT_EEEE_chi2} that, we fully
-recover the $\chi^2$ distribution (defining $\chi^2 = \cl - \langle \cl
-\rangle C^{-1} \cl - \langle \cl \rangle$) for the TTTT case; whereas for the
-worst case (i.e. EEEE) we are able to recover its shape, although sifted
-toward lower values. This might be consequence of the fact that the inverse of
-the covariance matrix is biased. It is interesting to note that even
-the approximation of the mixing matrix as that of the case with spin 0, gives
-good results. The eigenvalues of the covariance matrix
-(Fig.~\ref{fig:TTTT_EEEE_eigv}) are also recovered within the 1\%, for all
-scales in the TTTT case, and for the smaller scales in the EEEE case. Finally,
-the analytical approximations are shown to describe the scale coupling (see
-Fig.~\ref{fig:TTTT_rows} that comes from the fact we are masking some regions
-of the sky. The larger relative deviation for the better approximations are
-due to the fact that there is a division by $0$, while for the naive
-approximation, which is defined diagonal (see Eq.~\ref{eq:naive}), the
-relative deviation is exactly $-1$ for all values with $l \neq l'$.
-
-The subtraction of the correlation matrix from the simulations and that from
-the best analytical approximation (which we have just seen gives almost same
-results as the spin-0 one) shows no structure but for the case of the larger
-scales of the EEEE modes (see Fig.~\ref{fig:TTTT_EEEE_corr}).
-
-These approximations do not work well for the B-modes, though. We can see in
-Fig.~\ref{fig:BBBB} that we are not able to recover with accuracy the first
-diagonal elements.
-
-
-Finally, the analytical covariance also works for 2-bin correlations. The
-$\chi^2$ distribution for the covariance matrix of the modes TT, TE and EE
-among two bins is shown in Fig.~\ref{fig:TTTEEE_chi2}. The eigenvalues
-are recovered well except for the lower ones that diverge up to $20\%$ (see
-Fig.~\ref{fig:TTTEEE_eigv}, this is not translated to any substantial
-difference in the correlation matrices (see Fig.~\ref{fig:TTTEEE_corr}).
-
-
-
-% The resulting power spectra was then used to generate a map of the sky and
-% two random fields (one of spin-0 and other of spin-2), in turn. Their
-% correlations give  are used to obtain the simulated power spectra. In order to
-% find the real power spectra, it is necessary to subtract the contribution of
-% the mask, which mixes the closest modes:
-% \begin{equation}
-%   C^{obs}_l = \sum_{l'} M_{ll'} C_{l'}\,
-% \end{equation}
-% where $M$ depends on the mask. In general, $M$ is not invertible and, in order
-% to be able to recover the true power spectra, $C_l$, one needs to bin the
-% $l$-space. The bin width is given by the characteristics of the window
-% function and must be, approximately, of the size of the range of the mixed
-% modes. That way, each $\tilde C_l$ is almost independent of the others
-% $\tilde C_{l'}$, and $M$ is invertible.
-
-
 \section{Discussion}\label{sec:discussion}
 
 \appendix
