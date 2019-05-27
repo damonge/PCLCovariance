@@ -45,7 +45,7 @@
 \newcommand{\avg}[1]{\langle #1 \rangle}
 \newcommand{\fsky}{f_{\mbox{\rm sky}}}
 \newcommand{\clth}{C_\ell^{th}}
-\newcommand{\clf}{C_\ell^{fore}}
+\newcommand{\clc}{C_\ell^{cont}}
 \newcommand{\cl}{C_\ell}
 \newcommand{\summ}[1]{\sum_{\bf #1}\Delta #1^2}
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
@@ -561,6 +561,25 @@ eigenvalues.
 
 \subsection{Quantitative checks}
 
+For a quantitative analysis of the covariance matrix and the analytical
+approximations, we computed the quantity 
+\begin{equation}
+  (\cl - \langle \cl \rangle )C^{-1} (\cl - \langle \cl \rangle)\,,
+  \label{eq:chi2-def}
+\end{equation}
+which, given the fact the simulations are drawn from Gaussian fields, should
+follow a $\chi^2$ distribution. 
+
+The NKA works best for the $(\delta \delta, \delta, \delta)$ covariance.
+Involving $\gamma_E$ modes shift the distribution at lower $\chi^2$, but with
+the same overall shape. \todo{why is this expected?}. In
+Fig.~\ref{fig:chi2_1bin}, the distributions are shown. It is noticeable the
+good agreement of the naive spin-0 approximation with the more phsysical NKA.
+The simulations follow a $\chi^2$ distribution, as in the $(\delta \delta,
+\delta, \delta)$ case. As we mentioned, the more the $\gamma_E$ contributes,
+the more shifted the distribution is. However, in section \ref{S:cosmo} we
+will show this difference has no impact on the cosmological parameter
+estimation.
 
 \begin{figure}[htb]
   \centering
@@ -569,30 +588,23 @@ eigenvalues.
   \label{fig:chi2_1bin}
 \end{figure}
 
+\todo{Talk about TT-TE-EE chi2?}
 
 \subsection{Contaminant deprojection}
-The same results are obtained even in the presence of foregrounds. In
-particular, we tested the case with 100 foregrounds both at low scales and
-large scales, adding a mock power spectra (e.g. Fig.~\ref{fig:conts}) computed as 
+
+The discussed results remain the same even in the presence of observational
+contaminants. In Fig.~\ref{fig:chi2_conts}, we show that the distributions drawn
+from simulations with and without contaminants are the same. The contaminants
+power spectrum was parametrized as follow
 \begin{equation}
   \clf = A (l + 1)^{\beta}\,.
   \label{eq:conts}
 \end{equation}
-Here, $A$ was fixed so that the ratio of the foreground power spectra and the
-theoretical one ($\clth$) was $\clf/\clth = 0.1$ at $l=400$ and $\beta$ was
-randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
-0$ for small scale ones. 
-
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\columnwidth]{./figures/foreground.pdf}
-  \caption{$\cl$ foregrounds used in order to check the reliability of the
-    analytical approximations in their presence. They did not affect. The
-    limiting cases for the large-scale contaminants are given by $\beta=-1,\,
-    -3$ in Eq.~\ref{eq:conts}}
-  \label{fig:conts}
-\end{figure}
+In this equation, $A$ fixes the ration between the contaminant and signal
+power spectra at a certain scale. We chose $\clc/\clth = 0.1$ at $\ell=400$.
+In addition, $\beta$ was chosen randomly from a uniform distribution $U[-3,
+-1)$, for large-scale contaminants, and fixed to $\beta=0$, for small-scale
+contaminants. 
 
 \begin{figure}[htb]
   \centering
@@ -602,8 +614,24 @@ randomly chosen from $U[-3, -1)$ for large scale effects and fixed to $\beta =
   \label{fig:chi2_conts}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.6\textwidth]{./figures/contaminants_cl.pdf}
+  \caption{$\cl^{\delta\delta}$ signal and contaminants power spectra. The
+    limiting cases for the large-scale contaminants are given by $\beta=-1,\,
+    -3$ in Eq.~\ref{eq:conts}, with $A$ fixed so that $\clc/\clth = 0.1$ at $\ell=400$.}
+  \label{fig:conts}
+\end{figure}
+
+In Fig.~\ref{fig:chi2_conts}) it is also shown the distribution obtained
+by the NKA covariance matrix for the joint case
+$(\delta\delta-\delta\gamma_E-\gamma_E\gamma_E)$. As we saw in previous
+section, the distribution is shifted respect to the $\chi^2$ distribution by
+the effect of the $\gamma_E$ modes.
+
 
 \subsection{Impact on parameter estimation}
+\label{S:cosmo}
 
 \begin{figure}[htb]
   \centering
