@@ -19,6 +19,8 @@
 \usepackage{balance}
 \usepackage{enumitem}
 \usepackage{lipsum}
+\usepackage[caption=false]{subfig}
+
 \newcommand{\nv}{\hat{\mathbf{\theta}}}
 \newcommand{\kalo}{Karhunen-Lo\`{e}ve~}
 \newcommand{\cfh}{CFHTLenS~}
@@ -607,20 +609,22 @@ In addition, $\beta$ was chosen randomly from a uniform distribution $U[-3,
 contaminants. 
 
 \begin{figure}[htb]
+ \captionsetup[subfigure]{width=0.40\textwidth}
   \centering
-  \includegraphics{./figures/contaminants_chi2.pdf}
-  \caption{$\chi^2$ distributions for the case with and without contaminants.
-    We see they are perfectly removed.}
-  \label{fig:chi2_conts}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\textwidth]{./figures/contaminants_cl.pdf}
-  \caption{$\cl^{\delta\delta}$ signal and contaminants power spectra. The
-    limiting cases for the large-scale contaminants are given by $\beta=-1,\,
-    -3$ in Eq.~\ref{eq:conts}, with $A$ fixed so that $\clc/\clth = 0.1$ at $\ell=400$.}
-  \label{fig:conts}
+  \subfloat[$\chi^2$ distributions for the case with and without contaminants.
+      We see they are perfectly removed.]{%
+    \includegraphics[width=0.49\textwidth]{./figures/contaminants_chi2.pdf}
+    \label{fig:chi2_conts}%
+  }
+  \subfloat[$\cl^{\delta\delta}$ signal and contaminants power spectra. The
+      limiting cases for the large-scale contaminants are given by $\beta=-1,\,
+      -3$ in Eq.~\ref{eq:conts}, with $A$ fixed so that $\clc/\clth = 0.1$ at
+      $\ell=400$.]{%
+    \includegraphics[width=0.49\textwidth]{./figures/contaminants_cl.pdf}
+    \label{fig:conts}%
+  }
+  \caption{$\chi^2$ distributions from the simulations with contaminants and
+    their power spectra.}
 \end{figure}
 
 In Fig.~\ref{fig:chi2_conts}) it is also shown the distribution obtained
