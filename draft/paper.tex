@@ -520,7 +520,7 @@ The covariance matrices were obtained from 20000 simulations, for the band
 powers determined by the fraction of sky observed ($\Delta \lbpw = 1/\fsky$,
 $\fsky = \Pi_{\mbox{p}} \langle \mbox{masks} \rangle_{p}$, where $p$ stands
 for pixel). The highest accurate band power corresponds to $l_{\mbox{bpw}} =
-1023$; i.e. $\sim 2 \times 512$, where 512 is the \todo{nside} our maps. To
+1023$; i.e. $\sim 2 \times 512$, where 512 is the \todo{nside} of our maps. To
 work with the sky maps and masks we used
 \textit{HEALPix}\footnote{\url{https://healpix.jpl.nasa.gov/}}, whereas
 \textit{NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}}~\cite{2018arXiv180909603A}
@@ -531,19 +531,26 @@ available~\footnote{\url{https://github.com/damonge/PCLCovariance}}.
 
 \subsection{Visual inspection}
 
-In this section we will show a qualitative analysis of the NKA covariance
-matrices. As we anticipated, the NKA agrees with the simulation covariance
-matrices for all interesting cases of studies in LSS; i.e.\ the correlations
-involving pairs of $(\delta, \delta)$, $(\delta, \gamma_E)$ and $(\gamma_E,
-\gamma_E)$. The $\gamma_B$-modes are not well recovered. 
+In this section, we will present a qualitative analysis of the NKA covariance
+matrices. The idea is to identify what NKA is good able to reproduce
+accurately. We will focus here on some terms of the covariance matrix and the
+full correlation matrix.
 
-The NKA is able to reproduce the mask-induced coupling between
-nearest $\cl$ (see Fig.\ref{fig:rows_1bin}), except for the cases involving
-the $\gamma_B$ terms. \todo{Explain why this was expected}. We have also
-compared the spin-0 approximation and saw it gives results similar to the NKA.
-The naive approximation which, by construction, neglects the correlations
-between multipoles is clearly off, not only because of the lack of
-correlations but also because it fails to recover the autocorrelations. 
+The NKA correctly reproduces the mask induced mode coupling, as well as the
+size of the covariances (see Fig.~\ref{fig:rows_1bin}) for the cases
+that do not include the $\gamma_B$-modes \todo{explain why this is expected}.
+It must be noted that the terms involving the $\gamma_E$-modes also give worse
+result that those with $\delta$, specially at large scales (low $\ell$). We
+will see, however, that they are small enough to not impact on the parameter
+estimation. The normalization chosen for Fig.~\ref{fig:rows_1bin} is that of
+the numerator of the naive covariance, which is given by
+\begin{equation}
+  C(\cl^{ab}, \cl^{cd}) = \frac{\cl^{ac}\cl^{bd} + \cl^{ad}\cl^{bc}}{\fsky (2\ell + 1) \Delta\lbpw}\,,
+  \label{eq:naive}
+\end{equation}
+where $\Delta \lbpw$ is the width of the binning of the $\ell$-band. This
+diagonal approximation is also unable to recover the correct size of the
+peaks in the covariance.
 
 \begin{figure}[htb]
   \centering
@@ -554,15 +561,15 @@ correlations but also because it fails to recover the autocorrelations.
   \label{fig:rows_1bin}
 \end{figure}
 
-The difference of the correlation matrices obtained with the NKA and the
-simulations (Fig.~\ref{fig:diff_corr_1bin}) shows no structure, i.e. agreement
-up to small random differences, except for the $\gamma_B$ involving cases and,
-more subtlety, for the first multipoles of the $(\gamma_E\gamma_E,
-\gamma_E\gamma_E)$. For this case, the NKA is not accurate at low $\ell$. 
-The covariance matrix eigenvalues, for the joined case
-$(\delta\delta-\delta\gamma_E- \gamma_E\gamma_E)$ (Fig.~\ref{fig:eigv_1bin}),
-show an agreement around $5\%$, growing up to $10\%$ at the lowest
-eigenvalues. 
+The difference of the full NKA and simulations' correlation matrices, which is
+a more general check, shows no structure in Fig.~\ref{fig:diff_corr_1bin},
+except for the $\gamma_B$-modes. There is also some structure, at low
+$\ell$, in the $\gamma_E\gamma_E$ case. This results are coincident with
+previous analysis. What we call structure are systematic differences between
+the simulations and the NKA matrices. In contrast, those terms that are
+correctly recovered (i.e. the $\delta \delta$, $\delta \gamma_E$, $\gamma_E
+\gamma_E$ combinations), deviate from each other just by numerical issues, and
+are displayed as noisy regions.
 
 \begin{figure}[htb]
   \centering
@@ -574,11 +581,15 @@ eigenvalues.
   \label{fig:diff_corr_1bin}
 \end{figure}
 
+More quantitatively, the NKA covariance matrix eigenvalues, for the
+observational interesting case $(\delta\delta-\delta\gamma_E-
+\gamma_E\gamma_E)$ deviate around 5\% from those of the simulations. 
+
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_NKA_TTTEEE_reldev_eigval_1stbin.pdf}
-  \caption{Covariance matrix eigenvalues and the relative difference between
-    that from the simulations and NKA.}
+  \caption{Covariance matrix eigenvalues and the relative difference with
+    respect to the eigenvalues from the simulations and NKA covariances.}
   \label{fig:eigv_1bin}
 \end{figure}
 
