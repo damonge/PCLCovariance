@@ -143,10 +143,12 @@
 
   
   \subsection{The pseudo-$C_\ell$ method}\label{ssec:theory.pcl}
+  \label{S:pcl}
     This section provides a very brief introduction to the \PCL power spectrum estimator. Further details can be found in \todo{cite}. 
     In any practical situation we do not have access to maps of a given field ${\bf a}$ over the full sky, but rather to a weighted or masked version of them
     \begin{equation}
       \tilde{\bf a}({\bf x})\equiv w_a({\bf x}){\bf a}({\bf x}),
+      \label{eq:mask}
     \end{equation}
     where $w_a$ is commonly called the ``mask''. Due to the convolution theorem, the generalized Fourier coefficients of the masked field will be a convolution of the mask and true field coefficients:
     \begin{align}\nonumber
@@ -159,6 +161,7 @@
     \begin{align}\nonumber
       \left\langle\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l}\right\rangle=&\summ{k}\summ{q}\,^a{\sf M}_{{\bf l}{\bf k}}\left\langle{\bf a}_{\bf k}{\bf b}^\dag_{\bf q}\right\rangle\,^b{\sf M}^\dag_{{\bf l}{\bf q}}\\
                                                                               =&K\,\summ{k}\,^a{\sf M}_{{\bf l}{\bf k}}{\sf C}^{ab}_k\,^b{\sf M}^\dag_{{\bf l}{\bf k}}
+        \label{eq:M}                                                                             
     \end{align}
     
     The \PCL estimator then proceeds in two steps:
@@ -455,23 +458,31 @@ Plots:
 \item Eigenvalues
 \end{itemize}
 
-In this section we will show that our approximation is good and reliable; i.e.
-that can be used to obtain the cosmological parameters within the same error
-as using the covariance matrix from simulations. 
+In this section, we will show that the NKA is able to reproduce the relevant
+terms of the covariance matrix and that is reliable for parameter estimation.
+First, we will start describing how simulations were computed. Secondly, a
+qualitative analysis of the covariance terms will show the similarities and
+discrepancies between them. This will introduce the quantitative measurement,
+for which we will study how well the NKA is able to recover the Gaussian
+distribution, from which samples are taken. Finally, a Bayesian study on two
+cosmological parameter will show the NKA is actually reliable and does not
+bias the parameter estimation.
 
 \subsection{Simulations}
 
-Simulations were drawn from Gaussian fields that followed a fiducial power
-spectrum. The fiducial cosmology is given by $\Omega_{cdm} = 0.27$, $\Omega_b
-= 0.045$, $h = 0.67$, $A_s = 2.1 10^{-9}$ and $n_s = 0.9$, where each term
-corresponds, respectively, to the amount of cold dark matter and baryons today,
-the reduced Hubble constant, the primordial curvature fluctuation amplitude
-and the spectral index. The redshift bins are shown in Fig.~\ref{fig:pz} and
-the theoretical $\cl$ are in Fig.~\ref{fig:cl-2bins}. Since all parts of sky
-will not be equally observed, realist masks (see Fig.~\ref{fig:mask}) were
-applied.  The results shown here were obtained using the same mask for each
-redshift bin, as it is expected to be the case in real observations. We
-checked, however, that using different masks yielded similar results. 
+Simulations were drawn from Gaussian fields around a fiducial power spectrum,
+described by a fiducial cosmology with parameters: $\Omega_{cdm} = 0.27$,
+$\Omega_b = 0.045$, $h = 0.67$, $A_s = 2.1 10^{-9}$ and $n_s = 0.9$, where
+each term corresponds, respectively, to the amount of cold dark matter and
+baryons today, the reduced Hubble constant, the primordial curvature
+fluctuation amplitude and the spectral index. We considered two different
+overlapping redshift bins (Fig.~\ref{fig:pz}). A realist case would deal with
+many more redshift bins. For instance, Large Synoptic Survey Telescope (LSST)
+will be able to resolve 10 z-bins \cite{2009arXiv0912.0201L}. The reason to
+use only two z-bins is that computing the 10 bins case is really
+expensive and we expect our results will be valid for any number of z-bins as
+the covariance matrix is only built from of pairs of $\cl$. The resulting
+power spectra is shown in Fig.~\ref{fig:cl-2bins}. 
 
 \begin{figure}
   \centering
@@ -486,6 +497,16 @@ checked, however, that using different masks yielded similar results.
   \caption{Fiducial power spectra. We show only the $T$ and $E$ modes.}
   \label{fig:cl-2bins}
 \end{figure*}
+
+As we noted in Section~\ref{S:pcl}, surveys are not able to observe all sky
+equally. Mathematically this means that the true random fields that fill the
+space will have a mask on top of them (Eq.~\ref{eq:mask}). This introduces
+mode coupling between different $\cl$ (Eq.~\ref{eq:M}) and highly complicates
+the expressions for the pseudo-$\cl$ covariance matrix of (see
+Section~\ref{S:pcl} for the details). In order to prevent to overestimate the
+goodness of the NKA, we applied two different realist masks, which can be seen
+in Fig.~\ref{fig:mask}. Similar results were obtained using the same mask on
+both redshift bins.
 
 \begin{figure}
   \centering
