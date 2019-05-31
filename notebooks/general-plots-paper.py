@@ -577,6 +577,38 @@ def chi2_NKA_TTTEEE_full():
     # plt.show()
     plt.close()
 
+def chi2_Spin0_NKA_TTTEEE_full():
+    chi2_list = np.load('../run_sph_2b_same_mask/full_covariance/run_sph_2b_same_mask_chi2_sims_th_TTTEEE_short_Full.npz')['arr_0']
+    chi2_spin0 = np.load('../run_sph_2b_same_mask/full_covariance_spin0/run_sph_2b_same_mask_chi2_sims_th_TTTEEE_short_Full_spin0.npz')['arr_0'][1]
+
+    ell = np.loadtxt('../run_sph_2b_same_mask/run_sph_2b_same_mask_ells.txt')
+    lbins = ell
+    lmax = (ell < 2*512).sum()
+
+    f, ax = plt.subplots(1, 1, figsize=FSIZE1)
+    bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
+    _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
+                      label='Sim.', ls='-')
+    _, x, _ = ax.hist(chi2_list[1], bins=bins, histtype='step', density=True,
+                      label='NKA', ls='-')
+    _, x, _ = ax.hist(chi2_spin0, bins=bins, histtype='step', density=True,
+                      label='Spin-0', ls='-')
+
+    ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax * 10), ls='--', label=r'$\chi^2$ pdf')
+
+    ax.set_xlabel(r'$\chi^2$')
+    ax.set_ylabel('$10^3$ pdf')
+
+    y_vals = ax.get_yticks()
+    ax.set_yticklabels([str(x * 1000) for x in y_vals])
+
+    ax.legend(loc='upper right', fontsize='9') # , frameon=False)
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'run_sph_2b_same_mask_Spin0_NKA_TTTEEE_Full_chi2.pdf')
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
 ##############################################################################
 ############################## What to plot ##################################
 ##############################################################################
@@ -626,4 +658,5 @@ if __name__ == '__main__':
     chi2_flat_TT_TE_EE_TB_EB_BB()
     chi2_NKA_TTTEEE_full()
     eigv_sph_1bin()
+    chi2_Spin0_NKA_TTTEEE_full()
 
