@@ -1,3 +1,4 @@
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 import numpy as np
@@ -182,17 +183,21 @@ CorrTh = Cth/np.sqrt(np.diag(Cth)[:, None] * np.diag(Cth)[None, :])
 f, ax = plt.subplots(1, 1, figsize=(4, 4))
 
 cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
-f.colorbar(cb)
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.05)
+cbar = f.colorbar(cb, cax=cax)
+cbar.ax.tick_params(labelsize=8)
 for i in range(1, 6):
     ax.plot([0, 6*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
     ax.plot([i*nlbins, i*nlbins], [0, 6*nlbins-1], 'k-', lw=0.5)
 
 ticks = [(i + 0.5) * nlbins for i in range(6)]
 ax.set_xticks(ticks)
-ax.set_xticklabels(labels)
+ax.set_xticklabels(labels, fontsize=8)
 ax.set_yticks(ticks)
-ax.set_yticklabels(labels)
+ax.set_yticklabels(labels, fontsize=8)
 
+plt.tight_layout()
 fname = os.path.join(outdir, 'sph_1bin_diff_corr.pdf')
 plt.savefig(fname, dpi=DPI)
 # plt.show()

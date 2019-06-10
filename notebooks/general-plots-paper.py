@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from scipy import stats
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import common as co
 import flatmaps as fm
 import healpy as hp
@@ -40,10 +41,11 @@ def pz():
     ax.plot(z, pz1, label='Bin 1')
     ax.plot(z, pz2, label='Bin 2')
 
-    ax.set_ylabel('P(z)')
-    ax.set_xlabel('z')
+    ax.set_ylabel(r'$P(z)$ [arcmin$^{-2}$]')
+    ax.set_xlabel(r'$z$')
 
-    ax.legend(loc=0)
+    ax.legend(loc=0, frameon=False)
+    ax.set_ylim(bottom=0)
     plt.tight_layout()
     plt.savefig(fname, dpi=DPI)
     plt.close()
@@ -71,7 +73,7 @@ def cls_2b():
             if j in (2, 5):
                 continue
             axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2], label='Signal')
-            axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2] + nls2bin[i, j, ell >= 2], label='Signal + Noise', ls='--')
+            # axs[ci, cj].loglog(ell[ell >= 2], cl2bin[i, j, ell >= 2] + nls2bin[i, j, ell >= 2], label='Signal + Noise', ls='--')
             axs[ci, cj].loglog(ell[ell >= 2], nls2bin[i, j, ell >= 2], label='Noise')
             axs[ci, cj].text(0.78, 0.9, "({}, {})".format(labels[ci], labels[cj]),
                              transform=axs[ci, cj].transAxes,
@@ -80,7 +82,7 @@ def cls_2b():
 
         ci += 1
 
-    axs[0, 0].legend(loc=0)
+    axs[0, 0].legend(loc=0, frameon=False)
 
     i, j = np.triu_indices(axs.shape[0])
     for ax in axs[j, i].reshape((-1)):
@@ -146,7 +148,7 @@ def compare_cls_1bin():
     axs[2].text(0.5, 0.9, r'$C_\ell^{\gamma\gamma}$', transform=axs[2].transAxes)
     #axs[2].set_ylabel(r'$C_\ell^{\gamma\gamma}$')
 
-    axs[0].legend(loc=0)
+    axs[0].legend(loc=0, frameon=False)
 
     for i in range(axs.shape[0]):
         axs[i].set_xlabel('$\ell$')
@@ -231,17 +233,21 @@ def foregrounds():
     f, ax = plt.subplots(1, 1, figsize=FSIZE1)
     color = DEFAULT_COLOR_CYCLE
 
-    ax.loglog(ell, cl2bin[0, 0] + nls2bin[0, 0], label='Signal')
-    ax.loglog(ell, cl_ls1, c=color[1])
-    ax.loglog(ell, cl_ls2, c=color[1], label='Large-scale cont.')
-    ax.fill_between(ell, cl_ls1, cl_ls2, facecolor=color[1], alpha=0.5)
+    sel = (ell >= 2) * (ell <= 1e4)
 
-    ax.loglog(ell, cl_ss[0], c=color[2], label='Small-scale cont.')
+    ax.loglog(ell[sel], (cl2bin[0, 0] + nls2bin[0, 0])[sel], label='Signal')
+    ax.loglog(ell[sel], cl_ls1[sel], c=color[1])
+    ax.loglog(ell[sel], cl_ls2[sel], c=color[1], label='Large-scale cont.')
+    ax.fill_between(ell[sel], cl_ls1[sel], cl_ls2[sel], facecolor=color[1], alpha=0.5)
+
+    ax.loglog(ell[sel], cl_ss[0][sel], c=color[2], label='Small-scale cont.')
 
     ax.set_xlabel('$\ell$')
     ax.set_ylabel(r'$C_\ell^{\delta \delta}$')
 
-    ax.legend(loc=0, fontsize=8)
+    ax.legend(loc=0, fontsize=8, frameon=False)
+
+    ax.set_ylim([1e-9, 1])
 
     plt.tight_layout()
     plt.savefig(fname, dpi=DPI)
@@ -315,7 +321,9 @@ def corr_diff_2bins():
     f, ax = plt.subplots(1, 1, figsize=(8, 8))
     nlbins = CorrSims.shape[0] / 10
     cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
-    f.colorbar(cb)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    f.colorbar(cb, cax=cax)
     for i in range(1, 10):
         ax.plot([0, 10*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
         ax.plot([i*nlbins, i*nlbins], [0, 10*nlbins-1], 'k-', lw=0.5)
@@ -570,7 +578,7 @@ def chi2_NKA_TTTEEE_full():
     y_vals = ax.get_yticks()
     ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
-    ax.legend(loc='upper right', fontsize='9') # , frameon=False)
+    ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'run_sph_2b_same_mask_NKA_TTTEEE_Full_chi2.pdf')
     plt.savefig(fname, dpi=DPI)
@@ -602,7 +610,7 @@ def chi2_Spin0_NKA_TTTEEE_full():
     y_vals = ax.get_yticks()
     ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
-    ax.legend(loc='upper right', fontsize='9') # , frameon=False)
+    ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'run_sph_2b_same_mask_Spin0_NKA_TTTEEE_Full_chi2.pdf')
     plt.savefig(fname, dpi=DPI)
@@ -630,7 +638,7 @@ def eigv_sph_1bin():
     ax[1].plot(X, Eval_Th/Eval_Sims - 1)
 
     ax[0].set_ylabel('Eigenvalue')
-    ax[0].legend(loc=0)
+    ax[0].legend(loc=0, frameon=False)
 
     ax[1].set_xlabel('Element')
     ax[1].set_ylabel(r'$\tilde e_{i}^{NKA} / \tilde e_{i}^{Sim.} - 1$')
