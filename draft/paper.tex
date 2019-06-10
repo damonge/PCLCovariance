@@ -471,9 +471,14 @@
       
       \begin{figure}
         \centering
-        \includegraphics[width=0.45\textwidth]{./figures/mask-lss1.pdf}
-        \includegraphics[width=0.45\textwidth]{./figures/mask-lss2.pdf}
-        \caption{Sky mask used in our analysis} \label{fig:mask}
+        \includegraphics[width=0.6\textwidth]{./figures/mask-lss1.pdf}
+        \includegraphics[width=0.6\textwidth]{./figures/mask-lss2.pdf}
+        \caption{Sky masks used in our analysis for the two different redshift bins. The same mask is assumed for the galaxy overdensity $\delta$ and cosmic shear $\mathbf{\gamma}$ for simplicity.} \label{fig:mask}
+      \end{figure}
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.7\textwidth]{./figures/contaminants_cl.pdf}
+        \caption{Input (signal $+$ noise) power spectrum for the galaxy overdensity in the first redshift bin (blue line). The orange band shows the range of power spectra used for the 100 large-scale contaminant templates used to study the impact of contaminant deprojection on the covariance matrix. The green line shows the power spectrum used to generate small-scale contaminants. The amplitude of the contaminat power spectra was fixed by imposing a $10\%$ contamination level in the power spectrum at $\ell=400$. The same approach was used for the cosmic shear maps, with independent contaminants defined in $\gamma_E$ and $\gamma_B$. \red{Start at $\ell=2$, end at $\ell=10^4$. Reduce $y$ range to $10^{-9}-10^0$ or so.}} \label{fig:clcont}
       \end{figure}
       In order to quantitatively study the performance of the analytical approximations for the power spectrum covariance matrix introduced in Section \ref{sec:theory}, we generate a large number of Gaussian simulations including a number of realistic observational effects.
       
@@ -526,24 +531,33 @@
       where ${\bf C}_i$ is the vector of all possible power spectra for the $i$-th realization, and $\bar{\bf C}$ is the mean of this vector over all realizations. The comparison of this sample covariance with the analytical approximations described above is presented in the next sections.
 
     \subsection{Qualitative comparison}\label{ssec:results.visual}
-      As a first step, we visually compare the main properties of the sample covariance matrix estimated from the simulations and the NKA, Spin-0 and MC approximations described in the previous section. Figure \ref{fig:rows_1bin} shows four rows of the covariance matrix of different auto- and cross-correlations. The rows correspond to bandpowers centered on multipoles $\ell_q\simeq60,\,90,\,120$ and $150$. The upper panels show results for the non-zero power spectra ($\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$), with the solid blue, dashed orange and dotted green lines showing results for the sample covariance matrix, the analytical covariance using the NKA approximation and their difference respectively. For comparison, the black stars show the diagonal covariance matrix elements predicted by the MC approximation (Eq. \ref{eq:cov_naive_bpw}). We find an excellent agreement between the simulated and analytical covariances, with vermy small deviations in the amplitude of the diagonal and first few off-diagonal elements.
-      
-      The bottom panel in Fig. \ref{fig:rows_1bin} shows the same rows of the covariance matrix for power spectra involving $B$-modes (and therefore with zero signal expectation value). In this case we find significant differences, at the level of $30-50\%$, on the covariance matrix elements, with the analyticial prediction underestimating the error bars overall. This is expected and can be understood as follows: the presence of a sky mask mixes $E$ and $B$ modes. Although this mixing can be accounted for at the level of the power spectrum through the pseudo-$C_\ell$ estimator, the leaked modes contribute to the variance. This is particularly significant for power spectra involving $B$-modes, since the $E$-mode amplitude is significantly larger, especially at $\ell\lesssim200$, as can be seen in Fig. \ref{fig:cl-2bins}. Thus, if the effects of $E$-$B$ mixing caused by the sky mask are not accurately accounted for in the estimation of the covariance matrix for power spectra involving $B$-mode maps, we can expect a misestimation of the contribution to the covariance from the leaked $E$ modes that would underpredict the uncertainties. This is not a problem for power spectra involving only $E$ modes, since the only $B$ modes that leak into them are those associated with noise, and they have the same amplitude as the noise $E$ modes move into the $B$-mode map.
-
       \begin{figure}[htb]
         \centering
         \includegraphics[width=\textwidth]{./figures/all_rows_sph_1bin.pdf}
         \caption{\red{say what the normalization is}} \label{fig:rows_1bin}
       \end{figure}
-
-      The difference of the full NKA and simulations' correlation matrices, which is a more general check, shows no structure in Fig.~\ref{fig:diff_corr_1bin}, except for the $\gamma_B$-modes. There is also some structure, at low $\ell$, in the $\gamma_E\gamma_E$ case. This results are coincident with previous analysis. What we call structure are systematic differences between the simulations and the NKA matrices. In contrast, those terms that are correctly recovered (i.e. the $\delta \delta$, $\delta \gamma_E$, $\gamma_E \gamma_E$ combinations), deviate from each other just by numerical issues, and are displayed as noisy regions.
-
       \begin{figure}[htb]
         \centering
-        \includegraphics[width=0.6\textwidth]{./figures/sph_1bin_diff_corr.pdf}
-        \caption{Correlation matrices difference between that of the simulations and the NKA. There is no structure except for the $\gamma_B$ modes and the $(\gamma_E\gamma_E, \gamma_E\gamma_E)$ case. In this case, it is only present at low scales and in a more mildly way.} \label{fig:diff_corr_1bin}
+        \includegraphics[width=0.7\textwidth]{./figures/sph_1bin_diff_corr.pdf}
+        \caption{Correlation matrices difference between that of the simulations and the NKA. There is no structure except for the $\gamma_B$ modes and the $(\gamma_E\gamma_E, \gamma_E\gamma_E)$ case. In this case, it is only present at low scales and in a more mildly way. \red{can we make the colorbar a bit smaller?}} \label{fig:diff_corr_1bin}
       \end{figure}
+      \begin{figure}[htb]
+        \centering
+        \includegraphics[width=0.9\textwidth]{./figures/run_sph_2b_same_mask_NKA_diff_corr.pdf}
+        \caption{Correlation difference between simulation's and NKA covariance matrices \red{can we make the colorbar a bit smaller?}}
+        \label{fig:corr_diff_2bins}
+      \end{figure}
+      As a first step, we visually compare the main properties of the sample covariance matrix estimated from the simulations and the NKA, Spin-0 and MC approximations described in the previous section. Figure \ref{fig:rows_1bin} shows four rows of the covariance matrix of different auto- and cross-correlations. The rows correspond to bandpowers centered on multipoles $\ell_q\simeq60,\,90,\,120$ and $150$. The upper panels show results for the non-zero power spectra ($\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$), with the solid blue, dashed orange and dotted green lines showing results for the sample covariance matrix, the analytical covariance using the NKA approximation and their difference respectively. For comparison, the black stars show the diagonal covariance matrix elements predicted by the MC approximation (Eq. \ref{eq:cov_naive_bpw}). We find an excellent agreement between the simulated and analytical covariances, with vermy small deviations in the amplitude of the diagonal and first few off-diagonal elements.
+      
+      The bottom panel in Fig. \ref{fig:rows_1bin} shows the same rows of the covariance matrix for power spectra involving $B$-modes (and therefore with zero signal expectation value). In this case we find significant differences, at the level of $30-50\%$, on the covariance matrix elements, with the analyticial prediction underestimating the error bars overall. This is expected and can be understood as follows: the presence of a sky mask mixes $E$ and $B$ modes. Although this mixing can be accounted for at the level of the power spectrum through the pseudo-$C_\ell$ estimator, the leaked modes contribute to the variance. This is particularly significant for power spectra involving $B$-modes, since the $E$-mode amplitude is significantly larger, especially at $\ell\lesssim200$, as can be seen in Fig. \ref{fig:cl-2bins}. Thus, if the effects of $E$-$B$ mixing caused by the sky mask are not accurately accounted for in the estimation of the covariance matrix for power spectra involving $B$-mode maps, we can expect a misestimation of the contribution to the covariance from the leaked $E$ modes that would underpredict the uncertainties. This is not a problem for power spectra involving only $E$ modes, since the only $B$ modes that leak into them are those associated with noise, and they have the same amplitude as the noise $E$ modes move into the $B$-mode map.
 
+      This is further illustrated by Fig. \ref{fig:diff_corr_1bin}. The figure shows, for the case of a single redshift bin, the difference between the correlation matrices associated with the sample covariance matrix and the NKA estimate\footnote{The correlation matrix is defined as $r_ij = {\rm Cov}_{ij}/\sqrt{{\rm Cov}_{ii}{\rm Cov}_{jj}}$}. While the differences between both matrices are small for all elements involving $\delta$ and $\gamma_E$, all terms involving $B$-modes show a significant disagreement, particularly the  $\gamma_E\gamma_E$-$\gamma_B\gamma_B$, $\gamma_E\gamma_B$-$\gamma_E\gamma_B$ and $\gamma_B\gamma_B$-$\gamma_B\gamma_B$ boxes.
+
+      We thus conclude that while the NKA estimator is able to recover the covariance matrix for the non-zero power spectrum elements (i.e. those involving $\delta$ and $\gamma_E$) with high accuracy, a more sophisticated approach would be needed in order to obtain a precise estimate of the uncertainties for components involving $B$-modes. This is not a major concern, since $B$-mode power spectra are predominantly used as null tests, while cosmological parameter constraints are driven by the analysis of $\delta$ and $\gamma_E$. For completeness, Fig. \ref{fig:corr_diff_2bins} shows the difference between the correlation matrices for the sample covariance and the NKA estimator for all auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins with different small-scale masks.
+
+
+
+    \subsection{Quantitative checks}\label{ssec:results.quant}
       More quantitatively, the NKA covariance matrix eigenvalues, for the observational interesting case $(\delta\delta-\delta\gamma_E-\gamma_E\gamma_E)$ deviate around 5\% from those of the simulations. 
       \begin{figure}[htb]
         \centering
@@ -551,7 +565,6 @@
         \caption{Covariance matrix eigenvalues and the relative difference with respect to the eigenvalues from the simulations and NKA covariances.} \label{fig:eigv_1bin}
       \end{figure}
 
-    \subsection{Quantitative checks}\label{ssec:results.quant}
       For a quantitative analysis of the covariance matrix and the analytical approximations, we computed the quantity 
       \begin{equation}
         (\cl - \langle \cl \rangle )C^{-1} (\cl - \langle \cl \rangle)\,, \label{eq:chi2-def}
@@ -598,13 +611,6 @@
         \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_same_mask_NKA_TTTEEE_Full_chi2.pdf}
         \caption{$\chi^2$ plot para 2 bines TT-TE-EE}
         \label{fig:chi2_2bins}
-      \end{figure}
-
-      \begin{figure}[htb]
-        \centering
-        \includegraphics[width=0.9\textwidth]{./figures/run_sph_2b_same_mask_NKA_diff_corr.pdf}
-        \caption{Correlation difference between simulation's and NKA covariance matrices}
-        \label{fig:corr_diff_2bins}
       \end{figure}
 
       \todo{Contours}
