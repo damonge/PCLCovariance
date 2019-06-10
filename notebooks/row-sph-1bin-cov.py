@@ -84,7 +84,7 @@ Cth_ar = np.array([CovTh_TT, CovTh_TTTE, CovTh_TTTB, CovTh_TTEE, CovTh_TTEB, Cov
 Cth = np.empty((6, nlbins, 6, nlbins))
 i, j = np.triu_indices(6)
 Cth[i, :,  j, :] = Cth_ar[:, :lmax, :lmax]
-Cth[j, :,  i, :] = Cth_ar[:, :lmax, :lmax]
+Cth[j, :,  i, :] = Cth_ar[:, :lmax, :lmax].swapaxes(1, 2)
 
 ##############################################################################
 
@@ -92,7 +92,7 @@ CthN = np.empty((6, nlbins, 6, nlbins))
 CthN_ar = np.load(run_path + '_covNaive_ar_b1.npz')['arr_0']
 i, j = np.triu_indices(6)
 CthN[i, :,  j, :] = CthN_ar[:, :lmax, :lmax]
-CthN[j, :,  i, :] = CthN_ar[:, :lmax, :lmax]
+CthN[j, :,  i, :] = CthN_ar[:, :lmax, :lmax].swapaxes(1, 2)
 
 ##############################################################################
 
@@ -120,7 +120,7 @@ def ax_plot_row(ax, lbins, CovSims, CovTh, CovThN, normalization, index=20, dx=5
     indexi = index
     Xi = lbins[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
     Yth = np.diag(CovThN)[indexi : indexi + (peaks * 2 * dx) : 2 * dx]/normalization[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
-    ax.scatter(Xi, Yth, marker="*", s=6, c='k', label='Naive', zorder=3)
+    ax.scatter(Xi, Yth, marker="*", s=9, c='k', label='Naive', zorder=3)
 
     # dl = lbins[1] - lbins[0]
     # Naive = 1. / (0.4 * (2 * lbins  + 1) * dl)
