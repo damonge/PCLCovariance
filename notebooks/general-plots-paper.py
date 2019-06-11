@@ -666,8 +666,8 @@ def eigv_sph_1bin():
     ax[0].plot(X, Eval_Th, label='NKA')
     ax[1].plot(X, Eval_Th/Eval_Sims - 1)
 
-    ax[0].plot(X, Eval_Th0, label='Spin-0')
-    ax[1].plot(X, Eval_Th0/Eval_Sims - 1)
+    ax[0].plot(X, Eval_Th0, ls='--', label='Spin-0')
+    ax[1].plot(X, Eval_Th0/Eval_Sims - 1, ls='--')
 
     ax[0].set_ylabel('Eigenvalue')
     ax[0].legend(loc=0, frameon=False)
