@@ -569,6 +569,7 @@ def chi2_flat_TT_TE_EE_TB_EB_BB():
         i += 1
 
     axs[0, 0].set_ylabel('pdf')
+    axs[1, 0].set_ylabel('pdf')
 
     # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
     axs[0, 0].legend(loc='center right', fontsize='8', frameon=False)
@@ -644,7 +645,7 @@ def chi2_Spin0_NKA_TTTEEE_full():
     plt.close()
 
 ##############################################################################
-############################## What to plot ##################################
+############################## 1bin cov eigv #################################
 ##############################################################################
 
 def eigv_sph_1bin():
@@ -686,16 +687,16 @@ def eigv_sph_1bin():
     plt.close()
 
 if __name__ == '__main__':
-    pz()
-    masks()
-    foregrounds()
-    chi2_foregrounds()
-    corr_diff_2bins()
-    # compare_cls_1bin()
-    cls_2b()
-    chi2_sph_TT_TE_EE()
+    # pz()
+    # masks()
+    # foregrounds()
+    # chi2_foregrounds()
+    # corr_diff_2bins()
+    # # compare_cls_1bin()
+    # cls_2b()
+    # chi2_sph_TT_TE_EE()
     chi2_flat_TT_TE_EE_TB_EB_BB()
-    chi2_NKA_TTTEEE_full()
-    eigv_sph_1bin()
-    chi2_Spin0_NKA_TTTEEE_full()
+    # chi2_NKA_TTTEEE_full()
+    # eigv_sph_1bin()
+    # chi2_Spin0_NKA_TTTEEE_full()
 
