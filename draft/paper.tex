@@ -60,26 +60,25 @@
   \section{Introduction}\label{sec:intro}
     The two-point correlation of different fields projected on the celestial sphere is one of the most common observables used in the analysis of large datasets in astrophysics, from studies of the Cosmic Microwave Background \citep{1995PhRvL..74.4369B,1997PhRvD..55.5895T,1998PhRvD..57.2117B,2001PhRvD..64f3001T,2002ApJ...567....2H,2003PhRvD..67b3001W} to large-scale structure and weak lensing surveys \cite{2000MNRAS.317L..23H,2001ApJ...555..547H,2001MNRAS.325.1603E,2011arXiv1112.5723H,2016MNRAS.456.1508K,2018MNRAS.476.1050B,2018arXiv181208182X,2019MNRAS.tmp.1446C,2019PASJ...71...43H}. Using these two-point functions achieves a high level of data compression (with respect to the size of the raw datasets -- time-ordered data, images or catalogs), and they can be directly used to constrain cosmological and astrophysical parameters assuming that one can model their likelihood. This is usually done by assuming that the two-point functions are Gaussianly distributed, which is often good approximation due to the central limit theorem \cite{2008PhRvD..77j3013H,2018MNRAS.477.4879S}. In this case, the only obstacle that remains is being able to estimate the covariance matrix of a set of two-point correlators. Since the form of this covariance directly affects the posterior parameter uncertainties, a precise determination of it is of paramount importance. In large-scale structure experiments this has often been resolved by making use of one's own data through resampling techniques \cite{tukey1958,1984MNRAS.210P..19B,1993ApJ...406L..47H,2002ApJ...571..172Z,2016arXiv160600233E}, or by generating a large number of mock realizations \cite{2013MNRAS.428.1036M,2018MNRAS.479...94A,2019MNRAS.485.2806B}. With the advent of the larger current and future surveys, the increasing size of the data vector and of the volume to be simulated has made this solution impractical, and fully analytical and hybrid estimators are now being used.
   
-    The problem of producing accurate analytical estimates of the covariance matrix for large-scale structure data has seen significant progress in the last few years \todo{cite}. As described in \todo{cite}, the covariance matrix recieves three main contributions:
+    The problem of producing accurate analytical estimates of the covariance matrix for large-scale structure data has seen significant progress in the last few years \cite{2001ApJ...554...56C,2009ApJ...701..945S,2009MNRAS.395.2065T,2013PhRvD..87l3504T,2014MNRAS.441.2456T,2016PhRvD..94f3533P}. As described in \cite{2018JCAP...10..053B}, the covariance matrix recieves three main contributions:
     \begin{itemize}
       \item {\bf Gaussian covariance:} this is the contribution to the covariance from the disconnected part of the trispectrum of the different fields involved (also called the ``disconnected'' covariance). In simpler terms, this is the covariance matrix one would obtain if all fields involved were Gaussianly distributed.
       \item {\bf Connected non-Gaussian covariance:} this is the contribution from the connected trispectrum (which would vanish if all fields were Gaussianly distributed.
       \item {\bf Super-sample covariance:} this is the additional coupling between different scales induced by density fluctuations on scales larger than the volume mapped.
     \end{itemize}
   
-    On most scales relevant for cosmological studies, the Gaussian contribution dominates the error budget, although the connected and super-sample terms cannot be neglected \todo{cite}. The Gaussian contribution is trivial to compute for fields observed over the full sky:
+    On most scales relevant for cosmological studies, the Gaussian contribution dominates the error budget, although the connected and super-sample terms cannot be neglected \cite{2018JCAP...10..053B}. The Gaussian contribution is trivial to compute for fields observed over the full sky:
     \begin{equation}\label{eq:cov_naive}
       {\rm Cov}\left(C^{ab}_\ell,C^{cd}_\ell\right)=\delta^K_{\ell\ell'}\frac{C^{ac}_\ell C^{bd}_\ell+C^{ad}_\ell C^{bc}_\ell}{2\ell+1},
     \end{equation}
-    where $C^{xy}_\ell$ is the angular power spectrum between two maps $x$ and $y$ on multipole $\ell$. Unfortunately, the presence of a sky mask in general induces non-trivial couplings between different $\ell$s, which must be accurately estimated in order to produce unbiased evaluations of the parameter likelihood \todo{cite}.
+    where $C^{xy}_\ell$ is the angular power spectrum between two maps $x$ and $y$ on multipole $\ell$. Unfortunately, the presence of a sky mask in general induces non-trivial couplings between different $\ell$s, which must be accurately estimated in order to produce unbiased evaluations of the parameter likelihood \cite{2018MNRAS.479.4998T}.
   
-    In this paper we will present and generalise methods developed in the context of CMB experiments to account for the impact of survey geometry on the Gaussian part of the power spectrum covariance matrix \todo{cites}, and will study in detail the performance of these methods for large-scale structure and weak lensing datasets. We have also implemented these approximations in the public code {\tt NaMaster}, making the computation of accurate Gaussian covariance matrices significantly simpler.
+    In this paper we will present and generalise methods developed in the context of CMB experiments to account for the impact of survey geometry on the Gaussian part of the power spectrum covariance matrix \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2017A&A...602A..41C}, and will study in detail the performance of these methods for large-scale structure and weak lensing datasets. We have also implemented these approximations in the public code {\tt NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}} \cite{2019MNRAS.484.4127A}, making the computation of accurate Gaussian covariance matrices significantly simpler.
 
     The paper is structured as follows: Section \ref{sec:theory} presents the methods and approximations used to calculate accurate covariances. In Section \ref{sec:results} we test the methods against Gaussian simulations and study their performance as well as their impact on the final cosmological parameter estimation. We then summarize our results and conclude in Section \ref{sec:discussion}. Appendix \ref{app:flat} presents the performance of these methods for flat-sky approximation, and we provide technical details of the software implementation in Appendix \ref{app:namaster}.
 
   \section{Analytical Gaussian covariances}\label{sec:theory}
     \subsection{Preliminaries}\label{ssec:theory.prelim}
-      \todo{cites everywhere}
       We will deal with spin-0 and spin-2 fields defined on a 2-dimensional space. We will use a generic notation that can then be applied to both curved and flat skies. Given a field ${\bf a}({\bf x})$, with 1 (spin-0) or 2 components (spin-2), and defined on the coordinates ${\bf x}$, we define its generalized Fourier coefficients as
       \begin{equation}
         {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
@@ -139,7 +138,7 @@
       All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky approximation) as described in Table \ref{tab:notation}.
 
     \subsection{The pseudo-$C_\ell$ method}\label{ssec:theory.pcl}
-      This section provides a very brief introduction to the pseudo-$C_\ell$ power spectrum estimator. Further details can be found in \todo{cite}. 
+      This section provides a very brief introduction to the pseudo-$C_\ell$ power spectrum estimator. Further details can be found in \cite{2002ApJ...567....2H,2005MNRAS.360.1262B,2019MNRAS.484.4127A}. 
       In any practical situation we do not have access to maps of a given field ${\bf a}$ over the full sky, but rather to a weighted or masked version of them
       \begin{equation}
         \tilde{\bf a}({\bf x})\equiv w_a({\bf x}){\bf a}({\bf x}),
@@ -173,7 +172,7 @@
         The main advantage of the pseudo-$C_\ell$ estimator is that the mode-coupling matrix $\mathcal{M}$ is directly related to the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ (see \todo{cite}), and can be computed analytically making use of methods that scale like $\ell_{\rm max}^3$.
       \end{enumerate}
     
-      For completeness, the mode-coupling matrices for flat-sky and curved-sky fields are given by \todo{cite}:
+      For completeness, the mode-coupling matrices for flat-sky and curved-sky fields are given by \cite{2019MNRAS.484.4127A}:
       \begin{itemize}
         \item {\bf Curved sky.} After averaging over the harmonic number $m$, the mode-coupling matrices are:
         \begin{equation}\label{eq:mcms}
