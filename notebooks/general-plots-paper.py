@@ -319,7 +319,7 @@ def corr_diff_2bins():
 
 
     f, ax = plt.subplots(1, 1, figsize=(8, 8))
-    nlbins = CorrSims.shape[0] / 10
+    nlbins = int(CorrSims.shape[0] / 10)
     cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -338,6 +338,32 @@ def corr_diff_2bins():
     plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
+
+    f, ax = plt.subplots(1, 1, figsize=(4, 4))
+    mat = (CorrTh - CorrSims).reshape((10, nlbins, 10, nlbins))
+    ixgrid = np.ix_([2, 3, 5, 6], [2, 3, 5, 6])
+    mat = mat.swapaxes(1, 2)[ixgrid].swapaxes(1, 2).reshape((4 * nlbins, 4 * nlbins))
+    cb = ax.imshow(mat, vmin=-0.02, vmax=0.02)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = f.colorbar(cb, cax=cax)
+    cbar.ax.tick_params(labelsize=8)
+    for i in range(1, 4):
+        ax.plot([0, 4*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
+        ax.plot([i*nlbins, i*nlbins], [0, 4*nlbins-1], 'k-', lw=0.5)
+
+    ticks = [(i + 0.5) * nlbins for i in range(4)]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(np.array(labels_cov)[[2, 3, 5, 6]], fontsize=8)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(np.array(labels_cov)[[2, 3, 5, 6]], fontsize=8)
+
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'run_sph_2b_same_mask_NKA_diff_corr_short.pdf')
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
 
 ##############################################################################
 ####################### TTTT, TETE, EEEE chi2 plot ###########################
