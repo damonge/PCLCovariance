@@ -1,20 +1,12 @@
-%\documentclass[useAMS,usenatbib]{mn2e}
-%\bibliographystyle{mn2e}
-
 \documentclass[a4paper,11pt]{article}
-%\pdfoutput=1
-%\pdfminorversion=5
 
+\pdfoutput=1
 \usepackage{jcappub}
-%\usepackage{widetext}
 \usepackage{graphicx}
-%\usepackage{dcolumn}
 \usepackage{bm}
 \usepackage{amssymb,amsmath,bm,dsfont}
 \usepackage{color}
 \usepackage[dvipsnames]{xcolor}
-%\usepackage[colorlinks,linkcolor=red,citecolor=blue,urlcolor=blue ]{hyperref}
-%\usepackage{multirow}
 \usepackage[utf8]{inputenc}
 \usepackage{balance}
 \usepackage{enumitem}
@@ -39,23 +31,13 @@
 \newcommand{\procspie}{Proceedings of the SPIE}
 \newcommand{\physrep}{Physics Reports}
 
-\newcommand{\todo}[1]{{\bf TODO: #1}}
-%\newcommand{\todo}[1]{$\,$}
-
-\newcommand{\PCL}{pseudo-$C_\ell$~}
-\newcommand{\pcl}[3]{\hat C_{#1}^{#2 #3}}
-\newcommand{\avg}[1]{\langle #1 \rangle}
-\newcommand{\fsky}{f_{\mbox{\rm sky}}}
-\newcommand{\clth}{C_\ell^{th}}
-\newcommand{\clc}{C_\ell^{cont}}
-\newcommand{\cl}{C_\ell}
 \newcommand{\summ}[1]{\sum_{\bf #1}\Delta #1^2}
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
-\newcommand{\red}[1]{{\color{red} #1}}
 \newcommand{\wtj}[6]{\left(\begin{array}{ccc} #1 & #2 & #3\\#4 & #5 & #6\end{array} \right)}
-\newcommand{\lbpw}{\ell_{\mbox{bpw}}}
 
-%\title[Disconnected pseudo-$C_\ell$ covariances for projected datasets]{Disconnected pseudo-$C_\ell$ covariances for projected datasets}
+\newcommand{\todo}[1]{{\bf TODO: #1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+
 \title{\boldmath Disconnected pseudo-$C_\ell$ covariances for projected datasets}
 
 \author[a]{Carlos Garc\'{i}a-Garc\'{i}a}
@@ -76,7 +58,7 @@
   \flushbottom
 
   \section{Introduction}\label{sec:intro}
-    The two-point correlation of different fields projected on the celestial sphere is one of the most common observables used in the analysis of large datasets in astrophysics, from studies of the Cosmic Microwave Background \todo{cites} to large-scale structure and weak lensing surveys \todo{cites}. Using these two-point functions achieves a high level of data compression (with respect to the size of the raw datasets -- time-ordered data, images or catalogs), and they can be directly used to constrain cosmological and astrophysical parameters assuming that one can model their likelihood. This is usually done by assuming that the two-point functions are Gaussianly distributed, which is often good approximation due to the central limit theorem \todo{cites}. In this case, the only obstacle that remains is being able to estimate the covariance matrix of a set of two-point correlators. Since the form of this covariance directly affects the posterior parameter uncertainties, a precise determination of it is of paramount importance. In large-scale structure experiments this has often been resolved by making use of one's own data through resampling techniques \todo{cites}, or by generating a large number of mock realizations \todo{cites}. With the advent of the larger current and future surveys, the increasing size of the data vector and of the volume to be simulated has made this solution impractical, and fully analytical and hybrid estimators are now being used.
+    The two-point correlation of different fields projected on the celestial sphere is one of the most common observables used in the analysis of large datasets in astrophysics, from studies of the Cosmic Microwave Background \citep{1995PhRvL..74.4369B,1997PhRvD..55.5895T,1998PhRvD..57.2117B,2001PhRvD..64f3001T,2002ApJ...567....2H,2003PhRvD..67b3001W} to large-scale structure and weak lensing surveys \cite{2000MNRAS.317L..23H,2001ApJ...555..547H,2001MNRAS.325.1603E,2011arXiv1112.5723H,2016MNRAS.456.1508K,2018MNRAS.476.1050B,2018arXiv181208182X,2019MNRAS.tmp.1446C,2019PASJ...71...43H}. Using these two-point functions achieves a high level of data compression (with respect to the size of the raw datasets -- time-ordered data, images or catalogs), and they can be directly used to constrain cosmological and astrophysical parameters assuming that one can model their likelihood. This is usually done by assuming that the two-point functions are Gaussianly distributed, which is often good approximation due to the central limit theorem \cite{2008PhRvD..77j3013H,2018MNRAS.477.4879S}. In this case, the only obstacle that remains is being able to estimate the covariance matrix of a set of two-point correlators. Since the form of this covariance directly affects the posterior parameter uncertainties, a precise determination of it is of paramount importance. In large-scale structure experiments this has often been resolved by making use of one's own data through resampling techniques \cite{tukey1958,1984MNRAS.210P..19B,1993ApJ...406L..47H,2002ApJ...571..172Z,2016arXiv160600233E}, or by generating a large number of mock realizations \cite{2013MNRAS.428.1036M,2018MNRAS.479...94A,2019MNRAS.485.2806B}. With the advent of the larger current and future surveys, the increasing size of the data vector and of the volume to be simulated has made this solution impractical, and fully analytical and hybrid estimators are now being used.
   
     The problem of producing accurate analytical estimates of the covariance matrix for large-scale structure data has seen significant progress in the last few years \todo{cite}. As described in \todo{cite}, the covariance matrix recieves three main contributions:
     \begin{itemize}
@@ -157,7 +139,7 @@
       All the functions and operators above can be specialised to fields defined on the sphere or the 2D plane (flat sky approximation) as described in Table \ref{tab:notation}.
 
     \subsection{The pseudo-$C_\ell$ method}\label{ssec:theory.pcl}
-      This section provides a very brief introduction to the \PCL power spectrum estimator. Further details can be found in \todo{cite}. 
+      This section provides a very brief introduction to the pseudo-$C_\ell$ power spectrum estimator. Further details can be found in \todo{cite}. 
       In any practical situation we do not have access to maps of a given field ${\bf a}$ over the full sky, but rather to a weighted or masked version of them
       \begin{equation}
         \tilde{\bf a}({\bf x})\equiv w_a({\bf x}){\bf a}({\bf x}),
@@ -176,7 +158,7 @@
                                                                               =&K\,\summ{k}\,^a{\sf M}_{{\bf l}{\bf k}}{\sf C}^{ab}_k\,^b{\sf M}^\dag_{{\bf l}{\bf k}} \label{eq:M}                                                                             
       \end{align}
     
-      The \PCL estimator then proceeds in two steps:
+      The pseudo-$C_\ell$ estimator then proceeds in two steps:
       \begin{enumerate}
         \item We first bin different ${\bf l}$ modes into sets of them called bandpowers (typically bands of similar $\ell$ or annuli of flat-sky Fourier modes spanning a narrow range of radii). Let us denote a given bandpower by its index $q$. The binned pseudo-power spectrum is:
         \begin{equation}
@@ -188,7 +170,7 @@
           {\rm vec}\left(\hat{\sf C}^{ab}_q\right) = \sum_{q'} \left(\mathcal{M}^{-1}\right)_{qq'}\,{\rm vec}\left(\tilde{\sf C}^{ab}_{q'}\right).
         \end{equation}
 
-        The main advantage of the \PCL estimator is that the mode-coupling matrix $\mathcal{M}$ is directly related to the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ (see \todo{cite}), and can be computed analytically making use of methods that scale like $\ell_{\rm max}^3$.
+        The main advantage of the pseudo-$C_\ell$ estimator is that the mode-coupling matrix $\mathcal{M}$ is directly related to the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ (see \todo{cite}), and can be computed analytically making use of methods that scale like $\ell_{\rm max}^3$.
       \end{enumerate}
     
       For completeness, the mode-coupling matrices for flat-sky and curved-sky fields are given by \todo{cite}:
@@ -257,7 +239,7 @@
       Before we move on to covariances, it is worth considering the case of unmasked field (i.e $w^a({\bf x})=1$ everywhere). In this case $\,^a{\sf M}_{{\bf l}{\bf l}'}=\mathds{1}\Delta^x({\bf k},{\bf l})$, and therefore different modes are uncorrelated (as should have been obvious). In a non-ideal case where the mask is still sufficiently well behaved (i.e. masks without too much small-scale structure), we can still expect the coupling coefficients $\,^a{\sf M}_{{\bf l}{\bf l}'}$ to be sharply peaked around ${\bf l}={\bf l}'$.
   
     \subsection{Covariance matrices}\label{ssec:theory.pclcov}
-      So far we have not assumed anything about the statistics of the fields, other than the fact that they are isotropic (Eq. \ref{eq:iso}). This section presents a method to estimate the disconnected part of the power spectrum covariance for the \PCL estimator.
+      So far we have not assumed anything about the statistics of the fields, other than the fact that they are isotropic (Eq. \ref{eq:iso}). This section presents a method to estimate the disconnected part of the power spectrum covariance for the pseudo-$C_\ell$ estimator.
     
       Let $A$ and $F$ be the vector indices corresponding to the pairs of field indices $(\alpha,\beta)$ and $(\phi,\gamma)$ respectively, and let us start by considering the covariance
       \begin{equation}
@@ -271,7 +253,7 @@
       \begin{equation}
         {\rm Cov}\left(\hat{\sf C}\right)=\mathcal{M}^{-1}\cdot{\rm Cov}\left(\tilde{C}\right)\cdot\left(\mathcal{M}^{-1}\right)^{T},
       \end{equation}
-      where we have suppressed all indices for simplicity. The problem of estimating the \PCL covariance therefore reduces to estimating $\Sigma^{AC}_{\ell\ell'}$.
+      where we have suppressed all indices for simplicity. The problem of estimating the pseudo-$C_\ell$ covariance therefore reduces to estimating $\Sigma^{AC}_{\ell\ell'}$.
     
       We now make use of Wick's theorem, which states that, for Gaussian fields $\langle a\,b\,f\,g\rangle=\langle a\,b\rangle\langle f\,g\rangle+\langle a\,f\rangle\langle b\,g\rangle+\langle a\,g\rangle\langle b\,f\rangle$. In this case, the expression for $\Sigma^{AF}_{{\bf l}{\bf l'}}$ reads:
       \begin{align}\nonumber
@@ -375,7 +357,7 @@
            \,^{af}_{bg}\mathcal{J}^{0-}_{\ell\ell'}=0,
         \end{align}
         where the $\Xi^{XY}_{\ell\ell'}$ are defined in Eq. \ref{eq:coeff_mcm}.
-        Thus, computationally speaking, the problem of computing covariance matrices reduces to that of computing the same coupling coefficients needed for the computation of the \PCL power spectra themselves. Using the same notation as in Eq. \ref{eq:coeff}, the only non-zero $\mathcal{W}$ coefficients are:
+        Thus, computationally speaking, the problem of computing covariance matrices reduces to that of computing the same coupling coefficients needed for the computation of the pseudo-$C_\ell$ power spectra themselves. Using the same notation as in Eq. \ref{eq:coeff}, the only non-zero $\mathcal{W}$ coefficients are:
         \begin{align}
           &\mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \delta  ,\delta  \delta  }=
            \mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \gamma_X,\delta  \gamma_X}=
@@ -398,7 +380,7 @@
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
            \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},\\
         \end{align}
-        where $(X,Y,Z,W)$ stand for either $E$ or $B$, and where we have suppressed all redundant indices (including $\ell\ell'$). Any \PCL covariance element can then be found by replacing these results in Eq. \ref{eq:cov_sph}. Some explicit examples for common terms can be found in Appendix A.3.3 of \todo{cite}.
+        where $(X,Y,Z,W)$ stand for either $E$ or $B$, and where we have suppressed all redundant indices (including $\ell\ell'$). Any pseudo-$C_\ell$ covariance element can then be found by replacing these results in Eq. \ref{eq:cov_sph}. Some explicit examples for common terms can be found in Appendix A.3.3 of \todo{cite}.
 
       \subsubsection{Covariances for flat skies}
         Similar results hold in the case of flat skies. As mentioned in Section \ref{ssec:theory.pcl}, in this case averaging over the Fourier-space azimuth happens while binning into bandpowers. Under the assumption that the underlying power spectra are roughly constant within each bandpower, in this case the covariance matrix of the bandpowers defined in Eq. \todo{ref} takes the form:
@@ -553,7 +535,7 @@
 
       This is further illustrated by Fig. \ref{fig:diff_corr_1bin}. The figure shows, for the case of a single redshift bin, the difference between the correlation matrices associated with the sample covariance matrix and the NKA estimate\footnote{The correlation matrix is defined as $r_{ij} = {\rm Cov}_{ij}/\sqrt{{\rm Cov}_{ii}{\rm Cov}_{jj}}$}. While the differences between both matrices are small for all elements involving $\delta$ and $\gamma_E$, all terms involving $B$-modes show a significant disagreement, particularly the  $\gamma_E\gamma_E$-$\gamma_B\gamma_B$, $\gamma_E\gamma_B$-$\gamma_E\gamma_B$ and $\gamma_B\gamma_B$-$\gamma_B\gamma_B$ boxes.
 
-      We thus conclude that while the NKA estimator is able to recover the covariance matrix for the non-zero power spectrum elements (i.e. those involving $\delta$ and $\gamma_E$) with high accuracy, a more sophisticated approach would be needed in order to obtain a precise estimate of the uncertainties for components involving $B$-modes. This is not a major concern, since $B$-mode power spectra are predominantly used as null tests, while cosmological parameter constraints are driven by the analysis of $\delta$ and $\gamma_E$. For completeness, Fig. \ref{fig:corr_diff_2bins} shows the difference between the correlation matrices for the sample covariance and the NKA estimator for all auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins with different small-scale masks, where we find a similarly good agreement.
+      We thus conclude that while the NKA estimator is able to recover the covariance matrix for the non-zero power spectrum elements (i.e. those involving $\delta$ and $\gamma_E$) with high accuracy, a more sophisticated approach would be needed in order to obtain a precise estimate of the uncertainties for components involving $B$-modes. This is not a major concern, since $B$-mode power spectra are predominantly used as null tests, while cosmological parameter constraints are driven by the analysis of $\delta$ and $\gamma_E$. For completeness, Fig. \ref{fig:corr_diff_2bins} shows the difference between the correlation matrices for the sample covariance and the NKA estimator for all non-zero cross-correlations between different bins in the case of two redshift bins with different small-scale masks, where we find a similarly good agreement.
 
     \subsection{Quantitative comparison}\label{ssec:results.quant}
       \begin{figure}
@@ -599,7 +581,7 @@
 
       We explore $\log p(\vec{\theta})$ for of two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins. In this simple two-dimensional scenario we simply sample the distribution in a regular grid of 200 by 200 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor \todo{cite} given by
       \begin{equation}
-        {\rm Cov}^{-1}\,\longrightarrow \frac{N_s-2-N_{\rm data}}{N_s-1}{\rm Cov}^{-1},
+        {\rm Cov}^{-1}\,\longrightarrow \frac{N_s-2-N_{\rm data}}{N_s-1}\,{\rm Cov}^{-1},
       \end{equation}
       where $N_s=20,000$ is the number of samples used to estimate the covariance, and $N_{\rm data}=3510$ is the number of data points.
       
@@ -608,18 +590,18 @@
       We therefore conclude that the analytical approximations for the power spectrum covariance matrix explored here are able to reproduce the true posterior distribution of cosmological parameters to very high accuracy.
 
   \section{Discussion}\label{sec:discussion}
+    Estimating accurate covariance matrices for projected two-point correlators is an ubiquitous problem in modern cosmology \todo{cites}, but it is particularly relevant for large-scale structure datasets. This problem is further complicated in this case, in comparison with e.g. CMB experiments, by two factors: the fact that the fields involved are non-Gaussian at some level and the higher complexity of the sky masks used in optical datasets. The main impact of survey geometry is the statistical coupling it induces between different Fourier/harmonic modes, which must be accurately characterized in order to obtain reliable estimates of the posterior distribution for cosmological parameters. In this paper we have focused on the impact of survey geometry on the Gaussian (i.e. disconnected) part of the covariance matrix.
+    
+    We have described and generalized existing analytical approaches to estimate the covariance matrix for pseudo-$C_\ell$ power spectrum estimators \todo{cites}, and implemented them in the public code {\tt NaMaster} \todo{cite}, making it straightforward to fully account for the effects of survey geometry on the data uncertainties. With these approximation, computationally speaking, the problem of estimating a covariance matrix is as complex as that of computing the power spectrum itself, and scales with the number of pixels in the map as $N_{\rm pix}^{3/2}$.
+    
+    The main finding of this paper is the excellent performance of the analytical methods described in Section \ref{ssec:theory.pclcov}. We have shown that, in spite of the higher complexity of large-scale structure masks, the NKA estimator (see Section \ref{ssec:theory.approx}) is able to recover the covariance matrix for all power spectra with non-zero signal expectation value (i.e. those involving the galaxy overdensity $\delta$ or the $E$-mode shear $\gamma_E$), as well as the posterior distribution for cosmological parameters, to a high degree of accuracy.
 
+    More in detail, we have also found that the impact of contaminant deprojection on the covariance matrix, through the corresponding loss of modes, is negligible unless a very large number of contaminant templates are removed. This simplifies the procedure to estimate covariance matrices for galaxy clustering data, which are particularly sensitive to a large number of astrophysical and observational systematics. Additionally, we have found that, although the NKA estimator is accurate enough, it is not able to perfectly capture the additional effects of mode coupling that are present for spin-2 fields, and that a simpler approach treating the shear $E$ modes as a spin-0 object is able to reach similar levels of accuracty.
 
+    \todo{Bmodes, finish}
+    
   \acknowledgments
-  We would like to thank Eva-Maria Mueller, Francisco Javier S\'anchez and An\v ze Slosar for useful discussion. CGG is supported the Spanish grant BES-2016-077038, partially funded by the ESF and by AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain and the FEDER funds. He was partially supported by a Balzan Fellowship while in Oxford. He would like to thank New College and the Department of Physics at Oxford for their hospitality. DA acknowledges support from STFC through an Ernest Rutherford Fellowship, grant reference ST/P004474/1.
-
-%  \appendix
-
-
-%\setlength{\bibhang}{2.0em}
-%\setlength\labelwidth{0.0em}
-  \bibliography{paper}
-  
+  We would like to thank Eva-Maria Mueller, Francisco Javier S\'anchez and An\v ze Slosar for useful discussion. CGG is supported the Spanish grant BES-2016-077038, partially funded by the ESF and by AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain and the FEDER funds. He was partially supported by a Balzan Fellowship while in Oxford. He would like to thank New College and the Department of Physics at Oxford for their hospitality. DA acknowledges support from STFC through an Ernest Rutherford Fellowship, grant reference ST/P004474/1.  
   
   \appendix
   \section{Flat sky}\label{app:flat}
@@ -639,5 +621,9 @@
 
   \section{Software implementation}\label{app:namaster}
     \lipsum[4]
+
+
+  \bibliographystyle{JHEP}
+  \bibliography{paper}
 
 \end{document}
