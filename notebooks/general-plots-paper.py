@@ -650,6 +650,7 @@ def chi2_Spin0_NKA_TTTEEE_full():
 def eigv_sph_1bin():
     CovSims = np.load('../run_sph_2b/run_sph_2b_covTTTEE_b1_short_cl_0001-20000.npz')['arr_0']
     CovTh = np.load('../run_sph_2b/run_sph_2b_covThTTTEEE_b1_short.npz')['arr_0']
+    CovTh0 = np.load('../run_sph_2b/run_sph_2b_covSpin0TTTEEE_b1_short.npz')['arr_0']
 
     f, ax = plt.subplots(2, 1, sharex=True, figsize=(4,4))
 
@@ -659,15 +660,19 @@ def eigv_sph_1bin():
     ax[1].plot(X, 0 * X)
 
     Eval_Th, Evec_Th = co.diagonalize(CovTh)
+    Eval_Th0, Evec_Th0 = co.diagonalize(CovTh0)
 
     ax[0].plot(X, Eval_Th, label='NKA')
     ax[1].plot(X, Eval_Th/Eval_Sims - 1)
+
+    ax[0].plot(X, Eval_Th0, label='Spin-0')
+    ax[1].plot(X, Eval_Th0/Eval_Sims - 1)
 
     ax[0].set_ylabel('Eigenvalue')
     ax[0].legend(loc=0, frameon=False)
 
     ax[1].set_xlabel('Element')
-    ax[1].set_ylabel(r'$\tilde e_{i}^{NKA} / \tilde e_{i}^{Sim.} - 1$')
+    ax[1].set_ylabel(r'$\tilde e_{i}^{Analytical} / \tilde e_{i}^{Sim.} - 1$')
 
     ax[0].set_yscale('log')
     ax[1].set_yscale('linear')
