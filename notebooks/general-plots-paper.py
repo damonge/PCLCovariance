@@ -298,6 +298,53 @@ def chi2_foregrounds():
     plt.close()
 
 ##############################################################################
+######################### Foregrounds diag cov ###############################
+##############################################################################
+
+def foregrounds_cov_diag():
+    lbpw = np.loadtxt('../run_sph/run_sph_ells.txt')
+    CovSims = np.load('../run_sph/run_sph_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
+    CovSims_fore = np.load('../run_sph_contaminants_ls100_ss100/run_sph_contaminants_ls100_ss100_covTTTEE_short_clsims_0001-20000.npz')['arr_0']
+    CovTh = np.load('../run_sph_contaminants_ls100_ss100/run_sph_contaminants_ls100_ss100_covThTTTEEE_short.npz')['arr_0']
+
+    nlbins = int(CovSims.shape[0] / 3)
+    X = lbpw[:nlbins]
+
+    f, axs = plt.subplots(2, 3, sharex=True, sharey='row', gridspec_kw={'height_ratios': [2, 1], 'hspace': 0, 'wspace': 0}, figsize=(6, 3))
+    for i in range(3):
+        index1 = i * nlbins
+        index2 = (i + 1) * nlbins
+
+        Y0 = np.diag(CovSims[index1 : index2, index1 : index2])
+        axs[0, i].loglog(X, Y0, label='Sim')
+        axs[1, i].semilogx(X, Y0/Y0 - 1, label='Sim')
+
+        Y = np.diag(CovSims_fore[index1 : index2, index1 : index2])
+        axs[0, i].loglog(X, Y, ls='--', label='Sim w/ cont.')
+        axs[1, i].semilogx(X, Y/Y0 - 1, ls='--', label='Sim w/ cont.')
+
+        Y = np.diag(CovTh[index1 : index2, index1 : index2])
+        axs[0, i].loglog(X, Y, label='NKA')
+        axs[1, i].semilogx(X, Y/Y0 - 1, label='NKA')
+
+    axs[0, 0].set_ylabel('$C_{\ell\ell}$')
+    axs[1, 0].set_ylabel(r'$\frac{C_{\ell\ell}}{C_{\ell\ell}^{Sim.}} - 1$')
+
+    label = [r'$\delta \delta$', r'$\delta \gamma_E$', r'$\gamma_E \gamma_E$']
+    for i in range(3):
+        axs[1, i].set_xlabel('$\ell$')
+        axs[0, i].text(0.8, 0.9, label[i], horizontalalignment='center',
+                transform=axs[0, i].transAxes)
+
+    axs[0, 0].legend(loc=0, frameon=False)
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'contaminants_diag_cov.pdf')
+    plt.savefig(fname, DPI=DPI)
+    plt.close()
+
+
+
+##############################################################################
 ############################# 2bins corr diff ################################
 ##############################################################################
 
@@ -699,4 +746,5 @@ if __name__ == '__main__':
     chi2_NKA_TTTEEE_full()
     eigv_sph_1bin()
     chi2_Spin0_NKA_TTTEEE_full()
+    foregrounds_cov_diag()
 
