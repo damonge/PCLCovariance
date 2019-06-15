@@ -429,7 +429,6 @@
         \item The mode-counting approximation (labelled {\bf MC} here), commonly known as the {\sl Knox} formula \todo{cite}, which applies the result found for full-sky observations (Eq. \ref{eq:cov_naive}) to masked fields corrected by an overall factor that accounts to the loss of modes due to the sky mask. In this case, the covariance is simply given by:
         \begin{equation}\label{eq:cov_naive_bpw}
           {\rm Cov}\left(C^{ab}_q,C^{cd}_{q'}\right)=\delta^K_{qq'}\frac{C^{ad}_qC^{bc}_q+C^{ac}_qC^{bd}_q}{(2\ell_q+1)\,f_{\rm sky}\,N_q},
-          \label{eq:MC}
         \end{equation}
         where $\ell_q$ is the mean multipole in the $q$-th bandpower, $N_q$ is the number of multipoles assigned to it, and $f_{\rm sky}$ is the available sky fraction.
       \end{enumerate}
@@ -518,7 +517,7 @@
         \centering
         \includegraphics[width=\textwidth]{./figures/all_rows_sph_1bin.pdf}
         \caption{Mode coupling of different $C_\ell$'s. The covariances have
-          been normalized by the MC approximation numerator (Eq.~\ref{eq:MC}).}
+          been normalized by the MC approximation numerator (Eq.~\ref{eq:cov_naive_bpw}).}
         \label{fig:rows_1bin}
       \end{figure}
       \begin{figure}
