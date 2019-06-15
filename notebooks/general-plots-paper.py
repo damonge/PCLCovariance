@@ -193,13 +193,16 @@ def masks():
     fname = os.path.join(outdir, 'mask-lss_flat1.pdf')
 
     fmask = "./data/mask_lss_flat.fits"
+    f, ax = plt.subplots(figsize=(5, 2))
 
     fmi, mask_hsc = fm.read_flat_map(fmask)
     mask_hsc[mask_hsc == 0] = hp.UNSEEN
 
-    fmi.view_map(mask_hsc, addColorbar=False)
+    fmi.view_map(mask_hsc, ax=ax, addColorbar=False)
 
-    plt.savefig(fname, dpi=DPI, bbox_iches='tight')
+    plt.tight_layout()
+    plt.savefig(fname, dpi=DPI, bbox_iches='tight',
+                pad_inches=0)
     plt.close()
 
 ##############################################################################
