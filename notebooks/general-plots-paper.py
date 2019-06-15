@@ -285,10 +285,11 @@ def chi2_foregrounds():
     ax.plot(x[:-1], stats.chi2.pdf(x[:-1], clTTTEEE.shape[1]), ls='--', label=r'$\chi^2$ pdf')
 
     ax.set_xlabel(r'$\chi^2$')
-    ax.set_ylabel('$10^3$ pdf')
+    ax.set_ylabel('$p(\chi^2)$')
+    ax.set_yticks([])
 
-    y_vals = ax.get_yticks()
-    ax.set_yticklabels([str(x * 1000) for x in y_vals])
+    # y_vals = ax.get_yticks()
+    # ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
     ax.legend(loc='upper right', fontsize='8', frameon=False)
     plt.tight_layout()
@@ -619,8 +620,10 @@ def chi2_flat_TT_TE_EE_TB_EB_BB():
 
         i += 1
 
-    axs[0, 0].set_ylabel('pdf')
-    axs[1, 0].set_ylabel('pdf')
+    axs[0, 0].set_ylabel('$p(\chi^2)$')
+    axs[0, 0].set_yticks([])
+    axs[1, 0].set_ylabel('$p(\chi^2)$')
+    axs[1, 0].set_yticks([])
 
     # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
     axs[0, 0].legend(loc='center right', fontsize='8', frameon=False)
@@ -651,10 +654,11 @@ def chi2_NKA_TTTEEE_full():
     ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax * 10), ls='--', label=r'$\chi^2$ pdf')
 
     ax.set_xlabel(r'$\chi^2$')
-    ax.set_ylabel('$10^3$ pdf')
+    ax.set_ylabel('$p(\chi^2)$')
+    ax.set_yticks([])
 
-    y_vals = ax.get_yticks()
-    ax.set_yticklabels([str(x * 1000) for x in y_vals])
+    # y_vals = ax.get_yticks()
+    # ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
     ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
@@ -683,10 +687,11 @@ def chi2_Spin0_NKA_TTTEEE_full():
     ax.plot(x[:-1], stats.chi2.pdf(x[:-1], lmax * 10), ls='--', label=r'$\chi^2$ pdf')
 
     ax.set_xlabel(r'$\chi^2$')
-    ax.set_ylabel('$10^3$ pdf')
+    ax.set_ylabel('$p(\chi^2)$')
+    ax.set_yticks([])
 
-    y_vals = ax.get_yticks()
-    ax.set_yticklabels([str(x * 1000) for x in y_vals])
+    # y_vals = ax.get_yticks()
+    # ax.set_yticklabels([str(x * 1000) for x in y_vals])
 
     ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
