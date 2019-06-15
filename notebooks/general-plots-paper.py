@@ -501,7 +501,8 @@ def chi2_sph_TT_TE_EE():
 
         i += 1
 
-    axs[0].set_ylabel('pdf')
+    axs[0].set_ylabel('$p(\chi^2)$')
+    axs[0].set_yticks([])
 
     # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
     axs[0].legend(loc='center right', fontsize='9', frameon=False)
