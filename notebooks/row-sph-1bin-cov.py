@@ -121,7 +121,7 @@ def ax_plot_row(ax, lbins, CovSims, CovTh, CovThN, normalization, index=20, dx=5
     indexi = index
     Xi = lbins[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
     Yth = np.diag(CovThN)[indexi : indexi + (peaks * 2 * dx) : 2 * dx]/normalization[indexi : indexi + (peaks * 2 * dx) : 2 * dx]
-    ax.scatter(Xi, Yth, marker="*", s=9, c='k', label='Naive', zorder=3)
+    ax.scatter(Xi, Yth, marker="*", s=9, c='k', label='MC', zorder=3)
 
     # dl = lbins[1] - lbins[0]
     # Naive = 1. / (0.4 * (2 * lbins  + 1) * dl)
