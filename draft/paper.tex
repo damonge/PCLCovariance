@@ -506,7 +506,12 @@
         \item {\bf Large-scale contaminants:} Gaussian random maps with a red spectrum of the form $C_\ell\propto (\ell+1)^\beta$, where $\beta$ is a random number chosen within the range $\beta\in(-1,-3)$.
         \item {\bf Small-scale contaminants:} Gaussian random maps with a flat spectrum $C_\ell={\rm const.}$
       \end{itemize}
-      In both cases we fixed the amplitude of the contaminant power spectrum such that it would yield a $10\%$ contamination in the data power spectrum at $\ell=400$. In both cases, for spin-2 fields, we assumed the same power spectrum for $E$ and $B$ modes, with no cross-correlation between them. The resulting contaminant power spectra are shown in Figure \todo{ref}. When exploring the effects of mode deprojection, we generate 100 contaminant maps of both types and add them to each simulated realization. We then deproject the full set of 100 contaminant templates from the simulated maps and compute the corresponding unbiased power spectra. Note that our fiducial results do not include the effects of mode deprojection. These are discussed in detail separately.
+      In both cases we fixed the amplitude of the contaminant power spectrum
+      such that it would yield a $10\%$ contamination in the data power
+      spectrum at $\ell=400$. In both cases, for spin-2 fields, we assumed the
+      same power spectrum for $E$ and $B$ modes, with no cross-correlation
+      between them. The resulting contaminant power spectra are shown in
+      Figure \ref{fig:clcont}. When exploring the effects of mode deprojection, we generate 100 contaminant maps of both types and add them to each simulated realization. We then deproject the full set of 100 contaminant templates from the simulated maps and compute the corresponding unbiased power spectra. Note that our fiducial results do not include the effects of mode deprojection. These are discussed in detail separately.
 
       For our fiducial results, we generated a set of 20,000 random simulations. This number was chosen in order to recover the covariance matrix for all possible auto- and cross-correlations with sufficient accuracy. All simulations were generated as {\tt HEALPix} maps with resolution $N_{\rm side}=512$. We then used {\tt NaMaster} to compute all possible power spectra for each simulation using narrow bandpowers of width $\Delta\ell=3$ from $\ell=2$ to $\ell=1023$. Finally, we used the power spectra from the simulations to estimate the sample covariance matrix
       \begin{equation}
