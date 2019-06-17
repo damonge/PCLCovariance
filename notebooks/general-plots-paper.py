@@ -333,7 +333,7 @@ def foregrounds_cov_diag():
         axs[0, i].loglog(X, Y, label='NKA')
         # axs[1, i].semilogx(X, Y/Y0 - 1, label='NKA')
 
-    axs[0, 0].set_ylabel('$C_{\ell\ell}$')
+    axs[0, 0].set_ylabel('Cov$_{\ell\ell}$')
     # axs[1, 0].set_ylabel(r'$\frac{C_{\ell\ell}}{C_{\ell\ell}^{Sim.}} - 1$')
 
     label = [r'$\delta \delta$', r'$\delta \gamma_E$', r'$\gamma_E \gamma_E$']
