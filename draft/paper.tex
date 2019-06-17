@@ -13,9 +13,6 @@
 \usepackage{lipsum}
 \usepackage[caption=false]{subfig}
 
-\newcommand{\nv}{\hat{\boldsymbol{\theta}}}
-\newcommand{\kalo}{Karhunen-Lo\`{e}ve~}
-\newcommand{\cfh}{CFHTLenS~}
 \newcommand{\jcap}{JCAP}
 \newcommand{\mnras}{MNRAS}
 \newcommand{\aap}{A\&A}
@@ -32,6 +29,7 @@
 \newcommand{\physrep}{Physics Reports}
 \newcommand{\pasj}{Publications of the ASJ}
 
+\newcommand{\nv}{\hat{\boldsymbol{\theta}}}
 \newcommand{\summ}[1]{\sum_{\bf #1}\Delta #1^2}
 \newcommand{\Ylm}[3]{{\sf E}^{#1}_{\bf #2}({\bf #3})}
 \newcommand{\wtj}[6]{\left(\begin{array}{ccc} #1 & #2 & #3\\#4 & #5 & #6\end{array} \right)}
@@ -39,7 +37,7 @@
 \newcommand{\todo}[1]{{\bf TODO: #1}}
 \newcommand{\red}[1]{{\color{red} #1}}
 
-\title{\boldmath Disconnected pseudo-$C_\ell$ covariances for projected datasets}
+\title{\boldmath Disconnected pseudo-$C_\ell$ covariances for projected large-scale structure data}
 
 \author[a]{Carlos Garc\'{i}a-Garc\'{i}a}
 \author[b]{David Alonso}
@@ -52,7 +50,7 @@
 \emailAdd{david.alonso@physics.ox.ac.uk}
 \emailAdd{emilio.bellini@physics.ox.ac.uk}
 
-\abstract{\lipsum[1]}
+\abstract{The disconnected part of the power spectrum covariance matrix (also known as the ``Gaussian'' covariance) is the dominant contribution on large scales for galaxy clustering and weak lensing datasets. The presence of a complicated sky mask causes non-trivial correlations between different Fourier/harmonic modes, which must be accurately characterised in order to obtain reliable cosmological constraints. Unfortunately, an exact calculation of these correlations involve $O(\ell_{\rm max}^6)$ operations that become computationally impractical very quickly. We present an implementation of approximate methods to estimate the Gaussian covariance matrix of spin-0 and spin-2 flat- and curved-sky fields, expanding on existing algorithms. These methods achieve an $O(\ell_{\rm max}^3)$ scaling, which makes the computation of the covariance matrix as fast as the computation of the power spectrum itself. We quantify the accuracy of these method on large-scale structure and weak lensing data, characterised by comparatively complex survey geometries, making use of a large number of Gaussian but otherwise realistic simulations. We show that, using the covariance matrix computing using these approximations we are able to recover the true posterior distribution cosmological parameters to high accuracy. We also quantify the shortcomings of these methods, which become unreliable on the very largest scales, as well as for covariance matrix elements involving lensing $B$ modes. The algorithms presented here are implemented in the public code {\tt NaMaster} \url{https://github.com/LSSTDESC/NaMaster}.}
 
 \begin{document}
   \maketitle
@@ -86,7 +84,7 @@
       \begin{equation}
         {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
       \end{equation}
-      where the operator $\summ{x}$ denotes a integral or sum over all values of the coordinates ${\bf x}$, and $\Ylm{\dag}{k}{x}$ are a set of orthogonal functions. We will also assume that the $\Ylm{\dag}{k}{x}$ are a \emph{complete} set of basis functions, in which case:
+      where the operator $\summ{x}$ denotes an integral or sum over all values of the coordinates ${\bf x}$, and $\Ylm{\dag}{k}{x}$ are a set of orthogonal functions. We will also assume that the $\Ylm{\dag}{k}{x}$ are a \emph{complete} set of basis functions, in which case:
       \begin{align}
         &\summ{x}\,\Ylm{\dag}{k}{x}\Ylm{}{l}{x}=\mathds{1}\Delta^x({\bf k},{\bf l}),\\
         &\summ{k}\,\Ylm{}{k}{x}\Ylm{\dag}{k}{y}=\mathds{1}\Delta^k({\bf x},{\bf y}),
@@ -192,7 +190,7 @@
             0 & \Xi^{++}_{\ell\ell'} & -\Xi^{--}_{\ell\ell'} & 0 \\
             0 & -\Xi^{--}_{\ell\ell'} & \Xi^{++}_{\ell\ell'} & 0 \\
             \Xi^{--}_{\ell\ell'} & 0 & 0 & \Xi^{++}_{\ell\ell'}
-          \end{array}\right),\\\nonumber
+          \end{array}\right),
         \end{align}
         where
         \begin{align}\label{eq:coeff_mcm}
@@ -210,7 +208,7 @@
         \end{equation}
         with
         \begin{align}
-          {\sf M}^{00}_{{\bf l}\,{\bf k}}&\equiv \bar{\Xi}^{00}_{{\bf l}{\bf k}},\\\label{eq:m02_flat}
+          {\sf M}^{00}_{{\bf l}\,{\bf k}}&\equiv \bar{\Xi}^{00}_{{\bf l}{\bf k}},\\
           {\sf M}^{02}_{{\bf l}\,{\bf k}}&\equiv 
           \left(
           \begin{array}{cc}
@@ -233,7 +231,7 @@
           &\bar{\Xi}^{0-}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin2\Delta\varphi,\\
           &\bar{\Xi}^{++}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos^22\Delta\varphi,\\
           &\bar{\Xi}^{+-}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos2\Delta\varphi\,\sin2\Delta\varphi,\\
-          &\bar{\Xi}^{--}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin^22\Delta\varphi,\\
+          &\bar{\Xi}^{--}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin^22\Delta\varphi,
         \end{align}
         and $\Delta\varphi$ is the relative angle between ${\bf l}$ and ${\bf k}$.
       \end{itemize}
@@ -270,7 +268,7 @@
       \end{equation}
       In this case, the expression for $\Sigma^{AF}_{{\bf l}{\bf l}'}$ simplifies to
       \begin{align}\label{eq:covar_efstathiou}
-        \Sigma^{AF}_{{\bf l}{\bf l}'}=C^{ag,(\alpha'\gamma')}_{(\ell}C^{bf,(\beta',\phi')}_{\ell')}\,^{ag}W^{\alpha\gamma,\alpha'\gamma'}_{{\bf l}{\bf l}'}\left(\,^{bf}W^{\beta\phi,\beta'\phi'}_{{\bf l}{\bf l}'}\right)^*+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
+        \Sigma^{AF}_{{\bf l}{\bf l}'}=K^2C^{ag,(\alpha'\gamma')}_{(\ell}C^{bf,(\beta',\phi')}_{\ell')}\,^{ag}W^{\alpha\gamma,\alpha'\gamma'}_{{\bf l}{\bf l}'}\left(\,^{bf}W^{\beta\phi,\beta'\phi'}_{{\bf l}{\bf l}'}\right)^*+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
       \end{align}
       where we have defined the covariance coupling coefficients
       \begin{equation}\label{eq:covar_coupling}
@@ -380,7 +378,7 @@
           &\hspace{12pt}
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
-           \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},\\
+           \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},
         \end{align}
         where $(X,Y,Z,W)$ stand for either $E$ or $B$, and where we have suppressed all redundant indices (including $\ell\ell'$). Any pseudo-$C_\ell$ covariance element can then be found by replacing these results in Eq. \ref{eq:cov_sph}. Some explicit examples for common terms can be found in Appendix A.3.3 of \cite{2017A&A...602A..41C}.
 
@@ -396,21 +394,21 @@
            \bar{\mathcal{W}}^{\delta  \gamma_X,\delta  \gamma_X}_{\delta  \gamma_Y,\delta  \gamma_Y}=\bar{\mathcal{J}}^{00}\\
           &\bar{\mathcal{W}}^{\delta  \delta  ,\delta  \delta  }_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=
            \bar{\mathcal{W}}^{\delta  \gamma_Z,\delta  \gamma_Z}_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=\bar{\mathcal{J}}^{0+}\\
-          &\bar{\mathcal{W}}^{\gamma_X\gamma_Y,\gamma_X\gamma_Y}_{\gamma_W\gamma_Z,\gamma_W\gamma_Z}=\bar{\mathcal{J}}^{++}\\
+          &\bar{\mathcal{W}}^{\gamma_X\gamma_Y,\gamma_X\gamma_Y}_{\gamma_W\gamma_Z,\gamma_W\gamma_Z}=\bar{\mathcal{J}}^{++}\\\nonumber
           &\bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
           &\hspace{12pt}
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
-           \bar{\mathcal{W}}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=-\bar{\mathcal{J}}^{--}\\
+           \bar{\mathcal{W}}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=-\bar{\mathcal{J}}^{--}\\\nonumber
           &\bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \bar{\mathcal{W}}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
           &\hspace{12pt}
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
-           \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\bar{\mathcal{J}}^{--},\\
+           \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\bar{\mathcal{J}}^{--},
         \end{align}
         and, as before
         \begin{align}
@@ -436,8 +434,6 @@
       \end{enumerate}
 
   \section{Results}\label{sec:results}
-    %In this section, we will show that the NKA is able to reproduce the relevant terms of the covariance matrix and that is reliable for parameter estimation. First, we will start describing how simulations were computed. Secondly, a qualitative analysis of the covariance terms will show the similarities and discrepancies between them. This will introduce the quantitative measurement, for which we will study how well the NKA is able to recover the Gaussian distribution, from which samples are taken. Finally, a Bayesian study on two cosmological parameter will show the NKA is actually reliable and does not bias the parameter estimation.
-
     \subsection{Simulations}\label{ssec:results.sims}
       \begin{figure}
         \centering
@@ -479,8 +475,9 @@
       \begin{equation}
         S^{ab}_\ell = \int d\chi \frac{W^a_\ell(\chi)\,W^b_\ell(\chi)}{\chi^2}\,P\left(k=\frac{\ell+1/2}{\chi},z\right),
       \end{equation}
-      where $\chi$ is the comoving radial distance, $z\equiv z(\chi)$ is the corresponding redshift in the lightcone, $P(k,z)$ is the matter power spectrum and the window functions are given by \todo{cites}:
+      where $\chi$ is the comoving radial distance, $z\equiv z(\chi)$ is the corresponding redshift in the lightcone, $P(k,z)$ is the matter power spectrum and the window functions are given by \cite{2004PhRvD..70d3009H}\footnote{See \cite{2019ApJS..242....2C} and references therein for details about these theory predictions}:
       \begin{align}
+        \nonumber
         &W^\delta_\ell(\chi)=b(z)\,H(z)\,p_z(z),\\
         &W^\gamma_\ell(\chi)=f_\ell\,\frac{3H_0^2\Omega_M}{2}(1+z)\chi\,\int dz'\,p_z(z')\,\frac{\chi(z')-\chi}{\chi(z')},
       \end{align}
@@ -495,13 +492,13 @@
         N_\ell^{\delta\delta} = \frac{1}{n_\Omega},\hspace{12pt}
         N_\ell^{\gamma_E\gamma_E} = N_\ell^{\gamma_B\gamma_B} = \frac{\sigma_\gamma^2}{n_\Omega},
       \end{equation}
-      where $n_\Omega$ is the mean number density of galaxies in units of sterad$^{-2}$, and $\sigma_\gamma=0.28$ is the intrinsic shape scatter per ellipticity component \todo{cite}.
+      where $n_\Omega$ is the mean number density of galaxies in units of sterad$^{-2}$ (see below), and $\sigma_\gamma=0.28$ is the intrinsic shape scatter per ellipticity component.
 
-      We consider the case of auto- and cross-correlations between all fields in two redshift bins, with redshift distributions modelled as Gaussians with width $\sigma_z=0.13$ centered around redshifts $0.75$ and $0.95$, with number densities $n_\Omega=7.5\,{\rm arcmin}^{-2}$. The corresponding redshift distributions $p_z(z)$ are shown in Figure \ref{fig:pz}. For simplicity we use a constant bias $b(z)=1$. For these specifications, we generate signal power spectra using the Core Cosmology Library ({\tt CCL} \todo{cite}) for cosmological parameters $(\Omega_c,\Omega_b,h,A_s,n_s)=(0.27,0.045,0.67,2.1\times10^{-9},0.96)$. The resulting non-zero signal and noise power spectra are shown in Fig. \ref{fig:cl-2bins}.
+      We consider the case of auto- and cross-correlations between all fields in two redshift bins, with redshift distributions modelled as Gaussians with width $\sigma_z=0.13$ centered around redshifts $0.75$ and $0.95$, with number densities $n_\Omega=7.5\,{\rm arcmin}^{-2}$. The corresponding redshift distributions $p_z(z)$ are shown in Figure \ref{fig:pz}. For simplicity we use a constant bias $b(z)=1$. For these specifications, we generate signal power spectra using the Core Cosmology Library ({\tt CCL} \cite{2019ApJS..242....2C}) for cosmological parameters $(\Omega_c,\Omega_b,h,A_s,n_s)=(0.27,0.045,0.67,2.1\times10^{-9},0.96)$. The resulting non-zero signal and noise power spectra are shown in Fig. \ref{fig:cl-2bins}.
 
-      After generating a set of Gaussian maps, we mask them making use of a realistic sky mask. This mask has three main components: a cut in declination based on the expected sky coverage of LSST \todo{cite}, a more conservative Galactic cut using the dust reddening data from \todo{cite} and a set of 100 randomly positioned holes with a radius of 1 degree. To explore the case of cross-correlations between fields with different masks, we generated two masks for the two redshift bins above, consisting of two different sets of random holes. These masks are shown in Figure \ref{fig:mask}.
+      After generating a set of Gaussian maps, we mask them making use of a realistic sky mask. This mask has three main components: a cut in declination based on the expected sky coverage of LSST \cite{2014SPIE.9150E..15D}, a more conservative Galactic cut using the dust reddening data from \cite{1998ApJ...500..525S} and a set of 100 randomly positioned holes with a radius of 1 degree. To explore the case of cross-correlations between fields with different masks, we generated two masks for the two redshift bins above, consisting of two different sets of random holes. These masks are shown in Figure \ref{fig:mask}.
 
-      We have also explored the impact of the presence of sky contaminants on the estimate of the covariance matrix. As described in \todo{cites}, the presence of a small contamination from observational systematics in the data can be accounted for through a technique known as {\sl mode deprojection}. In this method, the contamination is modeled as a linear contribution at the map level from contaminants with a known template. Mode deprojection then consists on projecting the data onto the subspace of modes that are perpendicular to those templates, effectively removing all modes from the map that ``look like'' any of the contaminants. This removal of modes has been shown to provide unbiased estimates of the power spectrum, however it could potentially affect the power spectrum uncertainties due to the loss of statistical power. To study this effect, we have also generated contaminant maps of two types:
+      We have also explored the impact of the presence of sky contaminants on the estimate of the covariance matrix. As described in \cite{2019MNRAS.484.4127A}, the presence of a small contamination from observational systematics in the data can be accounted for through a technique known as {\sl mode deprojection} \todo{Cites}. In this method, the contamination is modeled as a linear contribution at the map level from contaminants with a known template. Mode deprojection then consists on projecting the data onto the subspace of modes that are perpendicular to those templates, effectively removing all modes from the map that ``look like'' any of the contaminants. This removal of modes has been shown to provide unbiased estimates of the power spectrum, however it could potentially affect the power spectrum uncertainties due to the loss of statistical power. To study this effect, we have also generated contaminant maps of two types:
       \begin{itemize}
         \item {\bf Large-scale contaminants:} Gaussian random maps with a red spectrum of the form $C_\ell\propto (\ell+1)^\beta$, where $\beta$ is a random number chosen within the range $\beta\in(-1,-3)$.
         \item {\bf Small-scale contaminants:} Gaussian random maps with a flat spectrum $C_\ell={\rm const.}$
@@ -538,7 +535,7 @@
         \caption{Same as Fig. \ref{fig:diff_corr_1bin} for all cross-correlations between $\delta$ and $\gamma_E$ measured in two different redshift bins.}
         \label{fig:corr_diff_2bins}
       \end{figure}
-      As a first step, we visually compare the main properties of the sample covariance matrix estimated from the simulations and the NKA, Spin-0 and MC approximations described in the previous section. Figure \ref{fig:rows_1bin} shows four rows of the covariance matrix of different auto- and cross-correlations. The rows correspond to bandpowers centered on multipoles $\ell_q\simeq60,\,90,\,120$ and $150$. The upper panels show results for the non-zero power spectra ($\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$), with the solid blue, dashed orange and dotted green lines showing results for the sample covariance matrix, the analytical covariance using the NKA approximation and their difference respectively. For comparison, the black stars show the diagonal covariance matrix elements predicted by the MC approximation (Eq. \ref{eq:cov_naive_bpw}). We find an excellent agreement between the simulated and analytical covariances, with vermy small deviations in the amplitude of the diagonal and first few off-diagonal elements.
+      As a first step, we visually compare the main properties of the sample covariance matrix estimated from the simulations and the NKA, Spin-0 and MC approximations described in the previous section. Figure \ref{fig:rows_1bin} shows four rows of the covariance matrix of different auto- and cross-correlations. The rows correspond to bandpowers centered on multipoles $\ell_q\simeq60,\,90,\,120$ and $150$. The upper panels show results for the non-zero power spectra ($\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$), with the solid blue, dashed orange and dotted green lines showing results for the sample covariance matrix, the analytical covariance using the NKA approximation and their difference respectively. For comparison, the black stars show the diagonal covariance matrix elements predicted by the MC approximation (Eq. \ref{eq:cov_naive_bpw}). We find an excellent agreement between the simulated and analytical covariances, with very small deviations in the amplitude of the diagonal and first few off-diagonal elements.
       
       The bottom panel in Fig. \ref{fig:rows_1bin} shows the same rows of the covariance matrix for power spectra involving $B$-modes (and therefore with zero signal expectation value). In this case we find significant differences, at the level of $30-50\%$, on the covariance matrix elements, with the analyticial prediction underestimating the error bars overall. This is expected and can be understood as follows: the presence of a sky mask mixes $E$ and $B$ modes. Although this mixing can be accounted for at the level of the power spectrum through the pseudo-$C_\ell$ estimator, the leaked modes contribute to the variance. This is particularly significant for power spectra involving $B$-modes, since the $E$-mode amplitude is significantly larger, especially at $\ell\lesssim200$, as can be seen in Fig. \ref{fig:cl-2bins}. Thus, if the effects of $E$-$B$ mixing caused by the sky mask are not accurately accounted for in the estimation of the covariance matrix for power spectra involving $B$-mode maps, we can expect a misestimation of the contribution to the covariance from the leaked $E$ modes that would underpredict the uncertainties. This is not a problem for power spectra involving only $E$ modes, since the only $B$ modes that leak into them are those associated with noise, and they have the same amplitude as the noise $E$ modes move into the $B$-mode map.
 
@@ -668,7 +665,7 @@
       \end{equation}
       where $\hat{\bf C}$ is a vector of power spectrum measurements, ${\rm Cov}$ is their covariance matrix, and ${\bf C}(\vec{\theta})$ is their theoretical prediction for parameters $\vec{\theta}$.
 
-      We explore $\log p(\vec{\theta})$ for of two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins. In this simple two-dimensional scenario we simply sample the distribution in a regular grid of 200 by 200 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor  given by \todo{cite}
+      We explore $\log p(\vec{\theta})$ for of two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins. In this simple two-dimensional scenario we simply sample the distribution in a regular grid of 200 by 200 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor  given by \cite{2007A&A...464..399H}
       \begin{equation}
         {\rm Cov}^{-1}\,\longrightarrow \frac{N_s-2-N_{\rm data}}{N_s-1}\,{\rm Cov}^{-1},
       \end{equation}
@@ -681,7 +678,7 @@
   \section{Discussion}\label{sec:discussion}
     Estimating accurate covariance matrices for projected two-point correlators is an ubiquitous problem in modern cosmology \todo{cites}, but it is particularly relevant for large-scale structure datasets. This problem is further complicated in this case, in comparison with e.g. CMB experiments, by two factors: the fact that the fields involved are non-Gaussian at some level and the higher complexity of the sky masks used in optical datasets. The main impact of survey geometry is the statistical coupling it induces between different Fourier/harmonic modes, which must be accurately characterized in order to obtain reliable estimates of the posterior distribution for cosmological parameters. In this paper we have focused on the impact of survey geometry on the Gaussian (i.e. disconnected) part of the covariance matrix.
     
-    We have described and generalized existing analytical approaches to estimate the covariance matrix for pseudo-$C_\ell$ power spectrum estimators \todo{cites}, and implemented them in the public code {\tt NaMaster} \todo{cite}, making it straightforward to fully account for the effects of survey geometry on the data uncertainties. With these approximation, computationally speaking, the problem of estimating a covariance matrix is as complex as that of computing the power spectrum itself, and scales with the number of pixels in the map as $N_{\rm pix}^{3/2}$.
+    We have described and generalized existing analytical approaches to estimate the covariance matrix for pseudo-$C_\ell$ power spectrum estimators \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2017A&A...602A..41C}, and implemented them in the public code {\tt NaMaster} \cite{2019MNRAS.484.4127A}, making it straightforward to fully account for the effects of survey geometry on the data uncertainties. With these approximation, computationally speaking, the problem of estimating a covariance matrix is as complex as that of computing the power spectrum itself, and scales with the number of pixels in the map as $N_{\rm pix}^{3/2}$.
     
     The main finding of this paper is the excellent performance of the analytical methods described in Section \ref{ssec:theory.pclcov}. We have shown that, in spite of the higher complexity of large-scale structure masks, the NKA estimator (see Section \ref{ssec:theory.approx}) is able to recover the covariance matrix for all power spectra with non-zero signal expectation value (i.e. those involving the galaxy overdensity $\delta$ or the $E$-mode shear $\gamma_E$), as well as the posterior distribution for cosmological parameters, to a high degree of accuracy.
 
@@ -690,7 +687,7 @@
     In spite of these inaccuracies, we find that the approximations described in this paper are able to provide estimates of the power spectrum covariance matrix that are sufficiently accurate for current and future tomographic large-scale structure cosmological datasets. The main advantage of this approach is the computational cost, which is comparable to that of estimating the power spectrum in the first place, and which scales with pixel resolution in a similar way. This is therefore significantly less time-consuming than generating large numbers of mock datasets (even simple Gaussian or log-normal realizations), and more reliable than the traditional jackknife resampling techniques. The method, in all its generality, is currently implemented in the public code {\tt NaMaster}. Future extensions to this work will focus on improving the estimator for power spectra involving $B$ modes, and incorporating the impact of $E/B$-mode purification \todo{cites}.
     
   \acknowledgments
-  We thank Eva-Maria Mueller, Francisco Javier S\'anchez and An\v ze Slosar for useful comments and discussion. CGG is supported the Spanish grant BES-2016-077038, partially funded by the ESF and by AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain and the FEDER funds. He was partially supported by a Balzan Fellowship while in Oxford. He would like to thank New College and the Department of Physics at Oxford for their hospitality. DA acknowledges support from STFC through an Ernest Rutherford Fellowship, grant reference ST/P004474/1. EB acknowledges support from the Beecroft Trust.
+  We thank Thibaut Louis, Eva-Maria Mueller, Francisco Javier S\'anchez and An\v ze Slosar for useful comments and discussion. CGG is supported the Spanish grant BES-2016-077038, partially funded by the ESF and by AYA2015-67854-P from the Ministry of Industry, Science and Innovation of Spain and the FEDER funds. He was partially supported by a Balzan Fellowship while in Oxford. He would like to thank New College and the Department of Physics at Oxford for their hospitality. DA acknowledges support from STFC through an Ernest Rutherford Fellowship, grant reference ST/P004474/1. EB acknowledges support from the Beecroft Trust.
   
   \appendix
   \section{Flat sky}\label{app:flat}
