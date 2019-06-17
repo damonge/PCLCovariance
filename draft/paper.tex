@@ -597,7 +597,40 @@
       \begin{equation}
         \chi^2=\left({\bf d}-{\bf m}\right)^T\cdot{\rm Cov}^{-1}\cdot\left({\bf d}-{\bf m}\right).
       \end{equation}
-      We compute this quantity for a data vector ${\bf d}$ composed of different auto- and cross-correlations for each of the 20,000 Gaussian simulations, with ${\bf m}$ given by the mean over all simulations and different choices of covariance matrix. Figure \ref{fig:chi2_1bin} shows the distribution of $\chi^2$ values for the three non-zero power spectra in the case of a single bin: $\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$. The histograms show the distribution for the sample covariance matrix (blue), and the analytical NKA and Spin-0 estimators (orange and green respectively). We additionally plot the theoretical $\chi^2$ distribution under the assumption that the underlying data vector is Gaussianly distributed (red dashed lines). In the simplest case of purely spin-0 quantities (leftmost panel), we find an excellent agreement between the different distributions. In the cases involving the spin-2 fields, we see noticeable differences between the distributions found with the sample covariance and the approximate ones. These differences are small, corresponding to a $X\%$ shift in the mean $\chi^2$, and a negligible variation in the width of the distributions. We therefore expect these differents to have a negligible effect on the posterior parameter distributions, as we will show in Section \ref{ssec:results.cosmo}. The fact that these differences appear only for power spectra involving spin-2 quantities indicate that the NKA and spin-0 methods are imperfect at describing the additional mode coupling caused in the presence of a mask for higher-spin fields. This is rather obvious in the case of the spin-0 approximation but, interestingly, we find that the NKA and Spin-0 predictions yield results that are almost indistinguishable from each other. We therefore conclude that the additional approximation made in the NKA method for spin-2 fields -- neglecting the spatial derivatives of the mask -- is effectively equivalent to ignoring the spin nature of the fields involved. For completeness, Figure \ref{fig:chi2_2bins} shows the distribution of $\chi^2$ values for a data vector composed of all possible auto- and cross-correlations of $\delta$ and $\gamma_E$ for the case of two redshift bins, where similar conclusions hold.
+      We compute this quantity for a data vector ${\bf d}$ composed of
+      different auto- and cross-correlations for each of the 20,000 Gaussian
+      simulations, with ${\bf m}$ given by the mean over all simulations and
+      different choices of covariance matrix. Figure \ref{fig:chi2_1bin} shows
+      the distribution of $\chi^2$ values for the three non-zero power spectra
+      in the case of a single bin: $\delta$-$\delta$, $\delta$-$\gamma_E$ and
+      $\gamma_E$-$\gamma_E$. The histograms show the distribution for the
+      sample covariance matrix (blue), and the analytical NKA and Spin-0
+      estimators (orange and green respectively). We additionally plot the
+      theoretical $\chi^2$ distribution under the assumption that the
+      underlying data vector is Gaussianly distributed (red dashed lines). In
+      the simplest case of purely spin-0 quantities (leftmost panel), we find
+      an excellent agreement between the different distributions. In the cases
+      involving the spin-2 fields, we see noticeable differences between the
+      distributions found with the sample covariance and the approximate ones.
+      These differences are small, corresponding to less of a $2$ and $4\%$
+      shift in the mean $\chi^2$ for the $\delta$ - $\gamma_E$ and
+      $\gamma_E$ - $\gamma_E$ cases, respectively, and a negligible variation in
+      the width of the distributions. We therefore expect these differents to
+      have a negligible effect on the posterior parameter distributions, as we
+      will show in Section \ref{ssec:results.cosmo}. The fact that these
+      differences appear only for power spectra involving spin-2 quantities
+      indicate that the NKA and spin-0 methods are imperfect at describing the
+      additional mode coupling caused in the presence of a mask for
+      higher-spin fields. This is rather obvious in the case of the spin-0
+      approximation but, interestingly, we find that the NKA and Spin-0
+      predictions yield results that are almost indistinguishable from each
+      other. We therefore conclude that the additional approximation made in
+      the NKA method for spin-2 fields -- neglecting the spatial derivatives
+      of the mask -- is effectively equivalent to ignoring the spin nature of
+      the fields involved. For completeness, Figure \ref{fig:chi2_2bins} shows
+      the distribution of $\chi^2$ values for a data vector composed of all
+      possible auto- and cross-correlations of $\delta$ and $\gamma_E$ for the
+      case of two redshift bins, where similar conclusions hold.  
 
       We have also explored the impact of contaminant deprojection on the
       different covariance matrix estimates. The loss of modes due to

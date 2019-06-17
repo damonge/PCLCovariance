@@ -527,6 +527,8 @@ def chi2_sph_TT_TE_EE():
              r"$(\gamma_E \gamma_E, \gamma_E \gamma_E)$"]
     i = 0
     for ax, chi2_list in zip(axs, [chi2_TT_ar, chi2_TE_ar, chi2_EE_ar]):
+        # means = np.mean(chi2_list, axis=1)
+        # print('Mean shift: ' + str(means/means[0] -1))
         bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
         _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
                           label='Sims.')
@@ -550,7 +552,7 @@ def chi2_sph_TT_TE_EE():
     axs[0].legend(loc='center right', fontsize='9', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_TT_TE_EE.pdf')
-    plt.savefig(fname, dpi=DPI)
+    # plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
 
