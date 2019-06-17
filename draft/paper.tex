@@ -87,12 +87,12 @@
         {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
       \end{equation}
       where the operator $\summ{x}$ denotes a integral or sum of all coordinates ${\bf x}$, and $\Ylm{\dag}{k}{x}$ are a set of orthogonal functions. We will also assume that the $\Ylm{\dag}{k}{x}$ are a \emph{complete} set of basis functions, in which case:
-      \begin{align}
+      \begin{align}\nonumber
         &\summ{x}\,\Ylm{\dag}{k}{x}\Ylm{}{l}{x}=\mathds{1}\Delta^x({\bf k},{\bf l}),\\
         &\summ{k}\,\Ylm{}{k}{x}\Ylm{\dag}{k}{y}=\mathds{1}\Delta^k({\bf x},{\bf y}),
       \end{align}
       where $\summ{k}$ denotes an integral over all possible generalised Fourier coefficients ${\bf k}$, and $\Delta^x$ and $\Delta^k$ are generalized delta functions:
-      \begin{align}
+      \begin{align}\nonumber
         &\summ{k}\,f({\bf k})\Delta^x({\bf k},{\bf l})\equiv f({\bf l}),\\
         &\summ{x}\,f({\bf x})\Delta^k({\bf x},{\bf y})\equiv f({\bf y}).
       \end{align}
@@ -182,7 +182,7 @@
           \left\langle\frac{1}{2\ell+1}\sum_{m=-\ell}^\ell {\rm vec}\left[\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l}\right]\right\rangle=\sum_{\ell'}{\sf M}^{s_as_b}_{\ell\ell'} {\rm vec}\left[{\sf C}^{ab}_{\ell'}\right],
         \end{equation}
         with
-        \begin{align}
+        \begin{align}\nonumber
           &{\sf M}^{00}_{\ell\ell'}=(2\ell'+1)\,\Xi^{00}_{\ell\ell'}(w_a,w_b),\hspace{12pt}
           {\sf M}^{02}_{\ell\ell'}=(2\ell'+1)\,\Xi^{0+}_{\ell\ell'}(w_a,w_b)\,\mathds{1},\\
           &{\sf M}^{22}_{\ell\ell'}=(2\ell'+1)
@@ -195,8 +195,9 @@
           \end{array}\right),\\\nonumber
         \end{align}
         where
-        \begin{align}\label{eq:coeff_mcm}
+        \begin{align}\label{eq:coeff_mcm}\nonumber
           &\Xi^{00}_{\ell\ell'}(w,v)  \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{0}{0}{0}^2\\
+          \nonumber
           &\Xi^{0+}_{\ell\ell'}(w,v)  \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{0}{0}{0}\wtj{\ell}{\ell'}{\ell''}{2}{-2}{0}\\
           &\Xi^{\pm\pm}_{\ell\ell'}(w,v) \equiv\sum_{\ell''}\frac{P^{wv}_{\ell''}}{4\pi}\wtj{\ell}{\ell'}{\ell''}{2}{-2}{0}^2\frac{1\pm(-1)^{\ell+\ell'+\ell''}}{2}.
         \end{align}
@@ -209,8 +210,9 @@
           \left\langle{\rm vec}\left[\tilde{\sf C}^{ab}_q\right]\right\rangle=\sum_{{\bf l}\in q}\frac{1}{N_q} \sum_{\bf k}{\sf M}^{s_as_b}_{{\bf l}{\bf k}}\,{\rm vec}\left[{\sf C}^{ab}_k\right]
         \end{equation}
         with
-        \begin{align}
-          {\sf M}^{00}_{{\bf l}\,{\bf k}}&\equiv \bar{\Xi}^{00}_{{\bf l}{\bf k}},\\\label{eq:m02_flat}
+        \begin{align}\nonumber
+          {\sf M}^{00}_{{\bf l}\,{\bf k}}&\equiv \bar{\Xi}^{00}_{{\bf l}{\bf k}},\\ %\label{eq:m02_flat}
+          \nonumber
           {\sf M}^{02}_{{\bf l}\,{\bf k}}&\equiv 
           \left(
           \begin{array}{cc}
@@ -227,13 +229,17 @@
           \end{array}\right),
         \end{align}
         where
-        \begin{align}
+        \begin{align}\nonumber
           &\bar{\Xi}^{00}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}},\\
+          \nonumber
           &\bar{\Xi}^{0+}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos2\Delta\varphi,\\
+          \nonumber
           &\bar{\Xi}^{0-}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin2\Delta\varphi,\\
+          \nonumber
           &\bar{\Xi}^{++}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos^22\Delta\varphi,\\
+          \nonumber
           &\bar{\Xi}^{+-}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\cos2\Delta\varphi\,\sin2\Delta\varphi,\\
-          &\bar{\Xi}^{--}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin^22\Delta\varphi,\\
+          &\bar{\Xi}^{--}_{{\bf l}{\bf k}}=\left(\frac{2\pi}{L_xL_y}\right)^2 (w_a)_{{\bf l}-{\bf k}}(w_b)^*_{{\bf l}-{\bf k}}\sin^22\Delta\varphi,
         \end{align}
         and $\Delta\varphi$ is the relative angle between ${\bf l}$ and ${\bf k}$.
       \end{itemize}
@@ -288,22 +294,33 @@
 
       Now, in what follows, we will be concerned with the auto- and cross-correlations of spin-0 and spin-2 fields. Thus, to simplify the notation, we will enumerate the different types of coupling coefficients that exist for a spin-0 field with a single component that we will call $\delta$, in analogy to the projected galaxy overensity, and for a spin-2 field $\mathbf{\gamma}$ with $E$ and $B$ components $\gamma_E$ and $\gamma_B$, in analogy to the cosmic shear field. With this setup, all the possible non-zero $W^{\alpha\beta,\alpha'\beta'}_{{\bf l}{\bf l}'}$ can be expressed in terms of the $I^{\pm s_a,\pm s_b}_{{\bf l}{\bf l}'}$ as follows:
       \begin{align}\label{eq:coeff}
+        \nonumber
         &W^{\delta\delta,\delta\delta}_{{\bf l},{\bf l}'}=I^{0,0}_{{\bf l}{\bf l}'}; \\
+        \nonumber
         &W^{\delta\gamma_E,\delta\gamma_E}_{{\bf l},{\bf l}'}=W^{\delta\gamma_B,\delta\gamma_B}_{{\bf l},{\bf l}'}=I^{0,+2}_{{\bf l},{\bf l}'};\hspace{12pt}
         W^{\delta\gamma_E,\delta\gamma_B}_{{\bf l},{\bf l}'}=-W^{\delta\gamma_E,\delta\gamma_B}_{{\bf l},{\bf l}'}=-i\,I^{0,-2}_{{\bf l},{\bf l}'};\\
+        \nonumber
         &W^{\gamma_E\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_E\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=I^{+2,+2}_{{\bf l}{\bf l}'}\\
+        \nonumber
         &W^{\gamma_E\gamma_E,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_E,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=I^{-2,-2}_{{\bf l}{\bf l}'}\\
+        \nonumber
         &W^{\gamma_E\gamma_E,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_B,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=-i\,I^{+2,-2}_{{\bf l}{\bf l}'}\\
         &W^{\gamma_E\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_E\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=i\,I^{-2,+2}_{{\bf l}{\bf l}'}.
       \end{align}
       Thus, in principle we only need to compute 7 different types of terms ($I^{0,0}$, $I^{0,\pm2}$, $I^{\pm2,\pm2}$ and $I^{\pm2,\mp2})$). In order to simplify these expressions further we follow \todo{cite} and neglect all gradients of the masks, which allows us to relate the different $I^{\pm s_a,\pm s_b}$ through the following set of identities:
       \begin{align}
+        \nonumber
         \summ{x}w({\bf x})\left(\bar{\eth}^2q({\bf l},{\bf x})\right)^*\,\bar{\eth}^2q({\bf k},{\bf x})
         &=\summ{x}w({\bf x})\eth^2 q^*({\bf l},{\bf x})\,\bar{\eth}^2q({\bf k},{\bf x})\\
+        \nonumber
         &=\summ{x}q^*({\bf l},{\bf x})\,\eth^2\left(\bar{\eth}^2q({\bf k},{\bf x})w({\bf x})\right)\\
+        \nonumber
         &\simeq\summ{x}q^*({\bf l},{\bf x})\,\left(\eth^2\bar{\eth}^2q({\bf k},{\bf x})\right)w({\bf x})\\
+        \nonumber
         &=\frac{1}{\beta^2_{k,2}}\summ{x}q^*({\bf l},{\bf x})\,q({\bf k},{\bf x})w({\bf x})\\
+        \nonumber
         &=\summ{x}q^*({\bf l},{\bf x})\,\left(\bar{\eth}^2\eth^2q({\bf k},{\bf x})\right)w({\bf x})\\
+        \nonumber
         &=\summ{x}\bar{\eth}^2\left(w({\bf x})\,q^*({\bf l},{\bf x})\right)\,\eth^2q({\bf k},{\bf x})\\
         &\simeq\summ{x}w({\bf x})\,\left(\eth^2\,q({\bf l},{\bf x})\right)^*\,\eth^2q({\bf k},{\bf x}),
       \end{align}
@@ -311,6 +328,7 @@
     
       Using these identities together with the completeness relation of the basis functions, it is possible to simplify the expressions for the $I^{\pm s_a,\pm s_b}$ \todo{cite}:
       \begin{align}
+        \nonumber
         &\,^{ab}I^{0,0}_{{\bf l}{\bf l}'}=\,^{ab}I^{0,+2}_{{\bf l}{\bf l}'}=\,^{ab}J^0_{{\bf l}{\bf l}'}; \hspace{12pt}
         \,^{ab}I^{+2,+2}_{{\bf l}{\bf l}'}=\,^{ab}J^+_{{\bf l}{\bf l}'};\\
         &\,^{ab}I^{+2,-2}_{{\bf l}{\bf l}'}=\,^{ab}I^{-2,+2}_{{\bf l}{\bf l}'}=\,^{ab}J^-_{{\bf l}{\bf l}'}; \hspace{12pt}
@@ -318,12 +336,15 @@
       \end{align}
       where  we have defined
       \begin{align}\label{eq:covar_coupling_J}
+        \nonumber
         &\,^{ab}J^0_{{\bf l}{\bf l}'}=\summ{x}\left(w_a w_b\right)({\bf x})\,q({\bf l},{\bf x})\,\left(q({\bf l}',{\bf x})\right)^*,\\
         &\,^{ab}J^\pm_{{\bf l}{\bf l}'}=\summ{x}\left(w_a w_b\right)({\bf x})\,q^{\pm2}_{{\bf l}{\bf l}'}({\bf x}).
       \end{align}
       Thus, the only surviving non-zero coupling coefficients are
       \begin{align}
+        \nonumber
         &W^{\delta\delta,\delta\delta}_{{\bf l},{\bf l}'}=W^{\delta\gamma_E,\delta\gamma_E}_{{\bf l},{\bf l}'}=W^{\delta\gamma_B,\delta\gamma_B}_{{\bf l},{\bf l}'}=J^0_{{\bf l}{\bf l}'};\\
+        \nonumber
         &W^{\gamma_E\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_E\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=J^+_{{\bf l}{\bf l}'}\\\nonumber
         &W^{\gamma_E\gamma_E,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=-W^{\gamma_B\gamma_B,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=\\
         &\hspace{20pt}=-W^{\gamma_E\gamma_E,\gamma_B\gamma_E}_{{\bf l},{\bf l}'}=-W^{\gamma_E\gamma_B,\gamma_B\gamma_B}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_E,\gamma_E\gamma_E}_{{\bf l},{\bf l}'}=W^{\gamma_B\gamma_B,\gamma_E\gamma_B}_{{\bf l},{\bf l}'}=-i\,J^-_{{\bf l}{\bf l}'}.
@@ -350,8 +371,10 @@
         \end{equation}
         Making use of the completeness relation for the Wigner 3-j symbols, it is possible to show, that these can be written as:
         \begin{align}
+        \nonumber
           &\,^{af}_{bg}\mathcal{J}^{00}_{\ell\ell'}=\Xi^{00}_{\ell\ell'}(w_aw_f,w_bw_g),\hspace{12pt}
            \,^{af}_{bg}\mathcal{J}^{0+}_{\ell\ell'}=\Xi^{0+}_{\ell\ell'}(w_aw_f,w_bw_g),\\
+        \nonumber
           &\,^{af}_{bg}\mathcal{J}^{++}_{\ell\ell'}=\Xi^{++}_{\ell\ell'}(w_aw_f,w_bw_g),\hspace{12pt}
            \,^{af}_{bg}\mathcal{J}^{--}_{\ell\ell'}=\Xi^{--}_{\ell\ell'}(w_aw_f,w_bw_g),\\
           &\,^{af}_{bg}\mathcal{J}^{+-}_{\ell\ell'}=
@@ -361,26 +384,32 @@
         where the $\Xi^{XY}_{\ell\ell'}$ are defined in Eq. \ref{eq:coeff_mcm}.
         Thus, computationally speaking, the problem of computing covariance matrices reduces to that of computing the same coupling coefficients needed for the computation of the pseudo-$C_\ell$ power spectra themselves. Using the same notation as in Eq. \ref{eq:coeff}, the only non-zero $\mathcal{W}$ coefficients are:
         \begin{align}
+        \nonumber
           &\mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \delta  ,\delta  \delta  }=
            \mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\delta  \gamma_X,\delta  \gamma_X}=
            \mathcal{W}^{\delta  \gamma_X,\delta  \gamma_X}_{\delta  \gamma_Y,\delta  \gamma_Y}=\mathcal{J}^{00}\\
+        \nonumber
           &\mathcal{W}^{\delta  \delta  ,\delta  \delta  }_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=
            \mathcal{W}^{\delta  \gamma_Z,\delta  \gamma_Z}_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=\mathcal{J}^{0+}\\
+        \nonumber
           &\mathcal{W}^{\gamma_X\gamma_Y,\gamma_X\gamma_Y}_{\gamma_W\gamma_Z,\gamma_W\gamma_Z}=\mathcal{J}^{++}\\
+        \nonumber
           &\mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
+        \nonumber
           &\hspace{12pt}
            \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
            \mathcal{W}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=-\mathcal{J}^{--}\\
+        \nonumber
           &\mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \mathcal{W}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \mathcal{W}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
           &\hspace{12pt}
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \mathcal{W}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
-           \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},\\
+           \mathcal{W}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\mathcal{J}^{--},
         \end{align}
         where $(X,Y,Z,W)$ stand for either $E$ or $B$, and where we have suppressed all redundant indices (including $\ell\ell'$). Any pseudo-$C_\ell$ covariance element can then be found by replacing these results in Eq. \ref{eq:cov_sph}. Some explicit examples for common terms can be found in Appendix A.3.3 of \todo{cite}.
 
@@ -391,31 +420,39 @@
         \end{equation}
         where the coefficients $\bar{\mathcal{W}}$ are related to the mode-coupling coefficients $\bar{\Xi}$ defined in \todo{ref} in the same way that the curved-sky coefficients $\mathcal{W}$ were related to the $\Xi$:
         \begin{align}
+        \nonumber
           &\bar{\mathcal{W}}^{\delta  \delta  ,\delta  \delta  }_{\delta  \delta  ,\delta  \delta  }=
            \bar{\mathcal{W}}^{\delta  \delta  ,\delta  \delta  }_{\delta  \gamma_X,\delta  \gamma_X}=
            \bar{\mathcal{W}}^{\delta  \gamma_X,\delta  \gamma_X}_{\delta  \gamma_Y,\delta  \gamma_Y}=\bar{\mathcal{J}}^{00}\\
+        \nonumber
           &\bar{\mathcal{W}}^{\delta  \delta  ,\delta  \delta  }_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=
            \bar{\mathcal{W}}^{\delta  \gamma_Z,\delta  \gamma_Z}_{\gamma_X\gamma_Y,\gamma_X\gamma_Y}=\bar{\mathcal{J}}^{0+}\\
+        \nonumber
           &\bar{\mathcal{W}}^{\gamma_X\gamma_Y,\gamma_X\gamma_Y}_{\gamma_W\gamma_Z,\gamma_W\gamma_Z}=\bar{\mathcal{J}}^{++}\\
+        \nonumber
           &\bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
+        \nonumber
           &\hspace{12pt}
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
            \bar{\mathcal{W}}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=-\bar{\mathcal{J}}^{--}\\
+        \nonumber
           &\bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_Y\gamma_E,\gamma_Y\gamma_B}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_B,\gamma_X\gamma_E}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=
            \bar{\mathcal{W}}^{\gamma_E\gamma_X,\gamma_B\gamma_X}_{\gamma_B\gamma_Y,\gamma_E\gamma_Y}=\\
           &\hspace{12pt}
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_Y\gamma_B,\gamma_Y\gamma_E}=
            \bar{\mathcal{W}}^{\gamma_X\gamma_E,\gamma_X\gamma_B}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=
-           \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\bar{\mathcal{J}}^{--},\\
+           \bar{\mathcal{W}}^{\gamma_B\gamma_X,\gamma_E\gamma_X}_{\gamma_E\gamma_Y,\gamma_B\gamma_Y}=\bar{\mathcal{J}}^{--},
         \end{align}
         and, as before
         \begin{align}
+        \nonumber
           &\,^{af}_{bg}\bar{\mathcal{J}}^{00}_{{\bf l}{\bf l}'}=\bar{\Xi}^{00}_{{\bf l}{\bf l}'}(w_aw_f,w_bw_g),\hspace{12pt}
            \,^{af}_{bg}\bar{\mathcal{J}}^{0+}_{{\bf l}{\bf l}'}=\bar{\Xi}^{0+}_{{\bf l}{\bf l}'}(w_aw_f,w_bw_g),\\
+        \nonumber
           &\,^{af}_{bg}\bar{\mathcal{J}}^{++}_{{\bf l}{\bf l}'}=\bar{\Xi}^{++}_{{\bf l}{\bf l}'}(w_aw_f,w_bw_g),\hspace{12pt}
            \,^{af}_{bg}\bar{\mathcal{J}}^{--}_{{\bf l}{\bf l}'}=\bar{\Xi}^{--}_{{\bf l}{\bf l}'}(w_aw_f,w_bw_g),\\
           &\,^{af}_{bg}\bar{\mathcal{J}}^{+-}_{{\bf l}{\bf l}'}=
@@ -481,6 +518,7 @@
       \end{equation}
       where $\chi$ is the comoving radial distance, $z\equiv z(\chi)$ is the corresponding redshift in the lightcone, $P(k,z)$ is the matter power spectrum and the window functions are given by \todo{cites}:
       \begin{align}
+        \nonumber
         &W^\delta_\ell(\chi)=b(z)\,H(z)\,p_z(z),\\
         &W^\gamma_\ell(\chi)=f_\ell\,\frac{3H_0^2\Omega_M}{2}(1+z)\chi\,\int dz'\,p_z(z')\,\frac{\chi(z')-\chi}{\chi(z')},
       \end{align}
