@@ -694,13 +694,26 @@
     \begin{figure}
       \centering
       \includegraphics[width=0.6\textwidth]{./figures/mask-lss_flat1.pdf}
-      \caption{\todo{write}} \label{fig:mask_flat}
+      \caption{Flat-sky mask used in the study of the analytical
+        methods presented in this work in the flat-sky regime. The mask was
+        constructed from the bright-object mask distributed with the first
+        data release of the HSC collaboration \todo{cite} for the VVDS
+        field. As in the full-sky case, it is used both for galaxy clustering
+        and shear for simplicity.} \label{fig:mask_flat}
     \end{figure}
 
     \begin{figure}
       \centering
       \includegraphics[width=\textwidth]{./figures/run_chi2_TT_TE_EE_TB_EB_BB.pdf}
-      \caption{\todo{write}}
+      \caption{$\chi^2$ distributions for the autocorrelations of the fields
+        of a redshift bin in the flat-sky regime. We compare the distributions
+        obtained with the covariance matrix estimated from simulated power
+        spectra, and the analytical NKA and Spin-0 methods. In addition, we
+        show the theoretical $\chi^2$ distribution, which is almost perfectly
+        followed by the others. The reason why the E and B modes are well
+        behaved in flat sky is because in this regime ($\ell \in (120,
+        17640)$), the shear power spectra is dominated by noise (see
+        Fig.~\ref{fig:cl-2bins}). }
       \label{fig:chi2_1bin_flat}
     \end{figure}
     We have repeated the analysis described in Section \ref{sec:results} on flat-sky realizations, making use of the flat-sky implementation of {\tt NaMaster}. We generate Gaussian realizations of the galaxy overdensity and shear maps making use of flat-sky extensions of the methods described in Section \ref{ssec:results.sims}. In this case we use a high-resolution mask constructed from the bright-object mask distributed with the first data release of the HSC collaboration \todo{cite} for the VVDS field, which is shown in Fig. \ref{fig:mask_flat}. 
