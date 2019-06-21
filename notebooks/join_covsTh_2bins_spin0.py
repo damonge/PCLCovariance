@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import numpy as np
 import os
+import sys
 
 # pylint: disable=C0103
 
@@ -8,7 +9,8 @@ import os
 ##############################################################################
 ##############################################################################
 
-prefix = 'run_sph_2b_same_mask'
+# prefix = 'run_sph_2b_same_mask'
+prefix = os.path.basename(sys.argv[1].strip('/'))
 run_path = os.path.join('./simulations_outputs/', prefix, prefix)
 output_dir = os.path.join('./simulations_outputs/', prefix, 'full_covariance_spin0')
 out_run_path = os.path.join(output_dir, prefix)
