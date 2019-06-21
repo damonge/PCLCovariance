@@ -816,6 +816,18 @@ def chi2_NKA_TTTEEE_full():
     lbins = ell
     lmax = (ell < 2*512).sum()
 
+    means = np.mean(chi2_list, axis=1)
+    covs = np.array([np.sqrt(np.cov(chi2is)) for chi2is in chi2_list])
+    print("Chi2_NKA_TTTEEE_full:")
+    print("Relative mean diff: {}".format(means[1]/means[0] - 1))
+    print("Relative width diff: {}".format(covs[1]/covs[0] - 1))
+    Ns = chi2_list.shape[1]
+    Nl = lmax * 10
+    H = (Ns - Nl - 2)/(Ns - 1) # arXiv:1601.05786
+    print('Ns =',  Ns, 'Nl =', Nl, 'Hartlap =', H)
+    print("Relative mean diff (Hartlap): {}".format(means[1]/(H * means[0]) - 1))
+    print("Relative width diff (Hartlap): {}".format(covs[1]/(H * covs[0]) - 1))
+
     f, ax = plt.subplots(1, 1, figsize=FSIZE1)
     bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
     _, x, _ = ax.hist(chi2_list[0], bins=bins, histtype='step', density=True,
@@ -846,6 +858,20 @@ def chi2_Spin0_NKA_TTTEEE_full():
     ell = np.loadtxt('../run_sph_2b_same_mask/run_sph_2b_same_mask_ells.txt')
     lbins = ell
     lmax = (ell < 2*512).sum()
+
+    means = np.concatenate([np.mean(chi2_list, axis=1), [np.mean(chi2_spin0)]])
+    covs = np.array([np.sqrt(np.cov(chi2is)) for chi2is in chi2_list] + [np.sqrt(np.cov(chi2_spin0))])
+    print("Chi2_Spin0_NKA_TTTEEE_full:")
+    print("Results for | NKA | Spin0 |")
+    print("Relative mean diff: {}".format(means[1:]/means[0] - 1))
+    print("Relative width diff: {}".format(covs[1:]/covs[0] - 1))
+    Ns = chi2_list.shape[1]
+    Nl = lmax * 10
+    H = (Ns - Nl - 2)/(Ns - 1) # arXiv:1601.05786
+    print('Ns =',  Ns, 'Nl =', Nl, 'Hartlap =', H)
+    # covs = np.array([np.sqrt(np.cov(H * chi2_list[0])), np.sqrt(np.cov(chi2_list[1])), np.sqrt(np.cov(chi2_spin0))])
+    print("Relative mean diff (Hartlap): {}".format(means[1:]/(H * means[0]) - 1))
+    print("Relative width diff (Hartlap): {}".format(covs[1:]/(H * covs[0]) - 1))
 
     f, ax = plt.subplots(1, 1, figsize=FSIZE1)
     bins = np.linspace(np.min(chi2_list), np.max(chi2_list), 60)
