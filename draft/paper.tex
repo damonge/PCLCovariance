@@ -458,7 +458,7 @@
       \begin{figure}
         \centering
         \includegraphics[width=0.7\textwidth]{./figures/contaminants_cl.pdf}
-        \caption{Input (signal $+$ noise) power spectrum for the galaxy overdensity in the first redshift bin (blue line). The orange band shows the range of power spectra used for the 100 large-scale contaminant templates used to study the impact of contaminant deprojection on the covariance matrix. The green line shows the power spectrum used to generate small-scale contaminants. The amplitude of the contaminat power spectra was fixed by imposing a $10\%$ contamination level in the power spectrum at $\ell=400$. The same approach was used for the cosmic shear maps, with independent contaminants defined in $\gamma_E$ and $\gamma_B$.} \label{fig:clcont}
+        \caption{Input (signal $+$ noise) power spectrum for the galaxy overdensity in the first redshift bin (blue line). The orange band shows the range of power spectra used for the 100 large-scale contaminant templates used to study the impact of contaminant deprojection on the covariance matrix. The green line shows the power spectrum used to generate small-scale contaminants. The amplitudes of the contaminant power spectra were fixed by imposing a $10\%$ contamination level in the power spectrum at $\ell=400$. The same approach was used for the cosmic shear maps, with independent contaminants defined in $\gamma_E$ and $\gamma_B$.} \label{fig:clcont}
       \end{figure}
       In order to quantitatively study the performance of the analytical approximations for the power spectrum covariance matrix introduced in Section \ref{sec:theory}, we generate a large number of Gaussian simulations including a number of realistic observational effects.
       
@@ -515,14 +515,13 @@
       \begin{figure}
         \centering
         \includegraphics[width=\textwidth]{./figures/all_rows_sph_1bin.pdf}
-        \caption{Mode coupling of different $C_\ell$'s. The covariances have
-          been normalized by the MC approximation numerator (Eq.~\ref{eq:cov_naive_bpw}).}
+        \caption{Four rows of the covariance matrix for different power spectra. The top panels show the cases of spectra with non-zero signal, involving $\delta$ and $\gamma_E$, while the bottom panels show cases involving $B$-modes. In each panel we show rows of the covariance matrix for $\ell=60,\,90,\,120$ and $150$, which peak at those central values. The different lines show the results for the sample covariance matrix (solid blue), its NKA estimator (dashed orange) and the difference between both (dotted green). The black stars show the mode-counting approximation to the covariance matrix (Eq. \ref{eq:cov_naive_bpw}). To facilitate the visualization of the different rows, we have divided them by $C_\ell^{aa}C_\ell^{bb}+(C^{ab}_\ell)^2$, where $a$ and $b$ are the two fields being correlated in each case. The NKA method is able to recover the covariance with high accuracy for all field combinations that do not involve $B$ modes, yielding visibly poorer results otherwise.}
         \label{fig:rows_1bin}
       \end{figure}
       \begin{figure}
         \centering
         \includegraphics[width=0.7\textwidth]{./figures/sph_1bin_diff_corr.pdf}
-        \caption{Difference between the correlation matrices associated to the sample covariance matrix and its estimate with the NKA method including all possible correlations between $\delta$ and $\boldsymbol{\gamma}$ in a single redshift bin.} \label{fig:diff_corr_1bin}
+        \caption{Difference between the correlation matrices associated to the sample covariance matrix and its estimate with the NKA method including all possible correlations between $\delta$ and $\boldsymbol{\gamma}$ in a single redshift bin. While the NKA estimator is able to recover the covariance matrix to high accuracy in most cases, it is not able to reproduce the off-diagonal correlations between different bandpowers in cases involving $B$ modes.} \label{fig:diff_corr_1bin}
       \end{figure}
       \begin{figure}
         \centering
@@ -542,45 +541,25 @@
       \begin{figure}
         \centering
         \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_NKA_TTTEEE_reldev_eigval_1stbin.pdf}
-        \caption{Covariance matrix eigenvalues and the relative difference with respect to the eigenvalues from the simulations and NKA covariances.} \label{fig:eigv_1bin}
+        \caption{Eigenvalues of the single-bin covariance matrices for all power spectra involving $\delta$ and $\gamma_E$. Results are shown for the sample covariance (solid blue), the NKA estimator (solid orange) and the spin-0 approximation (dashed green). The NKA and spin-0 estimators are able to recover the covariance eigenvalues with an accuracy $\lesssim5\%$.} \label{fig:eigv_1bin}
       \end{figure}
       \begin{figure}
         \centering
         \includegraphics[width=\textwidth]{./figures/run_sph_2b_1stbin_chi2_TT_TE_EE.pdf}
-        \caption{$\chi^2$ distributions for the cases without 
-          $\gamma_B$-modes. We compare the distributions obtained with the
-          covariance matrix computed directly from the simulated power spectra
-          and the two different analytical methods: NKA and Spin-0. In addition,
-          the theoretical $\chi^2$ distribution has been included. We observe
-          the simulations' distribution perfectly follows the former and
-          negligible differences between the approximations. It must be noted
-          their shift with respect to the true distribution when spin-2 fields
-          are considered. It will be shown in Section~\ref{ssec:results.cosmo}
-          it will have no effect on the cosmological predictions.}
+        \caption{$\chi^2$ distributions for the cases without $\gamma_B$-modes. We compare the distributions obtained with the covariance matrix computed directly from the simulated power spectra (blue) and the two different analytical methods: NKA (orange) and spin-0 (green). In addition, the theoretical $\chi^2$ distribution has been included (dashed red). The distribution extracted from the simulation follows the theoretical expectation almost perfectly in all cases. In the cases of $\delta\times\gamma_E$ and $\gamma_E\times\gamma_E$ we observe small shifts in the peak $\chi^2$, of $\sim2$-$4\%$, while they width is recovered accurately. We will show that these differences are due to the inaccuracy of the analytical approximations on the largest scales, and that they have a completely negligible impact on the final cosmological parameter constraints.}
         \label{fig:chi2_1bin} \end{figure}
       \begin{figure}
         \centering
         \includegraphics[width=0.6\textwidth]{./figures/run_sph_2b_same_mask_Spin0_NKA_TTTEEE_Full_chi2.pdf}
-        \caption{Same as Figure \ref{fig:chi2_1bin} for the combination of all correlations between $\delta$ and $\gamma_E$ for two redshift bins.}
+        \caption{Same as Figure \ref{fig:chi2_1bin} for the combination of all correlations between $\delta$ and $\gamma_E$ for two redshift bins, where similar conclusions hold.}
         \label{fig:chi2_2bins}
       \end{figure}
       \begin{figure}
         \centering
         \includegraphics[width=\textwidth]{./figures/contaminants_diag_cov.pdf}
-        \caption{Diagonal of the covariance matrix estimated from simulations
-          without contaminants, with 200 contaminants deprojected and the NKA
-          method. The differences between the simulated cases are much
-          smaller than those associated with the NKA estimator (shown in
-          green). The NKA method is therefore sufficient to approximate the
-          covariance even in the presence of contaminant deprojection.}
+        \caption{Diagonal of the covariance matrix estimated from simulations without contaminants (solid blue), with 200 contaminants deprojected (dashed orange) and the NKA estimator (solid green). The differences between the simulated cases are significantly smaller than those associated with the NKA estimator. The NKA method is therefore equally valid to approximate the covariance even in the presence of contaminant deprojection.}
         \label{fig:diag_conts}
       \end{figure}
-%      \begin{figure}
-%        \centering
-%        \includegraphics[width=0.6\textwidth]{./figures/contaminants_chi2.pdf}
-%        \caption{$\chi^2$ distributions for simulations with no systematic contaminants (blue), and for simulations containing contaminants after deprojection of 200 contaminant templates (orange). The covariance matrices associated to both sets of simulations are essentially the same, and the differences between them are much smaller than those associated with the NKA estimator (shown in green). The NKA method is therefore sufficient to approximate the covariance even in the presence of contaminant deprojection.}
-%        \label{fig:chi2_conts}
-%      \end{figure}
       In order to quantify the validity of our analytical approximations, we need to compare the NKA covariance with the sample covariance estimated from the simulations. However, comparing two matrices is not as straightforward as comparing their matrix elements one by one. The covariance between far-away bandpowers is expected to be very close to zero, and therefore a direct comparison of those elements would easily yield large relative differences simply due to the statistical noise in the sample covariance matrix. We will therefore quantify the differences between the different covariances making use of scalar quantities formed from them. The impact of the analytical approximations on the final parameter constraints will then be described in detail in Section \ref{ssec:results.cosmo}.
       
       As a first test to quantify the differences between covariance matrices, we compute the relative difference between their eigenvalues. This is shown in Fig. \ref{fig:eigv_1bin} for a data vector combining all auto- and cross-correlations between $\delta$ and $\gamma_E$ for a single redshift bin. The eigenvalues of both matrices are roughly similar, with relative differences of about $5\%$. The figure also shows the eigenvalues of the covariance matrix estimated using the Spin-0 approximation, which achieves a similar level of precision (even marginally higher in some cases).
@@ -594,9 +573,6 @@
 
       We have also explored the impact of contaminant deprojection on the different covariance matrix estimates. The loss of modes due to deprojection can potentially increase the variance of the power spectrum estimates, affecting the accuracy with which an analytical estimator would be able to recover the covariance. Figure \ref{fig:diag_conts} shows the diagonal of the covariance matrix for the $\delta$-$\delta$,      $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$ power spectra. Each panel displays the diagonal for the sample covariance matrix estimated from simulations without contaminants or contaminant deprojection (blue
       line), the sample covariance from simulations with contaminants and contaminant deprojection (dashed orange line) and for the NKA covariance   (green line). We see that the power spectrum uncertainties are almost indistinguishable with or without deprojection, and that those relative differences are much smaller than the differences between the sample covariance and the NKA estimator. We therefore conclude that, except in the case where a very large set of contaminant maps are deprojected (comparable with the number of unmasked pixels in the map), the analytical approximation to the covariance matrix should be as accurate as in the absence of contaminants (i.e. accurate enough).
-%      This is quantitatively shown in Fig.~\ref{fig:chi2_conts} through comparison of the $\chi^2$ distributions drawn with covariance matrices
-%      estimated with simulations without contaminants, simulations with
-%      contaminants deprojected and the NKA method.
       
       Figure \ref{fig:diag_conts} serves also to illustrate another important point. In all our tests we find that the largest differences between the sample and NKA covariances occur on large scales. For $\delta$-$\delta$ correlations, the effect is limited to the first few multipoles ($\ell\lesssim10$), while for $\gamma_E$-$\gamma_E$ we are only able to recover the sample covariance errors within $5\%$ for $\ell\gtrsim40$. This is the main source of the small mismatch observed in Fig. \ref{fig:chi2_1bin}. Note however, that most of the cosmological information is obtained from the higher multipoles, due to their higher statistical weight, and as we will show in the next section, the effect on the final parameter constraints is negligible. If accurate covariances bars are needed on these large scales for cosmic shear, they can be estimated alternatively making use of fast, low resolution simulations (e.g. {\tt HEALPix} $N_{\rm side}=64$ maps).
 
@@ -604,7 +580,7 @@
       \begin{figure}
         \centering
         \includegraphics[width=0.6\textwidth]{./figures/contours_2bin.pdf}
-        \caption{1$\sigma$ and 2$\sigma$ contours for $\Omega_M$ and $\sigma_8$ found from two different estimates of the power spectrum likelihood for a dataset containing all possible cross-power spectra between $\delta$ and $\gamma_E$ for two redshift bins. The solid black and dashed red contours correspond to Gaussian likelihoods estimated using the sample covariance matrix and the covariance estimated using the NKA method respectively. We find a remarkably good agreement between both likelihoods, highlighting the negligible impact of the approximations involved in the NKA method on the final parameter estimates. \todo{finish this plot.}} \label{fig:contours}
+        \caption{1$\sigma$ and 2$\sigma$ contours for $\Omega_M$ and $\sigma_8$ found from two different estimates of the power spectrum likelihood for a dataset containing all possible cross-power spectra between $\delta$ and $\gamma_E$ for two redshift bins. The filled contours corresponds to the parameter likelihood evaluated using the NKA estimator for the power spectrum covariance matrix, while the dashed black contours correspond to the same calculation done with the sample covariance matrix corrected by the factor in Eq. \ref{eq:hartlap}. In both cases we assume a Gaussian likelihood. We find a remarkably good agreement between both likelihoods, highlighting the negligible impact of the approximations involved in the NKA method on the final parameter estimates.} \label{fig:contours}
       \end{figure}
       Ultimately, the most important test to judge the accuracy of the analytical covariance matrix estimators implemented here is to study their impact on the posterior distribution of cosmological parameters derived from power spectrum measurements. Assuming flat priors, the posterior distribution for parameters $\vec{\theta}$ is simply given by:
       \begin{equation}\label{eq:parpos}
@@ -613,7 +589,7 @@
       where $\hat{\bf C}$ is a vector of power spectrum measurements, ${\rm Cov}$ is their covariance matrix, and ${\bf C}(\vec{\theta})$ is their theoretical prediction for parameters $\vec{\theta}$.
 
       We explore $\log p(\vec{\theta}|\hat{\bf C})$ for of two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins. In this simple two-dimensional scenario we simply sample the distribution in a regular grid of 100 by 100 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor  given by \cite{2007A&A...464..399H}
-      \begin{equation}
+      \begin{equation}\label{eq:hartlap}
         {\rm Cov}^{-1}\,\longrightarrow \frac{N_s-2-N_{\rm data}}{N_s-1}\,{\rm Cov}^{-1},
       \end{equation}
       where $N_s=20,000$ is the number of samples used to estimate the covariance, and $N_{\rm data}=3510$ is the number of data points.
@@ -652,15 +628,7 @@
     \begin{figure}
       \centering
       \includegraphics[width=\textwidth]{./figures/run_chi2_TT_TE_EE_TB_EB_BB.pdf}
-      \caption{$\chi^2$ distributions for the autocorrelations of the fields
-        of a redshift bin in the flat-sky regime. We compare the distributions
-        obtained with the covariance matrix estimated from simulated power
-        spectra, and the analytical NKA and Spin-0 methods. In addition, we
-        show the theoretical $\chi^2$ distribution, which is almost perfectly
-        followed by the others. The reason why the E and B modes are well
-        behaved in flat sky is because in this regime ($\ell \in (120,
-        17640)$), the shear power spectra is dominated by noise (see
-        Fig.~\ref{fig:cl-2bins}). }
+      \caption{Same as Figure \ref{fig:chi2_1bin} for flat-sky fields. This figure additionally shows the $\chi^2$ distributions for power spectra involving $B$-modes. For the smaller scales covered by these flat-sky simulations, the NKA and spin-0 estimators work remarkably well, even for $B$-mode spectra.}
       \label{fig:chi2_1bin_flat}
     \end{figure}
     We have repeated the analysis described in Section \ref{sec:results} on flat-sky realizations, making use of the flat-sky implementation of {\tt NaMaster}. We generate Gaussian realizations of the galaxy overdensity and shear maps making use of flat-sky extensions of the methods described in Section \ref{ssec:results.sims}. In this case we use a high-resolution mask constructed from the bright-object mask distributed with the first data release of the HSC collaboration \todo{cite} for the VVDS field, which is shown in Fig. \ref{fig:mask_flat}. 
