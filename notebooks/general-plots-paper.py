@@ -552,7 +552,136 @@ def chi2_sph_TT_TE_EE():
     axs[0].legend(loc='center right', fontsize='9', frameon=False)
     plt.tight_layout()
     fname = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_TT_TE_EE.pdf')
-    # plt.savefig(fname, dpi=DPI)
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
+##############################################################################
+################# TTTT, TETE, EEEE chi2 mean + sigma diff ####################
+##############################################################################
+
+def chi2_sph_1b_chi2_mean_cov_diff():
+    npzfile = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_mean_cov_diff.npz')
+    if os.path.isfile(npzfile):
+        rdmeans = np.load(npzfile)['rdmeans']
+        rdcovs = np.load(npzfile)['rdcovs']
+    else:
+        prefix = 'run_sph_2b'
+        run_path = os.path.join('./simulations_outputs/', prefix, prefix)
+        sims_suffix = '_cl_0001-20000.npz'
+
+        ##############################################################################
+
+        ell = np.loadtxt(run_path + '_ells.txt')
+        lmax = (ell < 2*512).sum()
+        nlbins = lmax
+
+        clsims = np.load(run_path + '_b1' + sims_suffix)['arr_0']
+
+        clTT = clsims[0, 0, :, :lmax]
+        clTE = clsims[0, 1, :, :lmax]
+        clTB = clsims[0, 2, :, :lmax]
+        clEE = clsims[1, 1, :, :lmax]
+        clEB = clsims[1, 2, :, :lmax]
+        clBB = clsims[2, 2, :, :lmax]
+
+        ##############################################################################
+
+        CovSims_path = run_path + '_cov_b1' + sims_suffix
+        Csims = np.load(CovSims_path)['arr_0']
+
+        nlbins_orig = int(Csims.shape[0] / 6)
+        Csims = Csims.reshape((6, nlbins_orig, 6, nlbins_orig))
+        Csims = Csims[:, :lmax, :, :lmax]
+
+        Csims_TT = Csims[0, :, 0, :]
+        Csims_TE = Csims[1, :, 1, :]
+        Csims_TB = Csims[2, :, 2, :]
+        Csims_EE = Csims[3, :, 3, :]
+        Csims_EB = Csims[4, :, 4, :]
+        Csims_BB = Csims[5, :, 5, :]
+
+        ##############################################################################
+        c0000 = np.load(run_path+'_c0000_b1.npz')['arr_0']
+        c0202 = np.load(run_path+'_c0202_b1.npz')['arr_0']
+        c2222 = np.load(run_path+'_c2222_b1.npz')['arr_0']
+
+        CovTh_TT = c0000[:lmax, :lmax]
+        CovTh_TE = c0202[:lmax, 0, :lmax, 0]
+        CovTh_TB = c0202[:lmax, 1, :lmax, 1]
+        CovTh_EE = c2222[:lmax, 0, :lmax, 0]
+        CovTh_EB = c2222[:lmax, 1, :lmax, 1]
+        CovTh_BB = c2222[:lmax, 3, :lmax, 3]
+
+        ##############################################################################
+
+        Cth0 = np.empty((6, nlbins, 6, nlbins))
+        Cth0_ar = np.load(run_path + '_covSpin0_ar_b1.npz')['arr_0']
+        i, j = np.triu_indices(6)
+        Cth0[i, :,  j, :] = Cth0_ar[:, :lmax, :lmax]
+        Cth0[j, :,  i, :] = Cth0_ar[:, :lmax, :lmax]
+
+        Cth0_TT = Cth0[0, :, 0, :]
+        Cth0_TE = Cth0[1, :, 1, :]
+        Cth0_TB = Cth0[2, :, 2, :]
+        Cth0_EE = Cth0[3, :, 3, :]
+        Cth0_EB = Cth0[4, :, 4, :]
+        Cth0_BB = Cth0[5, :, 5, :]
+
+        ##############################################################################
+        chi2_TT_ar = co.get_chi2(clTT, list(map(np.linalg.inv, [Csims_TT, CovTh_TT, Cth0_TT])))
+        chi2_TE_ar = co.get_chi2(clTE, list(map(np.linalg.inv, [Csims_TE, CovTh_TE, Cth0_TE])))
+        chi2_TB_ar = co.get_chi2(clTB, list(map(np.linalg.inv, [Csims_TB, CovTh_TB, Cth0_TB])))
+        chi2_EE_ar = co.get_chi2(clEE, list(map(np.linalg.inv, [Csims_EE, CovTh_EE, Cth0_EE])))
+        chi2_EB_ar = co.get_chi2(clEB, list(map(np.linalg.inv, [Csims_EB, CovTh_EB, Cth0_EB])))
+        chi2_BB_ar = co.get_chi2(clBB, list(map(np.linalg.inv, [Csims_BB, CovTh_BB, Cth0_BB])))
+
+
+        rdmeans = np.empty((6, chi2_TT_ar.shape[0]))
+        rdcovs = np.empty((6, chi2_TT_ar.shape[0]))
+        for i, chi2_list in enumerate([chi2_TT_ar, chi2_TE_ar, chi2_EE_ar, chi2_TB_ar, chi2_EB_ar, chi2_BB_ar]):
+            means = np.mean(chi2_list, axis=1)
+            covs = np.array([np.sqrt(np.cov(chi2is)) for chi2is in chi2_list])
+
+            rdmeans[i] = (means / means[0] - 1)
+            rdcovs[i] = (covs / covs[0] - 1)
+
+        np.savez_compressed(os.path.join(outdir, 'run_sph_2b_1stbin_chi2_mean_cov_diff.npz'), rdmeans=rdmeans, rdcovs=rdcovs)
+
+
+    label = [r"$(\delta \delta)$", r"$(\delta \gamma_E)$", r"$(\gamma_E \gamma_E)$",
+             r"$(\delta \gamma_B)$",
+             r"$(\gamma_E \gamma_B)$",
+             r"$(\gamma_B \gamma_B)$"]
+
+
+    f, axs = plt.subplots(2, 1, figsize=(4, 4), sharex=True, gridspec_kw={'hspace': 0, 'wspace': 0})
+
+    X = np.arange(rdmeans.shape[0])
+    # axs[0].plot(X, np.abs(rdmeans[:, 0]), label='Sims.')
+    axs[0].plot(X, np.abs(rdmeans[:, 1]), c=DEFAULT_COLOR_CYCLE[1], label='NKA')
+    axs[0].plot(X, np.abs(rdmeans[:, 2]), c=DEFAULT_COLOR_CYCLE[2], label='Spin-0')
+
+    # axs[1].plot(X, np.abs(rdcovs[:, 0]), label='Sims.')
+    axs[1].plot(X, np.abs(rdcovs[:, 1]), c=DEFAULT_COLOR_CYCLE[1], label='NKA')
+    axs[1].plot(X, np.abs(rdcovs[:, 2]), c=DEFAULT_COLOR_CYCLE[2], label='Spin-0')
+
+    axs[0].set_yscale('log')
+    axs[1].set_yscale('log')
+
+    # axs[0].set_ylabel(r'$\frac{\langle \chi^2(An.) \rangle}{\langle \chi^2(Sims.) \rangle} - 1$')
+    # axs[1].set_ylabel(r'$\frac{\sigma_{\chi^2(An.)}}{\sigma_{\chi^2(Sims.)}} - 1$')
+    axs[0].set_ylabel(r'Relative mean diff.', fontsize=9)
+    axs[1].set_ylabel(r'Relative width diff.', fontsize=9)
+
+    axs[1].set_xticks(X)
+    axs[1].set_xticklabels(label, fontsize=9)
+
+    # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
+    axs[0].legend(loc=0, fontsize='9', frameon=False)
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'run_sph_2b_1stbin_chi2_mean_cov_diff.pdf')
+    plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
 
@@ -800,4 +929,4 @@ if __name__ == '__main__':
     chi2_Spin0_NKA_TTTEEE_full()
     foregrounds_cov_diag()
     corr_diff_2bins_diff_mask()
-
+    chi2_sph_1b_chi2_mean_cov_diff()
