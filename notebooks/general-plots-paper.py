@@ -809,10 +809,15 @@ def chi2_flat_TT_TE_EE_TB_EB_BB():
 ############################ Chi2 TTTEEE Full ################################
 ##############################################################################
 
-def chi2_NKA_TTTEEE_full():
-    chi2_list = np.load('../run_sph_2b_same_mask/full_covariance/run_sph_2b_same_mask_chi2_sims_th_TTTEEE_short_Full.npz')['arr_0']
+def chi2_NKA_TTTEEE_full(same_mask=False):
+    suffix = ''
+    if same_mask:
+        suffix = '_same_mask'
 
-    ell = np.loadtxt('../run_sph_2b_same_mask/run_sph_2b_same_mask_ells.txt')
+    chi2_list = np.load('../run_sph_2b{0}/full_covariance/run_sph_2b{0}_chi2_sims_th_TTTEEE_short_Full.npz'.format(suffix))['arr_0']
+
+    ell = np.loadtxt('../run_sph_2b{0}/run_sph_2b{0}_ells.txt'.format(suffix))
+
     lbins = ell
     lmax = (ell < 2*512).sum()
 
@@ -846,16 +851,20 @@ def chi2_NKA_TTTEEE_full():
 
     ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
-    fname = os.path.join(outdir, 'run_sph_2b_same_mask_NKA_TTTEEE_Full_chi2.pdf')
+    fname = os.path.join(outdir, 'run_sph_2b{}_NKA_TTTEEE_Full_chi2.pdf'.format(suffix))
     plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
 
-def chi2_Spin0_NKA_TTTEEE_full():
-    chi2_list = np.load('../run_sph_2b_same_mask/full_covariance/run_sph_2b_same_mask_chi2_sims_th_TTTEEE_short_Full.npz')['arr_0']
-    chi2_spin0 = np.load('../run_sph_2b_same_mask/full_covariance_spin0/run_sph_2b_same_mask_chi2_sims_th_TTTEEE_short_Full_spin0.npz')['arr_0'][1]
+def chi2_Spin0_NKA_TTTEEE_full(same_mask=False):
+    suffix = ''
+    if same_mask:
+        suffix = '_same_mask'
 
-    ell = np.loadtxt('../run_sph_2b_same_mask/run_sph_2b_same_mask_ells.txt')
+    chi2_list = np.load('../run_sph_2b{0}/full_covariance/run_sph_2b{0}_chi2_sims_th_TTTEEE_short_Full.npz'.format(suffix))['arr_0']
+    chi2_spin0 = np.load('../run_sph_2b{0}/full_covariance_spin0/run_sph_2b{0}_chi2_sims_th_TTTEEE_short_Full_spin0.npz'.format(suffix))['arr_0'][1]
+
+    ell = np.loadtxt('../run_sph_2b{0}/run_sph_2b{0}_ells.txt'.format(suffix))
     lbins = ell
     lmax = (ell < 2*512).sum()
 
@@ -893,7 +902,7 @@ def chi2_Spin0_NKA_TTTEEE_full():
 
     ax.legend(loc='upper right', fontsize='9', frameon=False)
     plt.tight_layout()
-    fname = os.path.join(outdir, 'run_sph_2b_same_mask_Spin0_NKA_TTTEEE_Full_chi2.pdf')
+    fname = os.path.join(outdir, 'run_sph_2b{}_Spin0_NKA_TTTEEE_Full_chi2.pdf'.format(suffix))
     plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
