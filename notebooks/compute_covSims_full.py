@@ -6,7 +6,7 @@ import sys
 # pylint: disable=C0103
 
 # prefix = 'run_sph_2b_same_mask'
-prefix = os.path.basename(sys.argv[1])
+prefix = os.path.basename(sys.argv[1].rstrip('/'))
 run_path = os.path.join('./simulations_outputs/', prefix, prefix)
 outdir = os.path.join('./simulations_outputs/', prefix, 'full_covariance')
 output_path = os.path.join(outdir, prefix)
