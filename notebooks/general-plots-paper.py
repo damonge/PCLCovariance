@@ -419,6 +419,73 @@ def corr_diff_2bins_same_mask():
     plt.close()
 
 ##############################################################################
+###################### 2bins corr diff (diff mask) ###########################
+##############################################################################
+
+def corr_diff_2bins_diff_mask2():
+    Cth = np.load('../run_sph_2b/full_covariance/run_sph_2b_covTh_TTTEEE_short_2bins.npz')['arr_0']
+    Csims = np.load('../run_sph_2b/full_covariance/run_sph_2b_covSims_TTTEEE_short_0001-20000.npz')['arr_0']
+
+    ell = np.loadtxt('../run_sph_2b/run_sph_2b_ells.txt')
+
+    CorrSims = Csims/np.sqrt(np.diag(Csims)[:, None] * np.diag(Csims)[None, :])
+    CorrTh = Cth/np.sqrt(np.diag(Cth)[:, None] * np.diag(Cth)[None, :])
+
+
+    labels = [r'$\delta_1$', r'$\gamma_{E,1}$', r'$\delta_2$', r'$\gamma_{E,2}$']
+    labels_cov = []
+    for i in range(4):
+        for j in range(i, 4):
+            labels_cov.append(labels[i] + labels[j])
+
+
+    f, ax = plt.subplots(1, 1, figsize=(8, 8))
+    nlbins = int(CorrSims.shape[0] / 10)
+    cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    f.colorbar(cb, cax=cax)
+    for i in range(1, 10):
+        ax.plot([0, 10*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
+        ax.plot([i*nlbins, i*nlbins], [0, 10*nlbins-1], 'k-', lw=0.5)
+
+    ticks = [(i + 0.5) * nlbins for i in range(10)]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(labels_cov)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(labels_cov)
+
+    fname = os.path.join(outdir, 'run_sph_2b_NKA_diff_corr.pdf')
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
+    f, ax = plt.subplots(1, 1, figsize=(4, 4))
+    mat = (CorrTh - CorrSims).reshape((10, nlbins, 10, nlbins))
+    ixgrid = np.ix_([2, 3, 5, 6], [2, 3, 5, 6])
+    mat = mat.swapaxes(1, 2)[ixgrid].swapaxes(1, 2).reshape((4 * nlbins, 4 * nlbins))
+    cb = ax.imshow(mat, vmin=-0.02, vmax=0.02)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cbar = f.colorbar(cb, cax=cax)
+    cbar.ax.tick_params(labelsize=8)
+    for i in range(1, 4):
+        ax.plot([0, 4*nlbins-1], [i*nlbins, i*nlbins], 'k-', lw=0.5)
+        ax.plot([i*nlbins, i*nlbins], [0, 4*nlbins-1], 'k-', lw=0.5)
+
+    ticks = [(i + 0.5) * nlbins for i in range(4)]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(np.array(labels_cov)[[2, 3, 5, 6]], fontsize=8)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(np.array(labels_cov)[[2, 3, 5, 6]], fontsize=8)
+
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'run_sph_2b_NKA_diff_corr_short2.pdf')
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
+##############################################################################
 ####################### 2bins corr diff (diff mask) ##########################
 ##############################################################################
 
@@ -950,18 +1017,19 @@ def eigv_sph_1bin():
     plt.close()
 
 if __name__ == '__main__':
-    # pz()
-    # masks()
-    # foregrounds()
-    # chi2_foregrounds()
-    # # corr_diff_2bins_same_mask()
-    # # compare_cls_1bin()
-    # cls_2b()
-    # chi2_sph_TT_TE_EE()
-    # chi2_flat_TT_TE_EE_TB_EB_BB()
-    # chi2_NKA_TTTEEE_full()
-    # eigv_sph_1bin()
-    chi2_Spin0_NKA_TTTEEE_full()
-    # foregrounds_cov_diag()
-    # corr_diff_2bins_diff_mask()
-    # chi2_sph_1b_chi2_mean_cov_diff()
+    pz()
+    masks()
+    foregrounds()
+    chi2_foregrounds()
+    corr_diff_2bins_same_mask()
+    # compare_cls_1bin()
+    cls_2b()
+    chi2_sph_TT_TE_EE()
+    chi2_flat_TT_TE_EE_TB_EB_BB()
+    chi2_NKA_TTTEEE_full()
+    eigv_sph_1bin()
+    chi2_Spin0_NKA_TTTEEE_full(True)
+    foregrounds_cov_diag()
+    corr_diff_2bins_diff_mask()
+    chi2_sph_1b_chi2_mean_cov_diff()
+    corr_diff_2bins_diff_mask2()
