@@ -71,7 +71,7 @@ cov_mat[i, :, j, :] = cov_arr
 cov_mat[j, :, i, :] = cov_arr.swapaxes(1, 2)
 cov_mat = cov_mat.reshape((len(cl_bins) * l_bpw, len(cl_bins) * l_bpw))
 
-fname = out_run_path + '_covTh_TTTEEE_2bins_same_mask_spin0.npz'
+fname = out_run_path + '_covTh_TTTEEE_2bins_spin0.npz'
 np.savez_compressed(fname, cov_mat)
 
 ####################### Short version #############################
@@ -82,7 +82,7 @@ cov_mat[i, :, j, :] = cov_arr[:, :lmax, :lmax]
 cov_mat[j, :, i, :] = cov_arr[:, :lmax, :lmax].swapaxes(1, 2)
 cov_mat = cov_mat.reshape((len(cl_bins) * lmax, len(cl_bins) * lmax))
 
-fname = out_run_path + '_covTh_TTTEEE_short_2bins_same_mask_spin0.npz'
+fname = out_run_path + '_covTh_TTTEEE_short_2bins_spin0.npz'
 np.savez_compressed(fname, cov_mat)
 
 # cov_mat = np.empty((len(cl_bins), len(cl_bins), lmax, lmax))
