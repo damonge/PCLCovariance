@@ -35,7 +35,10 @@ lTh = f['ls']
 clTh = (f['cls'] + f['nls'])
 clTh_all = (f['cls'] + f['nls'])[np.triu_indices(f['cls'].shape[0])]
 
-fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph1.fits"]
+if 'same_mask' in prefix:
+    fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph1.fits"]
+else:
+    fmasks = ["data/mask_lss_sph1.fits", "data/mask_lss_sph2.fits"]
 
 mask_lss_ar = []
 
