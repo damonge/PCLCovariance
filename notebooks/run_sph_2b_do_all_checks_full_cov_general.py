@@ -21,7 +21,7 @@ ells = np.loadtxt(run_path + '_ells.txt')
 lmax = (ells < 2*512).sum()
 
 CovSims_path = output_path + '_covSims_TTTEEE_short_0001-20000.npz'
-CovTh_path = output_path + '_covTh_TTTEEE_short_2bins_same_mask.npz'
+CovTh_path = output_path + '_covTh_TTTEEE_short_2bins.npz'
 
 CovSims_Full = np.load(CovSims_path)['arr_0']
 CovTh_Full = np.load(CovTh_path)['arr_0']
