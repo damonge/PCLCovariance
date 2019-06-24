@@ -553,7 +553,18 @@
       \end{equation}
       where $n_\Omega$ is the mean number density of galaxies in units of sterad$^{-2}$ (see below), and $\sigma_\gamma=0.28$ is the intrinsic shape scatter per ellipticity component.
 
-      We consider the case of auto- and cross-correlations between all fields in two redshift bins, with redshift distributions modelled as Gaussians with width $\sigma_z=0.13$ centered around redshifts $0.75$ and $0.95$, with number densities $n_\Omega=7.5\,{\rm arcmin}^{-2}$. The corresponding redshift distributions $p_z(z)$ are shown in Figure \ref{fig:pz}. For simplicity we use a constant bias $b(z)=1$. For these specifications, we generate signal power spectra using the Core Cosmology Library ({\tt CCL} \cite{2019ApJS..242....2C}) for cosmological parameters $(\Omega_c,\Omega_b,h,A_s,n_s)=(0.27,0.045,0.67,2.1\times10^{-9},0.96)$. The resulting non-zero signal and noise power spectra are shown in Fig. \ref{fig:cl-2bins}.
+      We consider the case of auto- and cross-correlations between all fields
+      in two redshift bins, with redshift distributions modelled as Gaussians
+      with width $\sigma_z=0.13$ centered around redshifts $0.75$ and $0.95$,
+      with number densities $n_\Omega=7.5\,{\rm arcmin}^{-2}$. The
+      corresponding redshift distributions $p_z(z)$ are shown in Figure
+      \ref{fig:pz}. For simplicity we use a constant bias $b(z)=1$. For these
+      specifications, we generate signal power spectra using the Core
+      Cosmology Library ({\tt CCL} \cite{2019ApJS..242....2C}) for
+      cosmological parameters
+      $(\Omega_c,\Omega_b,h,A_s,n_s)=(0.27,0.045,0.67,2.1\times10^{-9},0.96)$.
+      The resulting non-zero signal and noise power spectra are shown in
+      Figure~\ref{fig:cl-2bins}.
 
       After generating a set of Gaussian maps, we mask them making use of a realistic sky mask. This mask has three main components: a cut in declination based on the expected sky coverage of LSST \cite{2014SPIE.9150E..15D}, a more conservative Galactic cut using the dust reddening data from \cite{1998ApJ...500..525S} and a set of 100 randomly positioned holes with a radius of 1 degree. To explore the case of cross-correlations between fields with different masks, we generated two masks for the two redshift bins above, consisting of two different sets of random holes. These masks are shown in Figure \ref{fig:mask}.
 
@@ -562,7 +573,18 @@
         \item {\bf Large-scale contaminants:} Gaussian random maps with a red spectrum of the form $C_\ell\propto (\ell+1)^\beta$, where $\beta$ is a random number chosen within the range $\beta\in(-1,-3)$.
         \item {\bf Small-scale contaminants:} Gaussian random maps with a flat spectrum $C_\ell={\rm const.}$
       \end{itemize}
-      In both cases we fixed the amplitude of the contaminant power spectrum such that it would yield a $10\%$ contamination in the data power spectrum at $\ell=400$. For spin-2 fields, we assumed the same power spectrum for $E$ and $B$ modes, with no cross-correlation between them. The resulting contaminant power spectra are shown in Figure \ref{fig:clcont}. When exploring the effects of mode deprojection, we generate 100 contaminant maps of both types and add them to each simulated realization. We then deproject the full set of 100 contaminant templates from the simulated maps and compute the corresponding unbiased power spectra. Note that our fiducial results do not include the effects of mode deprojection. These are discussed separately.
+      In both cases, we fixed the amplitude of the contaminant power spectrum
+      such that it would yield a $10\%$ contamination in the data power
+      spectrum at $\ell=400$. For spin-2 fields, we assumed the same power
+      spectrum for $E$ and $B$ modes, with no cross-correlation between them.
+      The resulting contaminant power spectra are shown in Figure
+      \ref{fig:clcont}. When exploring the effects of mode deprojection, we
+      generated 100 contaminant maps of both types and added them to each
+      simulated realization. We then deprojected the full set of 100
+      contaminant templates from the simulated maps and computed the
+      corresponding unbiased power spectra. Note that, in what follows, our
+      fiducial results do not include the effects of mode deprojection. These
+      are discussed separately.
 
       For our fiducial results, we generated a set of 20,000 random simulations. This number was chosen in order to recover the covariance matrix for all possible auto- and cross-correlations with sufficient accuracy. All simulations were generated as {\tt HEALPix} maps with resolution $N_{\rm side}=512$. We then used {\tt NaMaster} to compute all possible power spectra for each simulation using narrow bandpowers of width $\Delta\ell=3$ from $\ell=2$ to $\ell=1023$. Finally, we used the power spectra from the simulations to estimate the sample covariance matrix
       \begin{equation}
