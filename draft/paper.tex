@@ -664,7 +664,7 @@
           has been included (dashed red). The distribution extracted from the
           simulation follows the theoretical expectation almost perfectly in
           all cases. In the cases of $\delta\times\gamma_E$ and
-          $\gamma_E\times\gamma_E$ we observe small shifts in the peak
+          $\gamma_E\times\gamma_E$, we observe small shifts in the peak
           $\chi^2$, of $\sim2$-$4\%$, while their width is recovered
           accurately (a difference $\lesssim 2\%$). We will show that these
           differences are due to the inaccuracy of the analytical
@@ -689,21 +689,62 @@
         \caption{Diagonal of the covariance matrix estimated from simulations without contaminants (solid blue), with 200 contaminants deprojected (dashed orange) and the NKA estimator (solid green). The differences between the simulated cases are significantly smaller than those associated with the NKA estimator. The NKA method is therefore equally valid to approximate the covariance even in the presence of contaminant deprojection.}
         \label{fig:diag_conts}
       \end{figure}
-      In order to quantify the validity of our analytical approximations, we need to compare the NKA covariance with the sample covariance estimated from the simulations. However, comparing two matrices is not as straightforward as comparing their matrix elements one by one. The covariance between far-away bandpowers is expected to be very close to zero, and therefore a direct comparison of those elements would easily yield large relative differences simply due to the statistical noise in the sample covariance matrix. We will therefore quantify the differences between the different covariances making use of scalar quantities formed from them. The impact of the analytical approximations on the final parameter constraints will then be described in detail in Section \ref{ssec:results.cosmo}.
+      In order to quantify the validity of our analytical approximations, we need to compare the NKA covariance with the sample covariance estimated from the simulations. However, comparing two matrices is not as straightforward as comparing their elements one by one. The covariance between far-away bandpowers is expected to be very close to zero, and therefore a direct comparison of those elements would easily yield large relative differences simply due to the statistical noise in the sample covariance matrix. We will therefore quantify the differences between the different covariances making use of scalar quantities formed from them. The impact of the analytical approximations on the final parameter constraints will then be described in detail in Section \ref{ssec:results.cosmo}.
       
-      As a first test to quantify the differences between covariance matrices, we compute the relative difference between their eigenvalues. This is shown in Fig. \ref{fig:eigv_1bin} for a data vector combining all auto- and cross-correlations between $\delta$ and $\gamma_E$ for a single redshift bin. The eigenvalues of both matrices are roughly similar, with relative differences of about $5\%$. The figure also shows the eigenvalues of the covariance matrix estimated using the Spin-0 approximation, which achieves a similar level of precision (even marginally higher in some cases).
+      As a first test to quantify the differences between covariance matrices,
+      we compute the relative difference between their eigenvalues. This is
+      shown in Figure~\ref{fig:eigv_1bin} for a data vector combining all auto- and cross-correlations between $\delta$ and $\gamma_E$ for a single redshift bin. The eigenvalues of both matrices are roughly similar, with relative differences of about $5\%$. The figure also shows the eigenvalues of the covariance matrix estimated using the Spin-0 approximation, which achieves a similar level of precision (even marginally higher in some cases).
 
       Another scalar quantity that can be used to compare different covariances is the $\chi^2$. For a given random data vector ${\bf d}$ with mean ${\bf m}$ and covariance matrix ${\rm Cov}$, this is given by
       \begin{equation}
         \chi^2=\left({\bf d}-{\bf m}\right)^T\cdot{\rm Cov}^{-1}\cdot\left({\bf d}-{\bf m}\right).
       \end{equation}
-      We compute this quantity for a data vector ${\bf d}$ composed of different auto- and cross-correlations for each of the 20,000 Gaussian simulations, with ${\bf m}$ given by the mean over all simulations and different choices of covariance matrix. Figure \ref{fig:chi2_1bin} shows the distribution of $\chi^2$ values for the three non-zero power spectra in the case of a single bin: $\delta$-$\delta$, $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$. The histograms show the distribution for the sample covariance matrix (blue), and the analytical NKA and Spin-0 estimators (orange and green respectively). We additionally plot the theoretical $\chi^2$ distribution under the assumption that the underlying data vector is Gaussianly distributed (red dashed lines). In the simplest case of purely spin-0 quantities (leftmost panel), we find an excellent agreement between the different distributions. In the cases involving the spin-2 fields, we see noticeable differences between the distributions found with the sample covariance and the approximate ones.
-      These differences are small, corresponding to less of a $2$ and $4\%$ shift in the mean $\chi^2$ for the $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$ cases respectively, and a negligible variation in the width of the distributions. We therefore expect these differents to have a negligible effect on the posterior parameter distributions, as we show explicitly in Section \ref{ssec:results.cosmo}. The fact that these differences appear only for power spectra involving spin-2 quantities indicate that the NKA and spin-0 methods are imperfect at describing the additional mode coupling caused in the presence of a mask for higher-spin fields. This is rather obvious in the case of the spin-0 approximation but, interestingly, we find that the NKA and Spin-0 predictions yield results that are almost indistinguishable from each other. We therefore conclude that the additional approximation made in the NKA method for spin-2 fields -- neglecting the spatial derivatives of the mask -- is effectively equivalent to ignoring the spin nature of the fields involved. For completeness, Figure \ref{fig:chi2_2bins} shows the distribution of $\chi^2$ values for a data vector composed of all possible auto- and cross-correlations of $\delta$ and $\gamma_E$ for the case of two redshift bins, where similar conclusions hold.
+      We compute this quantity for a data vector ${\bf d}$ composed of
+      different auto- and cross-correlations for each of the 20,000 Gaussian
+      simulations, with ${\bf m}$ given by the mean over all simulations and
+      different choices of covariance matrix. Figure \ref{fig:chi2_1bin} shows
+      the distribution of $\chi^2$ values for the three non-zero power spectra
+      in the case of a single bin: $\delta$-$\delta$, $\delta$-$\gamma_E$ and
+      $\gamma_E$-$\gamma_E$. The histograms show the distribution for the
+      sample covariance matrix (blue), and the analytical NKA and Spin-0
+      estimators (orange and green, respectively). We additionally plot the theoretical $\chi^2$ distribution under the assumption that the underlying data vector is Gaussianly distributed (red dashed lines). In the simplest case of purely spin-0 quantities (leftmost panel), we find an excellent agreement between the different distributions. In the cases involving the spin-2 fields, we see noticeable differences between the distributions found with the sample covariance and the approximate ones.
+      These differences are small, corresponding to less of a $2$ and $4\%$
+      shift in the mean $\chi^2$ for the $\delta$-$\gamma_E$ and
+      $\gamma_E$-$\gamma_E$ cases, respectively, and a negligible variation in
+      the width of the distributions. We therefore expect these differents to
+      have a negligible effect on the posterior parameter distributions, as we
+      show explicitly in Section \ref{ssec:results.cosmo}. The fact that these
+      differences appear only for power spectra involving spin-2 quantities
+      indicate that the NKA and spin-0 methods are imperfect at describing the
+      additional mode coupling caused in the presence of a mask for
+      higher-spin fields. This is rather obvious in the case of the spin-0
+      approximation but, interestingly, we find that the NKA and Spin-0
+      predictions yield results that are almost indistinguishable from each
+      other. We therefore conclude that the additional approximation made in
+      the NKA method for spin-2 fields -- neglecting the spatial derivatives
+      of the mask -- is effectively equivalent to ignoring the spin nature of
+      the fields involved \textcolor{red}{for the $\delta$ and $\gamma_E$ cases. The B
+        modes break this similarity and worsen the spin-0 approximation,
+        yielding, in the most extreme case ($\gamma_b$- $\gamma_b$), around an
+        order of magnitude worse results than the NKA method}. For
+        completeness, Figure \ref{fig:chi2_2bins} shows the distribution of
+        $\chi^2$ values for a data vector composed of all possible auto- and
+        cross-correlations of $\delta$ and $\gamma_E$ for the case of two
+        redshift bins, where similar conclusions hold.
 
       We have also explored the impact of contaminant deprojection on the different covariance matrix estimates. The loss of modes due to deprojection can potentially increase the variance of the power spectrum estimates, affecting the accuracy with which an analytical estimator would be able to recover the covariance. Figure \ref{fig:diag_conts} shows the diagonal of the covariance matrix for the $\delta$-$\delta$,      $\delta$-$\gamma_E$ and $\gamma_E$-$\gamma_E$ power spectra. Each panel displays the diagonal for the sample covariance matrix estimated from simulations without contaminants or contaminant deprojection (blue
       line), the sample covariance from simulations with contaminants and contaminant deprojection (dashed orange line) and for the NKA covariance   (green line). We see that the power spectrum uncertainties are almost indistinguishable with or without deprojection, and that those relative differences are much smaller than the differences between the sample covariance and the NKA estimator. We therefore conclude that, except in the case where a very large set of contaminant maps are deprojected (comparable with the number of unmasked pixels in the map), the analytical approximation to the covariance matrix should be as accurate as in the absence of contaminants (i.e. accurate enough).
       
-      Figure \ref{fig:diag_conts} serves also to illustrate another important point. In all our tests we find that the largest differences between the sample and NKA covariances occur on large scales. For $\delta$-$\delta$ correlations, the effect is limited to the first few multipoles ($\ell\lesssim10$), while for $\gamma_E$-$\gamma_E$ we are only able to recover the sample covariance errors within $5\%$ for $\ell\gtrsim40$. This is the main source of the small mismatch observed in Fig. \ref{fig:chi2_1bin}. Note however, that most of the cosmological information is obtained from the higher multipoles, due to their higher statistical weight, and as we will show in the next section, the effect on the final parameter constraints is negligible. If accurate covariances bars are needed on these large scales for cosmic shear, they can be estimated alternatively making use of fast, low resolution simulations (e.g. {\tt HEALPix} $N_{\rm side}=64$ maps).
+      Figure \ref{fig:diag_conts} serves also to illustrate another important
+      point. In all our tests we find that the largest differences between the
+      sample and NKA covariances occur on large scales. For $\delta$-$\delta$
+      correlations, the effect is limited to the first few multipoles
+      ($\ell\lesssim10$), while for $\gamma_E$-$\gamma_E$ we are only able to
+      recover the sample covariance errors within $5\%$ for $\ell\gtrsim40$.
+      This is the main source of the small mismatch observed in
+      Figure~\ref{fig:chi2_1bin}. Note, however, that most of the cosmological
+      information is obtained from the higher multipoles, due to their higher
+      statistical weight, and, as we will show in the next section, the effect on the final parameter constraints is negligible. If accurate covariances bars are needed on these large scales for cosmic shear, they can be estimated alternatively making use of fast, low resolution simulations (e.g. {\tt HEALPix} $N_{\rm side}=64$ maps).
 
     \subsection{Impact on parameter estimation}\label{ssec:results.cosmo}
       \begin{figure}
