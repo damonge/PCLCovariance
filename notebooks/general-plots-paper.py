@@ -1028,7 +1028,7 @@ if __name__ == '__main__':
     chi2_flat_TT_TE_EE_TB_EB_BB()
     chi2_NKA_TTTEEE_full()
     eigv_sph_1bin()
-    chi2_Spin0_NKA_TTTEEE_full(True)
+    chi2_Spin0_NKA_TTTEEE_full()
     foregrounds_cov_diag()
     corr_diff_2bins_diff_mask()
     chi2_sph_1b_chi2_mean_cov_diff()
