@@ -872,6 +872,55 @@ def chi2_flat_TT_TE_EE_TB_EB_BB():
     # plt.show()
     plt.close()
 
+    ############## Plot mean & cov rel dev #################
+
+    rdmeans = np.empty((6, chi2_TT_ar.shape[0]))
+    rdcovs = np.empty((6, chi2_TT_ar.shape[0]))
+    for i, chi2_list in enumerate([chi2_TT_ar, chi2_TE_ar, chi2_EE_ar, chi2_TB_ar, chi2_EB_ar, chi2_BB_ar]):
+        means = np.mean(chi2_list, axis=1)
+        covs = np.array([np.sqrt(np.cov(chi2is)) for chi2is in chi2_list])
+
+        rdmeans[i] = (means / means[0] - 1)
+        rdcovs[i] = (covs / covs[0] - 1)
+
+
+
+    label = [r"$(\delta \delta)$", r"$(\delta \gamma_E)$", r"$(\gamma_E \gamma_E)$",
+             r"$(\delta \gamma_B)$",
+             r"$(\gamma_E \gamma_B)$",
+             r"$(\gamma_B \gamma_B)$"]
+
+
+    f, axs = plt.subplots(2, 1, figsize=(4, 4), sharex=True, gridspec_kw={'hspace': 0, 'wspace': 0})
+
+    X = np.arange(rdmeans.shape[0])
+    # axs[0].plot(X, np.abs(rdmeans[:, 0]), label='Sims.')
+    axs[0].plot(X, 100 * np.abs(rdmeans[:, 1]), c=DEFAULT_COLOR_CYCLE[1], label='NKA')
+    axs[0].plot(X, 100 * np.abs(rdmeans[:, 2]), c=DEFAULT_COLOR_CYCLE[2], label='Spin-0')
+
+    # axs[1].plot(X, np.abs(rdcovs[:, 0]), label='Sims.')
+    axs[1].plot(X, 100 * np.abs(rdcovs[:, 1]), c=DEFAULT_COLOR_CYCLE[1], label='NKA')
+    axs[1].plot(X, 100 * np.abs(rdcovs[:, 2]), c=DEFAULT_COLOR_CYCLE[2], label='Spin-0')
+
+    # axs[0].set_yscale('log')
+    # axs[1].set_yscale('log')
+
+    # axs[0].set_ylabel(r'$\frac{\langle \chi^2(An.) \rangle}{\langle \chi^2(Sims.) \rangle} - 1$')
+    # axs[1].set_ylabel(r'$\frac{\sigma_{\chi^2(An.)}}{\sigma_{\chi^2(Sims.)}} - 1$')
+    axs[0].set_ylabel(r'Relative mean diff. [%]', fontsize=9)
+    axs[1].set_ylabel(r'Relative width diff. [%]', fontsize=9)
+
+    axs[1].set_xticks(X)
+    axs[1].set_xticklabels(label, fontsize=9)
+
+    # axs[0].legend(loc='center right', fontsize='9') # , frameon=False)
+    axs[0].legend(loc=0, fontsize='9', frameon=False)
+    plt.tight_layout()
+    fname = os.path.join(outdir, 'run_chi2_mean_cov_diff.pdf')
+    plt.savefig(fname, dpi=DPI)
+    # plt.show()
+    plt.close()
+
 ##############################################################################
 ############################ Chi2 TTTEEE Full ################################
 ##############################################################################
