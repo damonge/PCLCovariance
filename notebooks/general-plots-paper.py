@@ -991,7 +991,6 @@ def chi2_Spin0_NKA_TTTEEE_full(same_mask=False):
     print("Mean : {}".format(means))
     print("Width : {}".format(covs))
     print("Relative mean diff: {}".format(means/means[0] - 1))
-    print("Relative mean diff: {}".format(means/means[0] - 1))
     print("Relative width diff: {}".format(covs/covs[0] - 1))
     Ns = chi2_list.shape[1]
     Nl = lmax * 10
