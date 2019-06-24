@@ -378,17 +378,19 @@
       We have reduced the problem of computing the covariance in Eq. \ref{eq:covar_general} to the problem of computing the coupling coefficients \ref{eq:covar_coupling} entering Eq. \ref{eq:covar_efstathiou}, and we have now shown that there are only 3 independent coefficients, given by Eq. \ref{eq:covar_coupling_J}. In order to simplify the calculation further, it is now useful to inspect these results for the specific case of fields defined on the sphere.
     
       \subsubsection{Covariances for curved skies}
-        As described in Section \ref{ssec:theory.pcl}, in the curved-sky estimator it is common to first average over the harmonic number $m$ as part of the bandpower binning operation. Let us therefore define
+        As described in Section \ref{ssec:theory.pcl}, in the curved-sky
+        estimator it is common to first average over the harmonic number $m$
+        as part of the bandpower binning operation. Let us, therefore, define
         \begin{equation}
           \tilde{C}^{a_\alpha b_\beta}_\ell=\frac{1}{2\ell+1}\sum_{m=-\ell}^\ell (\tilde{a}_\alpha)_{\ell m} (\tilde{b}_\beta)_{\ell m}^*.
         \end{equation}
-        The covariance of these objects under the approximation in Eq. \ref{eq:covar_efstathiou}, can be computed as:
+        The covariance of these objects, under the approximation in Eq. \ref{eq:covar_efstathiou}, can be computed as:
         \begin{equation}\label{eq:cov_sph}
           {\rm Cov}\left(\tilde{C}^{a_\alpha b_\beta}_\ell,\tilde{C}^{f_\phi g_\gamma}_{\ell'}\right) = C^{a_{\alpha'} f_{\phi'}}_{(\ell}C^{b_{\beta'} g_{\gamma'}}_{\ell')}\,^{af}_{bg}\mathcal{W}^{\alpha\phi,\alpha'\phi'}_{\beta\gamma,\beta'\gamma'}(\ell,\ell')+\left((g,\gamma)\leftrightarrow(f,\phi)\right),
         \end{equation}
         where we have defined the symbols
         \begin{equation}
-          ^{af}_{bg}\mathcal{W}^{\alpha\phi,\alpha'\phi'}_{\beta\gamma,\beta'\gamma'}(\ell,\ell')=\equiv\sum_{m=-\ell}^\ell \sum_{m'=-\ell'}^{\ell'}\frac{\,^{af}W^{\alpha\phi,\alpha'\phi'}_{{\bf l}{\bf l}'}\left(\,^{bg}W^{\beta\gamma,\beta'\gamma'}_{{\bf l}{\bf l}'}\right)^*}{(2\ell+1)(2\ell'+1)}.
+          ^{af}_{bg}\mathcal{W}^{\alpha\phi,\alpha'\phi'}_{\beta\gamma,\beta'\gamma'}(\ell,\ell')\equiv\sum_{m=-\ell}^\ell \sum_{m'=-\ell'}^{\ell'}\frac{\,^{af}W^{\alpha\phi,\alpha'\phi'}_{{\bf l}{\bf l}'}\left(\,^{bg}W^{\beta\gamma,\beta'\gamma'}_{{\bf l}{\bf l}'}\right)^*}{(2\ell+1)(2\ell'+1)}.
         \end{equation}
         These quantities involve terms of the form:
         \begin{equation}
