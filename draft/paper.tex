@@ -482,7 +482,10 @@
       \begin{enumerate}
         \item The narrow-kernel approximation (labelled {\bf NKA} here), described in the previous sections. This approximation assumes that the support of the harmonic-space masks (represented by the mode-coupling coefficients in e.g. Eq. \ref{eq:mcms}) is small compared to the variation of the true power spectrum with $\ell$. Additionally, it neglects all derivatives of the sky mask when accounting for the spin nature of the fields involved.
         \item The {\bf spin-0} approximation corresponds to a simplified version of the NKA in which the spin nature of all fields involved is completely ignored, and all fields, including the $E$- and $B$-mode components of a spin-2 field, are treated as spin-0 quantities.
-        \item The mode-counting approximation (labelled {\bf MC} here), commonly known as the {\sl Knox formula} \cite{1995PhRvD..52.4307K}, which applies the result found for full-sky observations (Eq. \ref{eq:cov_naive}) to masked fields corrected by an overall factor that accounts to the loss of modes due to the sky mask. In this case, the covariance is simply given by:
+        \item The mode-counting approximation (labelled {\bf MC} here),
+          commonly known as the {\sl Knox formula} \cite{1995PhRvD..52.4307K},
+          which applies the result found for full-sky observations (Eq.
+          \ref{eq:cov_naive}) to masked fields, corrected by an overall factor that accounts to the loss of modes due to the sky mask. In this case, the covariance is simply given by:
         \begin{equation}\label{eq:cov_naive_bpw}
           {\rm Cov}\left(C^{ab}_q,C^{cd}_{q'}\right)=\delta^K_{qq'}\frac{C^{ad}_qC^{bc}_q+C^{ac}_qC^{bd}_q}{(2\ell_q+1)\,f_{\rm sky}\,N_q},
         \end{equation}
