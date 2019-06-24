@@ -826,9 +826,26 @@
         is of about $\lesssim 2\%$ for all cases.}
       \label{fig:chi2_1bin_flat}
     \end{figure}
-    We have repeated the analysis described in Section \ref{sec:results} on flat-sky realizations, making use of the flat-sky implementation of {\tt NaMaster}. We generate Gaussian realizations of the galaxy overdensity and shear maps making use of flat-sky extensions of the methods described in Section \ref{ssec:results.sims}. In this case we use a high-resolution mask constructed from the bright-object mask distributed with the first data release of the HSC collaboration \cite{2018PASJ...70S...4A} for the VVDS field, which is shown in Fig. \ref{fig:mask_flat}. 
+    We have repeated the analysis described in Section \ref{sec:results} on
+    flat-sky realizations, making use of the flat-sky implementation of {\tt
+      NaMaster}. We generate Gaussian realizations of the galaxy overdensity
+    and shear maps making use of flat-sky extensions of the methods described
+    in Section \ref{ssec:results.sims}. In this case we use a high-resolution
+    mask constructed from the bright-object mask distributed with the first
+    data release of the HSC collaboration \cite{2018PASJ...70S...4A} for the
+    VVDS field, which is shown in Figure~\ref{fig:mask_flat}. 
     
-    We find similar levels of accuracy in the NKA and spin-0 estimators compared to the curved-sky case. The higher resolution and smaller area of these simulations allow us to focus on the small-scale galaxy clustering and lensing power spectra, covering the range of multipoles $\ell\in(120,17640)$ in constant bandpowers of width $\Delta \ell=240$. On these small scales, the shear power spectrum is more dominated by noise (e.g. see Fig. \ref{fig:cl-2bins}), and therefore there is roughly the same power in $E$ and $B$ modes. This reduces the sensitivity of the method to an inaccurate treatment of $E/B$ leakage, and the agreement between the sample covariance matrix and the NKA estimator improves significantly. This can be seen in Fig. \ref{fig:chi2_1bin_flat}, which shows the $\chi^2$ distributions for all possible power spectra (including those including $B$ modes) in the case of a single redshift bin. In all cases we find a good agreement between the $\chi^2$ distributions derived from all covariance matrix estimates (sample covariance, NKA and spin-0 in blue, orange and green respectively), which also accurately follow the expected $\chi^2$ distribution for the corresponding number of degrees of freedom (red dashed line).
+    We find similar levels of accuracy in the NKA and spin-0 estimators
+    compared to the curved-sky case. The higher resolution and smaller area of
+    these simulations allow us to focus on the small-scale galaxy clustering
+    and lensing power spectra, covering the range of multipoles
+    $\ell\in(120,17640)$ in constant bandpowers of width $\Delta \ell=240$. On
+    these small scales, the shear power spectrum is more dominated by noise
+    (e.g. see Fig. \ref{fig:cl-2bins}), and therefore there is roughly the
+    same power in $E$ and $B$ modes. This reduces the sensitivity of the
+    method to an inaccurate treatment of $E/B$ leakage, and the agreement
+    between the sample covariance matrix and the NKA estimator improves
+    significantly. This can be seen in Figure~\ref{fig:chi2_1bin_flat}, which shows the $\chi^2$ distributions for all possible power spectra (including those including $B$ modes) in the case of a single redshift bin. In all cases we find a good agreement between the $\chi^2$ distributions derived from all covariance matrix estimates (sample covariance, NKA and spin-0 in blue, orange and green respectively), which also accurately follow the expected $\chi^2$ distribution for the corresponding number of degrees of freedom (red dashed line).
     
   \section{Software implementation}\label{app:namaster}
     In addition to the code functionality described in Section 3 of \cite{2019MNRAS.484.4127A}, we have now included the capability to estimate Gaussian covariance matrices using the NKA method. This functionality is structured around a {\tt python} class called {\tt NmtCovarianceWorkspace}. These objects are used to compute and store the covariance mode-coupling coefficients in Eqs. \ref{eq:coeff_cmcm} and \ref{eq:coeff_cmcm_flat}. They are initialized from two pairs of fields corresponding to the two power spectra for which the covariance is required. Once initialized, these coefficients can be reused for any other set of fields with the same combination of sky masks. {\tt NaMaster} then provides routines to estimate covariance matrix elements making use of the coupling coefficients stored in a {\tt NmtCovarianceWorkspace} object and best-guess power spectra for the fields involved using Eqs. \ref{eq:cov_sph} and \ref{eq:cov_flat}. Further details about the implementation and practical examples can be found in \url{https://namaster.readthedocs.io/en/latest/sample_covariance.html}.
