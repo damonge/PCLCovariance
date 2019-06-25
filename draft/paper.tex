@@ -47,56 +47,20 @@
 \emailAdd{david.alonso@physics.ox.ac.uk}
 \emailAdd{emilio.bellini@physics.ox.ac.uk}
 
-\abstract{The disconnected part of the power spectrum covariance matrix (also
-  known as the ``Gaussian'' covariance) is the dominant contribution on large
-  scales for galaxy clustering and weak lensing datasets. The presence of a
-  complicated sky mask causes non-trivial correlations between different
-  Fourier/harmonic modes, which must be accurately characterised in order to
-  obtain reliable cosmological constraints. This is particularly relevant for
-  galaxy survey data. Unfortunately, an exact calculation of these
-  correlations involve $O(\ell_{\rm max}^6)$ operations that become
-  computationally impractical very quickly. We present an implementation of
-  approximate methods to estimate the Gaussian covariance matrix of power
-  spectra involving spin-0 and spin-2 flat- and curved-sky fields, expanding
-  on existing algorithms. These methods achieve an $O(\ell_{\rm max}^3)$
-  scaling, which makes the computation of the covariance matrix as fast as the
-  computation of the power spectrum itself. We quantify the accuracy of these
-  methods on large-scale structure and weak lensing data, making use of a
-  large number of Gaussian but otherwise realistic simulations. We show that,
-  using the approximated covariance matrix, we are able to recover
-  the true posterior distribution of cosmological parameters to high accuracy. We also quantify the shortcomings of these methods, which become unreliable on the very largest scales, as well as for covariance matrix elements involving lensing $B$ modes. The algorithms presented here are implemented in the public code {\tt NaMaster} \url{https://github.com/LSSTDESC/NaMaster}.}
+\abstract{The disconnected part of the power spectrum covariance matrix (also known as the ``Gaussian'' covariance) is the dominant contribution on large scales for galaxy clustering and weak lensing datasets. The presence of a complicated sky mask causes non-trivial correlations between different Fourier/harmonic modes, which must be accurately characterised in order to obtain reliable cosmological constraints. This is particularly relevant for galaxy survey data. Unfortunately, an exact calculation of these correlations involves $O(\ell_{\rm max}^6)$ operations that become computationally impractical very quickly. We present an implementation of approximate methods to estimate the Gaussian covariance matrix of power spectra involving spin-0 and spin-2 flat- and curved-sky fields, expanding on existing algorithms. These methods achieve an $O(\ell_{\rm max}^3)$ scaling, which makes the computation of the covariance matrix as fast as the computation of the power spectrum itself. We quantify the accuracy of these methods on large-scale structure and weak lensing data, making use of a large number of Gaussian but otherwise realistic simulations. We show that, using the approximate covariance matrix, we are able to recover the true posterior distribution of cosmological parameters to high accuracy. We also quantify the shortcomings of these methods, which become unreliable on the very largest scales, as well as for covariance matrix elements involving cosmic shear $B$ modes. The algorithms presented here are implemented in the public code {\tt NaMaster} \url{https://github.com/LSSTDESC/NaMaster}.}
 
 \begin{document}
   \maketitle
   \flushbottom
 
   \section{Introduction}\label{sec:intro}
-    The two-point correlation of different fields projected on the celestial
-    sphere is one of the most common observables used in the analysis of large
-    datasets in astrophysics, from studies of the Cosmic Microwave Background
-    \citep{1995PhRvL..74.4369B,1997PhRvD..55.5895T,1998PhRvD..57.2117B,2001PhRvD..64f3001T,2002ApJ...567....2H,2003PhRvD..67b3001W}
-    to large-scale structure and weak lensing surveys
-    \cite{2000MNRAS.317L..23H,2001ApJ...555..547H,2001MNRAS.325.1603E,2011arXiv1112.5723H,2016MNRAS.456.1508K,2018MNRAS.476.1050B,2018arXiv181208182X,2019MNRAS.tmp.1446C,2019PASJ...71...43H}.
-    Using these two-point functions, one achieves a high level of data
-    compression (with respect to the size of the raw datasets -- time-ordered
-    data, images or catalogs). They can also be directly used to constrain
-    cosmological and astrophysical parameters assuming that one can model
-    their likelihood. This is usually done by assuming that the two-point
-    functions are Gaussianly distributed, which is often a good approximation
-    due to the central limit theorem
-    \cite{2008PhRvD..77j3013H,2018MNRAS.477.4879S}. In this case, the only
-    obstacle that remains is being able to estimate the covariance matrix of a
-    set of two-point correlators. Since the form of this covariance directly
-    affects the posterior parameter uncertainties, a precise determination of
-    it is of paramount importance. In large-scale structure experiments, this has often been resolved by making use of one's own data through resampling techniques \cite{tukey1958,1984MNRAS.210P..19B,1993ApJ...406L..47H,2002ApJ...571..172Z,2016arXiv160600233E}, or by generating a large number of mock realizations \cite{2013MNRAS.428.1036M,2018MNRAS.479...94A,2019MNRAS.485.2806B}. With the advent of the larger current and future surveys, the increasing size of the data vector and of the volume to be simulated has made this solution impractical, and fully analytical and hybrid estimators are now being used.
+    The two-point correlation of different fields projected on the celestial sphere is one of the most common observables used in the analysis of large datasets in astrophysics, from studies of the Cosmic Microwave Background \citep{1995PhRvL..74.4369B,1997PhRvD..55.5895T,1998PhRvD..57.2117B,2001PhRvD..64f3001T,2002ApJ...567....2H,2003PhRvD..67b3001W} to large-scale structure and weak lensing surveys \cite{2000MNRAS.317L..23H,2001ApJ...555..547H,2001MNRAS.325.1603E,2011arXiv1112.5723H,2016MNRAS.456.1508K,2018MNRAS.476.1050B,2018arXiv181208182X,2019MNRAS.tmp.1446C,2019PASJ...71...43H}. Using these two-point functions, one achieves a high level of data compression (with respect to the size of the raw datasets -- time-ordered data, images or catalogs). They can also be directly used to constrain cosmological and astrophysical parameters assuming that one can model their likelihood. This is usually done by assuming that the two-point functions are Gaussianly distributed, which is often a good approximation due to the central limit theorem \cite{2008PhRvD..77j3013H,2018MNRAS.477.4879S}. In this case, the only obstacle that remains is being able to estimate the covariance matrix of a set of two-point correlators. Since the form of this covariance directly affects the posterior parameter uncertainties, a precise determination of it is of paramount importance. In large-scale structure experiments, this has often been resolved by making use of one's own data through resampling techniques \cite{tukey1958,1984MNRAS.210P..19B,1993ApJ...406L..47H,2002ApJ...571..172Z,2016arXiv160600233E}, or by generating a large number of mock realizations \cite{2013MNRAS.428.1036M,2018MNRAS.479...94A,2019MNRAS.485.2806B}. With the advent of the larger current and future surveys, the increasing size of the data vector and of the volume to be simulated has made this solution impractical, and fully analytical and hybrid estimators are now being used.
   
     The problem of producing accurate analytical estimates of the covariance matrix for large-scale structure data has seen significant progress in the last few years \cite{2001ApJ...554...56C,2009ApJ...701..945S,2009MNRAS.395.2065T,2013PhRvD..87l3504T,2014MNRAS.441.2456T,2016PhRvD..94f3533P}. As described in \cite{2018JCAP...10..053B}, the covariance matrix recieves three main contributions:
     \begin{itemize}
       \item {\bf Gaussian covariance:} this is the contribution to the covariance from the disconnected part of the trispectrum of the different fields involved (also called the ``disconnected'' covariance). In simpler terms, this is the covariance matrix one would obtain if all fields involved were Gaussianly distributed.
-      \item {\bf Connected non-Gaussian covariance:} this is the contribution
-        from the connected trispectrum (which would vanish if all fields were
-        Gaussianly distributed).
-      \item {\bf Super-sample covariance:} this is the additional coupling between different scales induced by density fluctuations on scales larger than the volume mapped.
+      \item {\bf Connected non-Gaussian covariance:} this is the contribution from the connected trispectrum (which would vanish if all fields were Gaussianly distributed).
+      \item {\bf Super-sample covariance:} this is the additional coupling between different scales induced by density fluctuations on scales larger than the volume mapped. This term also vanishes for Gaussian fields.
     \end{itemize}
   
     On most scales relevant for cosmological studies, the Gaussian contribution dominates the error budget, although the connected and super-sample terms cannot be neglected \cite{2018JCAP...10..053B}. The Gaussian contribution is trivial to compute for fields observed over the full sky:
@@ -111,11 +75,9 @@
 
   \section{Analytical Gaussian covariances}\label{sec:theory}
     \subsection{Preliminaries}\label{ssec:theory.prelim}
-      We will deal with spin-0 and spin-2 fields defined on a 2-dimensional
-      space. We will use a generic notation that can be applied to both
-      curved and flat skies. Given a field ${\bf a}({\bf x})$, with 1
-      (spin-0; i.e. an scalar field) or 2 components (spin-2; i.e. a field
-      that remains invariant under a transformation $e^{i2\phi}$), defined on the coordinates ${\bf x}$, we define its generalized Fourier coefficients as
+      We will deal with spin-0 and spin-2 fields defined on a 2-dimensional space. In two dimensions, spin-$s$ fields in general have two components ${\bf a}({\bf x})=(a_1({\bf x}),a_2({\bf x}))$\footnote{E.g. for CMB polarisation, a spin-2 field, these components are the Stokes parameters $(Q,U)$, while for cosmic shear the two components are usually labelled $(\gamma_1,\gamma_2)$.}. Forming a complex number from these components, $a_1+ia_2$, spin-$s$ fields transform, under a coordinate rotation with angle $\psi$, as $a_1+ia_2\rightarrow (a_1+ia_2)\exp(i\,s\psi)$. Thus, spin-0 fields are invariant under rotations, and are usually expressed as real-valued fields with a single component.
+      
+      Given a field ${\bf a}({\bf x})$, with 1 (spin-0) or 2 components (spin-2), defined on the coordinates ${\bf x}$, we define its generalized Fourier coefficients as
       \begin{equation}
         {\bf a}_{\bf k}=\summ{x}\,\Ylm{\dag}{k}{x}\,{\bf a}({\bf x}),
       \end{equation}
@@ -124,7 +86,7 @@
         &\summ{x}\,\Ylm{\dag}{k}{x}\Ylm{}{l}{x}=\mathds{1}\Delta^x({\bf k},{\bf l}),\\
         &\summ{k}\,\Ylm{}{k}{x}\Ylm{\dag}{k}{y}=\mathds{1}\Delta^k({\bf x},{\bf y}),
       \end{align}
-      where $\summ{k}$ denotes an integral over all possible generalised Fourier coefficients ${\bf k}$, and $\Delta^x$ and $\Delta^k$ are generalized delta functions, defined through their action on functions of ${\bf x}$ or ${\bf k}$:
+      where $\summ{k}$ denotes an integral over all possible generalised Fourier coefficients ${\bf k}$, and $\Delta^x$ and $\Delta^k$ are generalized delta functions, defined through their actionl on functions of ${\bf x}$ or ${\bf k}$:
       \begin{align}
         &\summ{k}\,f({\bf k})\Delta^x({\bf k},{\bf l})\equiv f({\bf l}),\\
         &\summ{x}\,f({\bf x})\Delta^k({\bf x},{\bf y})\equiv f({\bf y}).
@@ -139,9 +101,7 @@
       \end{equation}
       where $\beta_{\ell,s}$ is a normalization factor defined in Table \ref{tab:notation}.
     
-      Finally, we will assume that all fields are Gaussian stochastic fields
-      that are additionally statistically isotropic. As a consequence of the
-      latter, different generalised Fourier modes are uncorrelated:
+      Finally, we will assume that all fields are Gaussian stochastic fields that are additionally statistically isotropic. As a consequence of the latter, different generalised Fourier modes are uncorrelated:
       \begin{equation}\label{eq:iso}
         \langle {\bf a}_{\bf k}{\bf b}^\dag_{\bf l}\rangle\equiv {\sf C}^{ab}_\ell\,K\,\Delta^x({\bf k},{\bf l}),
       \end{equation}
@@ -166,7 +126,7 @@
           \(\displaystyle q({\bf l},{\bf x})\) & \(\displaystyle Y_{\ell m}(\nv)\) & \(\displaystyle e^{i{\bf l}\cdot{\bf x}}\) \\
           \(\displaystyle \eth\,_sf\) & \(\displaystyle -(\sin\theta)^s\left(\partial_\theta+i\frac{\partial_\varphi}{\sin\theta}\right)(\sin\theta)^{-s}\,_sf(\nv)\) & \(\displaystyle (\partial_x-i\partial_y)\,_sf\) \\
           \(\displaystyle \bar{\eth}\,_sf\) & \(\displaystyle -(\sin\theta)^{-s}\left(\partial_\theta-i\frac{\partial_\varphi}{\sin\theta}\right)(\sin\theta)^s\,_sf(\nv)\) & \(\displaystyle (\partial_x+i\partial_y)\,_sf\) \\
-          \(\displaystyle \beta_{\ell,s}\) & \(\displaystyle \sqrt{\frac{(\ell-2)!}{(\ell+2)!}}\) & \(\displaystyle \ell^{-s}\) \\
+          \(\displaystyle \beta_{\ell,s}\) & \(\displaystyle \sqrt{\frac{(\ell-s)!}{(\ell+s)!}}\) & \(\displaystyle \ell^{-s}\) \\
           \(\displaystyle K \) & \(\displaystyle 1 \) & \(\displaystyle (2\pi)^{-1}\) \\
           \hline
         \end{tabular}
@@ -494,31 +454,6 @@
 
   \section{Results}\label{sec:results}
     \subsection{Simulations}\label{ssec:results.sims}
-      \begin{figure}
-        \centering
-        \includegraphics[width=0.6\textwidth]{./figures/pz.pdf}
-        \caption{Redshift distributions assumed for the simulated maps used in this analysis.}
-        \label{fig:pz}
-      \end{figure}
-
-      \begin{figure*}
-        \centering
-        \includegraphics[width=\textwidth]{./figures/cls-sph-2b.pdf}
-        \caption{Signal (blue) and noise (orange) power spectra for the different observables used in our simulations. Note that the signal for shear $B$-modes ($\gamma_B$) is zero, and the noise is the same as that of $\gamma_E$. The different panels show different cross-correlations between $\delta$ and $\gamma_E$ in two redshift bins.}
-        \label{fig:cl-2bins}
-      \end{figure*}
-      
-      \begin{figure}
-        \centering
-        \includegraphics[width=0.6\textwidth]{./figures/mask-lss1.pdf}
-        \includegraphics[width=0.6\textwidth]{./figures/mask-lss2.pdf}
-        \caption{Sky masks used in our analysis for bins 1 and 2 (upper and lower panels respectively). The same mask is assumed for the galaxy overdensity $\delta$ and cosmic shear $\boldsymbol{\gamma}$ for simplicity.} \label{fig:mask}
-      \end{figure}
-      \begin{figure}
-        \centering
-        \includegraphics[width=0.7\textwidth]{./figures/contaminants_cl.pdf}
-        \caption{Input (signal $+$ noise) power spectrum for the galaxy overdensity in the first redshift bin (blue line). The orange band shows the range of power spectra used for the 100 large-scale contaminant templates used to study the impact of contaminant deprojection on the covariance matrix. The green line shows the power spectrum used to generate small-scale contaminants. The amplitudes of the contaminant power spectra were fixed by imposing a $10\%$ contamination level in the power spectrum at $\ell=400$. The same approach was used for the cosmic shear maps, with independent contaminants defined in $\gamma_E$ and $\gamma_B$.} \label{fig:clcont}
-      \end{figure}
       In order to quantitatively study the performance of the analytical approximations for the power spectrum covariance matrix introduced in Section \ref{sec:theory}, we generate a large number of Gaussian simulations including a number of realistic observational effects.
       
       Each simulation is a set of maps corresponding to a number of spin-0 and spin-2 fields that are drawn as Gaussian random fields following a set of input power spectra that include all relevant cross-correlations between different fields. We generate simulations for two types of fields modelled after the two main large-scale structure observables of photometric redshift surveys:
@@ -530,11 +465,11 @@
       \begin{equation}
         C^{ab}_\ell = S^{ab}_\ell+N^{ab}_\ell,
       \end{equation}
-      where $S$ and $N$ are the power spectra of the cosmological signal and noise. We model the signal part for $\delta$ and $\gamma_E$ as:
+      where $S$ and $N$ are the power spectra of the cosmological signal and noise respectively. We model the signal part for $\delta$ and $\gamma_E$ as:
       \begin{equation}
         S^{ab}_\ell = \int d\chi \frac{W^a_\ell(\chi)\,W^b_\ell(\chi)}{\chi^2}\,P\left(k=\frac{\ell+1/2}{\chi},z\right),
       \end{equation}
-      where $\chi$ is the comoving radial distance, $z\equiv z(\chi)$ is the corresponding redshift in the lightcone, $P(k,z)$ is the matter power spectrum and the window functions are given by \cite{2004PhRvD..70d3009H}\footnote{See \cite{2019ApJS..242....2C} and references therein for details about these calculations.}:
+      where $\chi$ is the comoving radial distance, $z\equiv z(\chi)$ is the corresponding redshift in the lightcone, $P(k,z)$ is the matter power spectrum. The window functions are given by \cite{2004PhRvD..70d3009H}\footnote{See \cite{2019ApJS..242....2C} and references therein for details about these calculations.}:
       \begin{align}
         \nonumber
         &W^\delta_\ell(\chi)=b(z)\,H(z)\,p_z(z),\\
@@ -545,6 +480,29 @@
         f_\ell\equiv\frac{\sqrt{(\ell+2)(\ell+1)\ell(\ell-1)}}{(\ell+1/2)^2}.
       \end{equation}
       We assume zero signal for the shear $B$-modes.
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{./figures/pz.pdf}
+        \caption{Redshift distributions assumed for the Gaussian simulations used in this analysis.}
+        \label{fig:pz}
+      \end{figure}
+      \begin{figure*}
+        \centering
+        \includegraphics[width=\textwidth]{./figures/cls-sph-2b.pdf}
+        \caption{Signal (blue) and noise (orange) power spectra for the different observables used in our simulations. Note that the signal for shear $B$-modes ($\gamma_B$) is zero, and the noise is the same as that of $\gamma_E$. The different panels show different cross-correlations between $\delta$ and $\gamma_E$ in two redshift bins.}
+        \label{fig:cl-2bins}
+      \end{figure*}      
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{./figures/mask-lss1.pdf}
+        \includegraphics[width=0.6\textwidth]{./figures/mask-lss2.pdf}
+        \caption{Sky masks used in our analysis for bins 1 and 2 (upper and lower panels respectively). The same mask is assumed for the galaxy overdensity $\delta$ and cosmic shear $\boldsymbol{\gamma}$ for simplicity.} \label{fig:mask}
+      \end{figure}
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.7\textwidth]{./figures/contaminants_cl.pdf}
+        \caption{Input (signal $+$ noise) power spectrum for the galaxy overdensity in the first redshift bin (blue line). The orange band shows the range of power spectra used for the 100 large-scale contaminant templates used to study the impact of contaminant deprojection on the covariance matrix. The green line shows the power spectrum used to generate small-scale contaminants. The amplitudes of the contaminant power spectra were fixed by imposing a $10\%$ contamination level in the power spectrum at $\ell=400$. The same approach was used for the cosmic shear maps, with independent contaminants defined in $\gamma_E$ and $\gamma_B$.} \label{fig:clcont}
+      \end{figure}
 
       The noise power spectrum is diagonal (i.e. zero between different fields and redshift bins), and is given by:
       \begin{equation}
