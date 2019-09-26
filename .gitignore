@@ -7,3 +7,6 @@ Simulations/
 .bashrc
 python-*.out
 python.sh
+*.toc
+*.bbl
+*.blg
