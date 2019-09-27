@@ -206,7 +206,12 @@
     
       The pseudo-$C_\ell$ estimator then proceeds in two steps:
       \begin{enumerate}
-        \item We first bin different ${\bf l}$ modes into sets of them called bandpowers (typically bands of similar $\ell$ or annuli of flat-sky Fourier modes spanning a range of radii). Let us denote a given bandpower by its index $q$. The binned pseudo-power spectrum is:
+        \item We first bin different ${\bf l}$ modes into sets of them called
+          bandpowers (typically bands of similar $\ell$ or annuli of flat-sky
+          Fourier modes spanning a range of radii). Let us denote a given
+          bandpower by its index $q$. \cgg{The number of bandpowers and their
+            width are determined by the true underlying power spectra, which
+            must not vary much within the bandpower}. The binned pseudo-power spectrum is:
         \begin{equation}\label{eq:bandpowers}
           \tilde{\sf C}^{ab}_q=\sum_{{\bf l}\in q} B_q^{\bf l}\,\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l},
         \end{equation}
@@ -575,7 +580,7 @@
       simulations. This number was chosen in order to recover the covariance
       matrix for all possible auto- and cross-correlations with sufficient
       accuracy. All simulations were generated as {\tt
-        HEALPix}\footnote{\url{http://healpix.sourceforge.net}} maps with resolution $N_{\rm side}=512$. We then used {\tt NaMaster} to compute all possible power spectra for each simulation using narrow bandpowers of width $\Delta\ell=3$ from $\ell=2$ to $\ell=1023$. Finally, we used the power spectra from the simulations to estimate the sample covariance matrix
+        HEALPix}\footnote{\url{http://healpix.sourceforge.net}}~\cite{Gorski:2004by} maps with resolution $N_{\rm side}=512$. We then used {\tt NaMaster} to compute all possible power spectra for each simulation using narrow bandpowers of width $\Delta\ell=3$ from $\ell=2$ to $\ell=1023$. Finally, we used the power spectra from the simulations to estimate the sample covariance matrix
       \begin{equation}
         {\rm Cov}({\bf C}) =\frac{1}{N_{\rm sim}-1}\sum_{i=1}^{N_{\rm sim}}\left({\bf C}_i-\bar{\bf C}\right)\cdot\left({\bf C}_i-\bar{\bf C}\right)^T,
       \end{equation}
@@ -590,12 +595,12 @@
       \end{figure}
       \begin{figure}
         \centering
-        \includegraphics[width=0.7\textwidth]{./figures/sph_1bin_diff_corr.pdf}
+        \includegraphics[width=0.7\textwidth]{./figures/sph_1bin_diff_corr-lims-v02.pdf}
         \caption{Difference between the correlation matrices associated to the sample covariance matrix and its estimate with the NKA method including all possible correlations between $\delta$ and $\boldsymbol{\gamma}$ in a single redshift bin. While the NKA estimator is able to recover the covariance matrix to high accuracy in most cases, it is not able to reproduce the off-diagonal correlations between different bandpowers in cases involving $B$ modes.} \label{fig:diff_corr_1bin}
       \end{figure}
       \begin{figure}
         \centering
-        \includegraphics[width=0.9\textwidth]{./figures/run_sph_2b_NKA_diff_corr_short.pdf}
+        \includegraphics[width=0.9\textwidth]{./figures/run_sph_2b_NKA_diff_corr_short-lims-v02.pdf}
         \caption{Same as Fig. \ref{fig:diff_corr_1bin} for all cross-correlations between $\delta$ and $\gamma_E$ measured in two different redshift bins.}
         \label{fig:corr_diff_2bins}
       \end{figure}
@@ -675,23 +680,62 @@
         -2\log p(\vec{\theta}|\hat{\bf C})=\left(\hat{\bf C}-{\bf C}(\vec{\theta})\right)^T\cdot{\rm Cov}^{-1}\cdot\left(\hat{\bf C}-{\bf C}(\vec{\theta})\right)+{\rm const.},
       \end{equation}
       where $\hat{\bf C}$ is a vector of power spectrum measurements, ${\rm Cov}$ is their covariance matrix, and ${\bf C}(\vec{\theta})$ is their theoretical prediction for parameters $\vec{\theta}$.
+      \cgg{Note that the low-$\ell$ non-gaussianities of real power spectra
+        are not being taking into account with this approximation. They,
+        however, have a lower statistical weight and will contribute less to
+        the posterior distribution.}
 
       We explore $\log p(\vec{\theta}|\hat{\bf C})$ for \cgg{the} two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins described in Section \ref{ssec:results.sims}. In this simple two-dimensional scenario, we simply sample the distribution in a regular grid of 100 by 100 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor given by \cite{2007A&A...464..399H}
       \begin{equation}\label{eq:hartlap}
         {\rm Cov}^{-1}\,\longrightarrow \frac{N_s-2-N_{\rm data}}{N_s-1}\,{\rm Cov}^{-1},
       \end{equation}
-      where $N_s=20,000$ is the number of samples used to estimate the covariance, and $N_{\rm data}=3510$ is the number of data points.
+      where $N_s=20,000$ is the number of samples used to estimate the
+      covariance, and $N_{\rm data}=3510$ is the number of data points.
       
       The 68\% and 95\% confidence level contours associated with the posterior distributions for the sample covariance and the NKA estimator are shown in Figure~\ref{fig:contours}. We find that both distributions agree with each other remarkably well, and that the $1\sigma$ errors for each parameter agree for both covariances up to $0.3\%$. Note that, since we have not included any statistical noise in the data vector $\hat{\bf C}$, the relative difference in the means of both distributions is zero by construction (since Eq. \ref{eq:parpos} is bounded from below by zero). When adding Gaussian statistical noise compatible with the sample covariance matrix, we observe small differences (smaller than 0.3$\sigma$) in the best fit parameters found with both covariance matrices. These differences, however, are not systematic, and we have verified that averaging over several noise realizations does not yield biased best-fit parameters.
       
       We therefore conclude that the analytical approximations for the power spectrum covariance matrix explored here are able to reproduce the true posterior distribution of cosmological parameters to very high accuracy.
 
   \section{Discussion}\label{sec:discussion}
-    Estimating accurate covariance matrices for projected two-point correlators is an ubiquitous problem in modern cosmology \cite{2013PhRvD..88f3537D,2013MNRAS.432.1928T,2017arXiv170609359K}, but it is particularly relevant for large-scale structure datasets. This problem is further complicated in this case, in comparison with e.g. CMB experiments, by two factors: the fact that the fields involved are non-Gaussian at some level and the higher complexity of the sky masks used in optical datasets. The main impact of survey geometry is the statistical coupling it induces between different Fourier/harmonic modes, which must be accurately characterized in order to obtain reliable estimates of the posterior distribution for cosmological parameters. In this paper we have focused on the impact of survey geometry on the dominant Gaussian (i.e. disconnected) part of the covariance matrix.
+    Estimating accurate covariance matrices for projected two-point
+    correlators is an ubiquitous problem in modern cosmology
+    \cite{2013PhRvD..88f3537D,2013MNRAS.432.1928T,2017arXiv170609359K}, but it
+    is particularly relevant for large-scale structure datasets. This problem
+    is further complicated in this case, in comparison with e.g. CMB
+    experiments, by 
+    %two factors: 
+    the fact that the fields involved are
+    non-Gaussian at some level
+    %and the higher complexity of the sky masks used in optical datasets.
+    The main impact of survey geometry is the statistical
+    coupling it induces between different Fourier/harmonic modes, which must
+    be accurately characterized in order to obtain reliable estimates of the
+    posterior distribution for cosmological parameters. In this paper we have
+    focused on the impact of survey geometry on the dominant Gaussian (i.e.
+    disconnected) part of the covariance matrix.
     
-    We have described and generalized existing analytical approaches to estimate the covariance matrix for pseudo-$C_\ell$ power spectrum estimators \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2017A&A...602A..41C}, and implemented them in the public code {\tt NaMaster} \cite{2019MNRAS.484.4127A}, making it straightforward to fully account for the effects of survey geometry on the data uncertainties. With these approximation, computationally speaking, the problem of estimating a covariance matrix is as complex as that of computing the power spectrum itself, and scales with the number of pixels in the map as $N_{\rm pix}^{3/2}$.
+    We have described and generalized existing analytical approaches to
+    estimate the covariance matrix for pseudo-$C_\ell$ power spectrum
+    estimators
+    \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2017A&A...602A..41C}, and
+    implemented them in the public code {\tt NaMaster}
+    \cite{2019MNRAS.484.4127A}, making it straightforward to fully account for
+    the effects of survey geometry on the data uncertainties. With these
+    approximation\cgg{s}, computationally speaking, the problem of estimating a
+    covariance matrix is as complex as that of computing the power spectrum
+    itself, and scales with the number of pixels in the map as $N_{\rm
+      pix}^{3/2}$. \cgg{We leave for future work the study of the impact of
+      extra complications, as position-dependent noise, on their performance.}
     
-    The main finding of this paper is the excellent performance of the analytical methods described in Section \ref{ssec:theory.pclcov}. We have shown that, in spite of the higher complexity of large-scale structure masks, the NKA estimator (see Section \ref{ssec:theory.approx}) is able to recover the covariance matrix for all power spectra with non-zero signal expectation value (i.e. those involving the galaxy overdensity $\delta$ or the $E$-mode shear $\gamma_E$), as well as the posterior distribution for cosmological parameters, to a high degree of accuracy.
+    The main finding of this paper is the excellent performance of the
+    analytical methods described in Section \ref{ssec:theory.pclcov}. We have
+    shown that
+    %, in spite of the higher complexity of large-scale structure masks,
+    the NKA estimator (see Section \ref{ssec:theory.approx}) is able to
+    recover the covariance matrix for all power spectra with non-zero signal
+    expectation value (i.e. those involving the galaxy overdensity $\delta$ or
+    the $E$-mode shear $\gamma_E$), as well as the posterior distribution for
+    cosmological parameters, to a high degree of accuracy.
 
     More in detail, we have also found that the impact of contaminant
     deprojection on the covariance matrix, through the corresponding loss of
