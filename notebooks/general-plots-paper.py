@@ -503,7 +503,8 @@ def corr_diff_2bins_diff_mask():
 
     f, ax = plt.subplots(1, 1, figsize=(4, 4))
     nlbins = int(CorrSims.shape[0] / 4)
-    cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
+    # cb = ax.imshow(CorrTh - CorrSims, vmin=-0.02, vmax=0.02)
+    cb = ax.imshow(CorrTh - CorrSims, vmin=-0.01, vmax=0.01)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cbar = f.colorbar(cb, cax=cax)
@@ -519,7 +520,8 @@ def corr_diff_2bins_diff_mask():
     ax.set_yticklabels(labels, fontsize=8)
 
     plt.tight_layout()
-    fname = os.path.join(outdir, 'run_sph_2b_NKA_diff_corr_short.pdf')
+    # fname = os.path.join(outdir, 'run_sph_2b_NKA_diff_corr_short.pdf')
+    fname = os.path.join(outdir, 'run_sph_2b_NKA_diff_corr_short-lims-v0.2.pdf')
     plt.savefig(fname, dpi=DPI)
     # plt.show()
     plt.close()
