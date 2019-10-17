@@ -14,59 +14,40 @@
 
 \begin{document}
 \maketitle
-We have carefully addressed the referee's questions and concerns. The
-modifications we have performed, for each of the numbered requests, are as
-follow:
-\begin{enumerate}
-  \item  Abstract. Line 9. Added explicit reference to CMB. We have changed
-    \textit{expanding on existing algorithms} to \textit{expanding on existing algorithms \cgg{for CMB}}.
-  \item  Page 8. After Eq. 2.44. Added GPE2 reference.
-  \item  Changed limits of Figure 6 and 7.
-  \item  Last sentence of 3.3. Added \textit{or computed exactly as in [41,
-      44]}. In the second to last paragraph of Section 4, we added at the end
-    \textit{or exactly following Refs.~[41, 44]}.
-  \item  In Section 3.3, before previous sentence, we changed \textit{If accurate
-    covariances bars} to \textit{If accurate covariance matrix \cgg{elements}}.
-\item  In Section 3.4, before Eq. 3.8, I have mentioned the Gaussian
-  approximation of the likelihood: \textit{Assuming flat priors \cgg{and a
-      fiducial Gaussian likelihood approximation [21]}}.
-  \item  Second paragraph of Section 3.4. Changed \textit{for of two
-      parameters} to \textit{for the \cgg{two} parameters}.
-  \item  At the end of the first paragraph of Section 3.4,  after Eq. 3.8, I
-    have added \textit{\cgg{Note that the low-$\ell$ non-gaussianities of real power spectra
-        are not being taking into account with this approximation. They,
-        however, have a lower statistical weight and will contribute less to
-        the posterior distribution.}
-}
+We would like to thank the referee for their careful reading of our manuscript.
+We have addressed the points raised as described below. All modifications are
+highlighted in red in the resubmitted version of the manuscript.
 
+With regards to the specific points raised by the referee:
+\begin{enumerate}
+  \item We have added an explicit reference to the CMB expertise in the abstract.
+  \item We have added a citation to GPE2 after Eq. 2.44.
+  \item We have reduced the range of Figures 6 and 7 to highlight the differences in the correlation matrices.
+  \item We have included a reference to GPE2 in the context of low-ell covariance estimation.
+  \item Thanks for noticing this. This is a typo (left over from a previous version of this sentence that read ``error bars'' instead of ``covariance''). We have changed this sentence as suggested.
+  \item We have added the {\sl fiducial Gaussian likelihood} caveat in Section 3.4. We are aware of the biases associated with varying the covariance at each point in parameter space.
+  \item Thanks for noticing this typo. This has been fixed.
+  \item We have added a caveat about the appropriateness of the Gaussian approximation. We have also noted that the approximate likelihood of Hamimeche \& Lewis also require an accurate evaluation of the power spectrum covariance, and therefore these results are still valuable in that case.
 \end{enumerate}
+
+Regarding the additional points raised by the referee:
+\begin{enumerate}
+ \item We have changed $\Delta x^2$ to $\Delta^2 x$ ($\Delta x^2$ made sense in the case of flat skies, where this is just $\Delta x\,\Delta y$).
+ \item We have added a comment about bandpower averaging before Eq. 2.12.
+\end{enumerate}
+
 
 Changes related to the CMB background:
 \begin{enumerate}
-  \item  
-  \item In Section 4, removed the statements about the higher complexity of LSS
-    masks.
-  \item  In the second paragraph of Section 4, we have added a comment on the
-    effect of "real-wold" complications: \textit{With these
-    approximation\cgg{s}, computationally speaking, the problem of estimating a
-    covariance matrix is as complex as that of computing the power spectrum
-    itself, and scales with the number of pixels in the map as $N_{\rm
-      pix}^{3/2}$. \cgg{We leave for future work the study of the impact of
-      extra complications, as position-dependent noise, on their performance.}
-}
+  \item We have expanded the list of references to the CMB legacy for covariance matrix estimation in the introduction, by including a reference to GPE2, to the Planck 2013, 2015 and 2018 likelihood papers, and to Challinog \& Chon 2005 (we also cite the latter in section 2 in the context of mask gradients).
+  \item We have toned down the statement about the higher complexity of LSS masks.
+  \item We have added a statement about the role of anisotropic noise and other complications at the end of Section 4.
 \end{enumerate}
 
-Extra changes:
+Other modifications:
 \begin{enumerate}
-  \item  Changed $\Delta x^2$ to $\Delta^2 x$.
-  \item  Before Eq. 2.12, added a comment on how the true power spectra must
-    not change much over a bandpower. It says now \textit{Let us denote a given
-          bandpower by its index $q$. \cgg{The number of bandpowers and their
-            width are determined by the true underlying power spectra, which
-            must not vary much within the bandpower}.}
-  \item  Introduction. Line 3. Updated the set of references for CMB.
-  \item  Added HEALPix project url, reference and credits in the
-    Acknowledgments.
+  \item We have updated the references to CMB in line 3 of the introduction.
+  \item We have added a citation to the HEALPix URL and the corresponding references and acknowledgements.
 \end{enumerate}
 
 \end{document}

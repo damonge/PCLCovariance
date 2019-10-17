@@ -28,7 +28,7 @@
 \newcommand{\physrep}{Physics Reports}
 \newcommand{\pasj}{Publications of the ASJ}
 
-\newcommand{\cgg}[1]{{\color{olive} #1}}
+\newcommand{\cgg}[1]{{\color{red} #1}}
 
 \newcommand{\nv}{\hat{\boldsymbol{\theta}}}
 \newcommand{\summ}[1]{\sum_{\bf #1}\Delta^2 #1\,}
@@ -60,7 +60,8 @@
   computationally impractical very quickly. We present an implementation of
   approximate methods to estimate the Gaussian covariance matrix of power
   spectra involving spin-0 and spin-2 flat- and curved-sky fields, expanding
-  on existing algorithms \cgg{for CMB}. These methods achieve an $O(\ell_{\rm max}^3)$
+  on existing algorithms \cgg{developed in the context of CMB analyses}.
+  These methods achieve an $O(\ell_{\rm max}^3)$
   scaling, which makes the computation of the covariance matrix as fast as the
   computation of the power spectrum itself. We quantify the accuracy of these
   methods on large-scale structure and weak lensing data, making use of a
@@ -118,7 +119,7 @@
     \end{equation}
     where $C^{xy}_\ell$ is the angular power spectrum between two maps $x$ and $y$ on multipole $\ell$. Unfortunately, the presence of a sky mask in general induces non-trivial couplings between different $\ell$s, which must be accurately estimated in order to produce unbiased evaluations of the parameter likelihood \cite{2018MNRAS.479.4998T}.
   
-    In this paper, we will present and generalize methods developed in the context of CMB experiments to account for the impact of survey geometry on the Gaussian part of the power spectrum covariance matrix \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2017A&A...602A..41C}\footnote{See also \cite{2019JCAP...01..016L} for a similar application to the problem of 3D power spectrum covariances.}, and will study in detail the performance of these methods for large-scale structure and weak lensing datasets. We have also implemented these approximations in the public code {\tt NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}} \cite{2019MNRAS.484.4127A}, making the computation of accurate Gaussian covariance matrices significantly simpler for the community.
+    In this paper, we will present and generalize methods developed in the context of CMB experiments to account for the impact of survey geometry on the Gaussian part of the power spectrum covariance matrix \cite{2004MNRAS.349..603E,2005MNRAS.360.1262B,2005MNRAS.360..509C,Efstathiou:2006eb,2014A&A...571A..15P,2016A&A...594A..11P,2017A&A...602A..41C,2019arXiv190712875P}\footnote{See also \cite{2019JCAP...01..016L} for a similar application to the problem of 3D power spectrum covariances.}, and will study in detail the performance of these methods for large-scale structure and weak lensing datasets. We have also implemented these approximations in the public code {\tt NaMaster}\footnote{\url{https://github.com/LSSTDESC/NaMaster}} \cite{2019MNRAS.484.4127A}, making the computation of accurate Gaussian covariance matrices significantly simpler for the community.
 
     The paper is structured as follows: Section \ref{sec:theory} presents the methods and approximations used to calculate accurate covariances. In Section \ref{sec:results} we test the methods against Gaussian simulations and study their performance as well as their impact on the final cosmological parameter estimation. We then summarize our results and conclude in Section \ref{sec:discussion}. Appendix \ref{app:flat} presents the performance of these methods in the flat-sky approximation, and we provide technical details of the software implementation in Appendix \ref{app:namaster}.
 
@@ -206,12 +207,7 @@
     
       The pseudo-$C_\ell$ estimator then proceeds in two steps:
       \begin{enumerate}
-        \item We first bin different ${\bf l}$ modes into sets of them called
-          bandpowers (typically bands of similar $\ell$ or annuli of flat-sky
-          Fourier modes spanning a range of radii). Let us denote a given
-          bandpower by its index $q$. \cgg{The number of bandpowers and their
-            width are determined by the true underlying power spectra, which
-            must not vary much within the bandpower}. The binned pseudo-power spectrum is:
+        \item We first bin different ${\bf l}$ modes into sets of them called bandpowers (typically bands of similar $\ell$ or annuli of flat-sky Fourier modes spanning a range of radii). Let us denote a given bandpower by its index $q$. \cgg{We must note that it is more appropriate to use bandpower-averaged spectra when the underlying spectrum does not vary much within each $\ell$ bin. When this is not the case, it is often useful to apply $\ell$-weights (such as $D_\ell\equiv\ell(\ell+1)C_\ell/(2\pi)$). The large-scale structure spectra discussed here are sufficiently flat that the binning used is appropriate.} The binned pseudo-power spectrum is:
         \begin{equation}\label{eq:bandpowers}
           \tilde{\sf C}^{ab}_q=\sum_{{\bf l}\in q} B_q^{\bf l}\,\tilde{\bf a}_{\bf l}\tilde{\bf b}^\dag_{\bf l},
         \end{equation}
@@ -356,7 +352,7 @@
       \end{align}
       Thus, in principle, we only need to compute 7 different types of terms
       ($I^{0,0}$, $I^{0,\pm2}$, $I^{\pm2,\pm2}$ and $I^{\pm2,\mp2})$). In
-      order to simplify these expressions further, we follow \cite{Efstathiou:2006eb,2017A&A...602A..41C} and neglect all gradients of the masks, which allows us to relate the different $I^{\pm s_a,\pm s_b}$ through the following set of identities:
+      order to simplify these expressions further, we follow \cite{Efstathiou:2006eb,2017A&A...602A..41C} and neglect all gradients of the masks\footnote{\cgg{It is worth noting that it is possible in principle to avoid this approximation, as demonstrated in \cite{2005MNRAS.360..509C}}.}, which allows us to relate the different $I^{\pm s_a,\pm s_b}$ through the following set of identities:
       \begin{align}\nonumber
         \summ{x}w({\bf x})\left(\bar{\eth}^2q({\bf l},{\bf x})\right)^*\,\bar{\eth}^2q({\bf k},{\bf x})
         &=\summ{x}w({\bf x})\eth^2 q^*({\bf l},{\bf x})\,\bar{\eth}^2q({\bf k},{\bf x})\\\nonumber
@@ -662,7 +658,7 @@
       on the final parameter constraints is negligible. If accurate
       \cgg{covariance matrix elements} are needed on these large scales for cosmic shear, they
       can be estimated alternatively making use of fast, low resolution
-      simulations (e.g. {\tt HEALPix} $N_{\rm side}=64$ maps) \cgg{or computed
+      simulations (e.g. {\tt HEALPix} $N_{\rm side}=64$ maps)\cgg{, or computed
       exactly as in Ref.~\cite{Efstathiou:2006eb,2017A&A...602A..41C}}.
 
     \subsection{Impact on parameter estimation}\label{ssec:results.cosmo}
@@ -675,15 +671,11 @@
       analytical covariance matrix estimators implemented here is to study
       their impact on the posterior distribution of cosmological parameters
       derived from power spectrum measurements. Assuming flat priors \cgg{and
-      a fiducial Gaussian likelihood approximation~\cite{2008PhRvD..77j3013H}}, the posterior distribution for parameters $\vec{\theta}$ is simply given by:
+      a fiducial Gaussian likelihood approximation~\cite{2008PhRvD..77j3013H}, in which the covariance matrix is computed only once for the fiducial model}, the posterior distribution for parameters $\vec{\theta}$ is simply given by:
       \begin{equation}\label{eq:parpos}
         -2\log p(\vec{\theta}|\hat{\bf C})=\left(\hat{\bf C}-{\bf C}(\vec{\theta})\right)^T\cdot{\rm Cov}^{-1}\cdot\left(\hat{\bf C}-{\bf C}(\vec{\theta})\right)+{\rm const.},
       \end{equation}
-      where $\hat{\bf C}$ is a vector of power spectrum measurements, ${\rm Cov}$ is their covariance matrix, and ${\bf C}(\vec{\theta})$ is their theoretical prediction for parameters $\vec{\theta}$.
-      \cgg{Note that the low-$\ell$ non-gaussianities of real power spectra
-        are not being taking into account with this approximation. They,
-        however, have a lower statistical weight and will contribute less to
-        the posterior distribution.}
+      where $\hat{\bf C}$ is a vector of power spectrum measurements, ${\rm Cov}$ is their covariance matrix, and ${\bf C}(\vec{\theta})$ is their theoretical prediction for parameters $\vec{\theta}$. \cgg{It is worth noting that this Gaussian likelihood is not accurate on large scales, where the small number of modes invalidates the application of the central limit theorem. Even in this regime, the likelihood can be approximated through the method described in \cite{2008PhRvD..77j3013H}, which still requires an accurate estimate of the power spectrum covariance.}
 
       We explore $\log p(\vec{\theta}|\hat{\bf C})$ for \cgg{the} two parameters $\vec{\theta}\equiv(\Omega_M,\sigma_8)$, for a data vector composed of all possible auto- and cross-correlations between $\delta$ and $\gamma_E$ in the case of two redshift bins described in Section \ref{ssec:results.sims}. In this simple two-dimensional scenario, we simply sample the distribution in a regular grid of 100 by 100 points for each parameter. We construct a data vector $\hat{\bf C}$ from the theoretical prediction for the experimental setup described in Section \ref{ssec:results.sims}, and produce theoretical predictions for it at each grid point using {\tt CCL}. Note that, when evaluating the posterior for the sample covariance matrix, one needs to correct for the finite number of simulations used to construct the covariance. In most situations this can be done simply by rescaling the inverse covariance matrix by a factor given by \cite{2007A&A...464..399H}
       \begin{equation}\label{eq:hartlap}
@@ -702,11 +694,9 @@
     \cite{2013PhRvD..88f3537D,2013MNRAS.432.1928T,2017arXiv170609359K}, but it
     is particularly relevant for large-scale structure datasets. This problem
     is further complicated in this case, in comparison with e.g. CMB
-    experiments, by 
-    %two factors: 
+    experiments, by two factors: 
     the fact that the fields involved are
-    non-Gaussian at some level
-    %and the higher complexity of the sky masks used in optical datasets.
+    non-Gaussian at some level and the \cgg{arguably} higher complexity of the sky masks used in optical datasets.
     The main impact of survey geometry is the statistical
     coupling it induces between different Fourier/harmonic modes, which must
     be accurately characterized in order to obtain reliable estimates of the
